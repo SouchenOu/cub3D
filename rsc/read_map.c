@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:53:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/05 15:13:20 by souchen          ###   ########.fr       */
+/*   Updated: 2022/09/07 18:49:22 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ int	get_height(char *map_file)
 	fd = open(map_file, O_RDONLY);
 	height = 0;
 	get_line = get_next_line(fd);
-	while (get_line != NULL)
+	while (get_line)
 	{
-		//number line
 		get_line = get_next_line(fd);
 		height ++;
 	}
@@ -72,12 +71,8 @@ int	get_width(char *map_file, int height)
 	while (i < height)
 	{
 		get_line = get_next_line(fd);
-		//the size of the longest line
 		if (ft_strlen(get_line) > max)
-		{
 			max = ft_strlen(get_line);
-			printf("max here : %zu\n", max);
-		}
 		free(get_line);
 		i++;
 	}
@@ -104,7 +99,6 @@ void	ft_read_maps(char *map_file, t_struct *cub)
 	while (i < cub->height)
 	{
 		get_line = get_next_line(fd);
-		//put the line in map array
         cub->map[i] = ft_strdup(get_line);
 		free(get_line);
 		i++;

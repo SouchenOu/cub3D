@@ -6,17 +6,22 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:48:33 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/05 15:08:21 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/09 10:58:33 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-/*float	ft_max(float a, float b)
+void	my_mlx_pixel_put(t_struct *ptr, int x, int y, int color)
 {
-	if (a > b)
-		return (a);
-	return (b);
+	char	*dst;
+
+	if (x > 0 && y > 0 && x < W_WIDTH && y < W_HEIGHT)
+	{
+		dst = ptr->addr + (y * ptr->line_length + x
+				* (ptr->bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
+	}
 }
 
 int ft_count_height(char **data)
@@ -41,85 +46,131 @@ int ft_count_height(char **data)
    return (len); 
 }
 
-void    ft_bresenham(t_struct *cub)
+void    draw_cub(t_struct *ptr, int x, int y, int color)
 {
-    float   x_step;
-    float   y_step;
-    float   max;
+    int start_x;
+    int start_y;
+    int     i;
+    int     j;
     char    **data;
-    float   p;
-    float   p_1;
     
-    data = ft_jump_lines(cub);
-    p = cub->cordnt.x;
-    p_1 = cub->cordnt.x_1;
-    cub->cordnt.z = data[(int)cub->cordnt.y][(int)cub->cordnt.x];
-    cub->cordnt.z_1 = data[(int)cub->cordnt.y_1][(int)cub->cordnt.x_1];
-    cub->cordnt.x = (p - cub->cordnt.y) * cos(cub->cos_x);
-    cub->cordnt.y = (p + cub->cordnt.y) * sin(cub->sin_y) - cub->cordnt.z;
-    cub->cordnt.x_1 = (p_1 - cub->cordnt.y_1) * cos(cub->cos_x);
-    cub->cordnt.y_1 = (p_1 + cub->cordnt.y_1) * sin(cub->sin_y) - cub->cordnt.z_1;
-    x_step = cub->cordnt.x_1 - cub->cordnt.x;
-    y_step = cub->cordnt.y_1 - cub->cordnt.y;
-    max = ft_max(abs((int)x_step), abs((int)y_step));
-    x_step /= max;
-    y_step /= max;
-    while ((int)(cub->cordnt.x - cub->cordnt.x_1) || (int)(cub->cordnt.y - cub->cordnt.y_1))
+    data = ft_jump_lines(ptr);
+    int  height = ft_count_height(data);
+    int scaleHeight = W_HEIGHT/ height ;
+    int scaleWidth = W_WIDTH/ ptr->width;
+    //printf("height = %d\n", height);
+    //printf("width: %d\n", ptr->width);
+    start_x = x * scaleWidth;
+    start_y = y * scaleHeight;
+    i = start_y;
+    j = start_x;
+    while (i < start_y + scaleHeight)
     {
-       	mlx_pixel_put(cub->mlx_ptr, cub->win_ptr, cub->cordnt.x,  cub->cordnt.y, 0xffffff);
-		cub->cordnt.x = cub->cordnt.x + x_step;
-		cub->cordnt.y = cub->cordnt.y + y_step;
-    // printf("---> %f\n",cub->cordnt.x);
+        j =  start_x;
+        while (j < start_x + scaleWidth)
+        {
+            my_mlx_pixel_put(ptr, j, i,color);
+            j++;
+        }
+        i++;
     }
-}
-
-void    ft_coordinate(int x, int y, t_struct *cub, int check)
-{
-    if (check == 0)
-    {
-        cub->cordnt.x = x;
-        cub->cordnt.x_1 = x + 1;
-        cub->cordnt.y = y;
-        cub->cordnt.y_1 = y;
-    }
-    if (check == 1)
-    {
-        cub->cordnt.x = x;
-        cub->cordnt.x_1 = x;
-        cub->cordnt.y = y;
-        cub->cordnt.y_1 = y + 1;
-    }
-    ft_bresenham(cub);
 }
 
 void    ft_draw_map(t_struct *cub)
 {
     int x;
     int y;
-    int height;
+    char    **data;
+    int     len;
+
+    y = 0;
+    len = 0;
+    player_position(cub); // get player position
+    data = ft_jump_lines(cub);
+    while (data[y])
+    {
+        x = 0;
+        while (data[y][x])
+        {
+            if (data[y][x] == '1')
+                draw_cub(cub, x, y, 0xFF00000);
+            else if (data[y][x] == 'E'|| data[y][x] == 'N' || data[y][x] == 'S' || data[y][x] == 'W'){
+                 draw_cub(cub, x, y, 0xfffff);
+            }
+            else
+                draw_cub(cub, x, y, 0);
+            x++;
+        }
+        y++;
+    }
+    mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 1, 1);
+}
+
+void player_position(t_struct *cub){
+    int i = 0;
+    int j = 0;
+    cub->player.rotation_angle = PI / 2;
+   char** data = ft_jump_lines(cub);
+   while(data[i] != NULL)
+   {
+        printf("data : %s\n", data[i]);
+        i++;
+   }
+   
+   while (data[i])
+   {
+    j = 0;
+    while(data[i][j]){
+        if (data[i][j] == 'E'|| data[i][j] == 'N' || data[i][j] == 'S' || data[i][j] == 'W'){
+          cub->player.position_x = j + cos(cub->player.rotation_angle) * 40;
+         cub->player.position_y = i + sin(cub->player.rotation_angle) * 40;
+        return ;
+        }
+        j++;
+    }
+    i++;
+   } 
+}
+
+int	player_move(int key, t_struct *p)
+{
+	if (key == 125)
+		p->player.position_y += 1;
+	if (key == 126)
+		p->player.position_y -= 1;
+	if (key == 124)
+		p->player.position_x += 1;
+	if (key == 123)
+		p->player.position_x -= 1;
+    mlx_destroy_image(p->mlx_ptr, p->img);
+    p->img = mlx_new_image(p->mlx_ptr, W_WIDTH, W_HEIGHT);
+    update_ptayer(p);
+    return (0);
+}
+void update_ptayer(t_struct *cub){
+    int     x;
+    int     y;
     char    **data;
     int     len;
 
     y = 0;
     len = 0;
     data = ft_jump_lines(cub);
-    print(data);
-    height = ft_count_height(data);
-    while (y < height)
+    while (data[y])
     {
         x = 0;
-        len = ft_strlen(data[y]);
-        while (x < len)
+        while (data[y][x])
         {
-            if (x < len - 1)
-                ft_coordinate(x, y, cub, 0);
-            if (y < height - 1)
-                ft_coordinate(x, y, cub, 1);
-           printf("x---> %d\n", x);
+            if (data[y][x] == '1')
+                draw_cub(cub, x, y, 0xFF00000);
+            else if (y == cub->player.position_y && x == cub->player.position_x){
+                draw_cub(cub, x, y, 0xfffff);
+            }
+            else
+                draw_cub(cub, x, y, 0);
             x++;
         }
-    printf("y---> %d\n", y);
         y++;
     }
-   // mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 2, 2);
-}*/
+    mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 1, 1);
+}

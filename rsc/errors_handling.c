@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/05 16:14:58 by souchen          ###   ########.fr       */
+/*   Updated: 2022/09/14 11:51:13 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,11 +232,8 @@ char    **ft_jump_lines(t_struct *cub)
     char    **data;
     int     len;
 
-
     i = 0;
     len = 0;
-    cub->x = 0;
-    cub->y = 0;
     while (cub->map[len])
     {
         if (ft_strchr(cub->map[len],'N') || ft_strchr(cub->map[len], 'S') || ft_strchr(cub->map[len], 'W')|| ft_strchr(cub->map[len], 'E')|| ft_strchr(cub->map[len], 'F')|| ft_strchr(cub->map[len], 'C')|| cub->map[len][0] == '\0'|| cub->map[len][0] == '\n')
@@ -257,30 +254,8 @@ char    **ft_jump_lines(t_struct *cub)
     }
     cub->len_ofmap = i;
     data[i] = NULL;
-    i = 0;
-    int j = 0;
-    int cmp = 0;
-    int lengthMax = 0;
-    while(data[j] != NULL)
-    {
-        cub->x++;
-        while(data[j][i] != '\0')
-        {
-            cmp++;
-            i++;
-        }
-        if(cmp >= lengthMax)
-        {
-            lengthMax = cmp;
-        }
-        j++;
-    }
-    cub->y = lengthMax;
-    
     return (data);
 }
-
-
 
 int ft_check_bgnend(char *data)
 {
