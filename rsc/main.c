@@ -25,6 +25,9 @@ void print(char **str)
 int main(int ac, char **av)
 {
     t_struct cub;
+    int i;
+    int k;
+    i = O;
 
     if (ac != 2)
 		return (ft_putstr_fd("Usage : ./cub3D path/to/map.cub", 0), 0);
@@ -33,11 +36,35 @@ int main(int ac, char **av)
     ft_check_rgb(&cub);
     ft_check_map(&cub);
     ft_wall_cordinate(&cub);
-    cub.mlx_ptr = mlx_init();
-	cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_HEIGHT, "cub3D");
-    cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
-	cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
+    //cub.mlx_ptr = mlx_init();
+	//cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_WIDTH, "cub3D");
+    cub.mlx_info.mlx = mlx_init();
+	cub.mlx_info.window = mlx_new_window(cub.mlx_info.mlx, W_WIDTH, W_WIDTH, "Souchen_ysmaili'Cub3d");
+    //cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
+	//cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
+    cub.buffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
+	while (i < W_HEIGHT)
+    {
+        cub.buffer[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
+        i++;
+
+    }
+
+	i = 0;
+	while (i < W_HEIGHT)
+	{
+		k = 0;
+		while (k < W_WIDTH)
+        {
+            cub.buffer[i][k] = 0;
+            k++;
+        }
+        i++;
+	}
+	cub.img = mlx_new_image(cub.mlx_info.mlx, W_WIDTH,  W_HEIGHT);
+	cub.addr = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     //ft_draw_map(&cub);
+    initial(&cub);
     mlx_key_hook(cub.win_ptr, player_move, &cub);
     mlx_loop(cub.mlx_ptr);
     // print(ft_jump_lines(&cub));

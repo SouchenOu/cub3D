@@ -36,8 +36,6 @@
 # define H 8
 # define V 10
 # define size 64.00
-# define WIN_H	512
-# define WIN_W	640
 # define rotationAngle PI / 2
 
 typedef struct s_floor
@@ -67,6 +65,13 @@ typedef struct  s_player{
 	int rotation_angle;
 	
 }  t_player;
+
+typedef struct vector
+{
+	double	pos;
+	double	x;
+	double	y;
+}	t_vector;
 typedef struct cordinate
 {
 	double	x;
@@ -79,12 +84,24 @@ typedef struct wall
 	t_wall_cordinate	*next;
 }	t_wall;
 
+typedef struct mlx
+{
+	void	*window;
+	void	*mlx;
+	void	*width;
+	void	*height;
+}	t_mlx;
+
+typedef struct direction
+{
+	double	up;
+	double	down;
+	double	right;
+	double	left;
+}	t_direction;
 typedef struct s_struct
 {
 	char		**map;
-	t_ceilling 	clg;
-	t_floor		flr;
-	t_dirct		drct;
 	int			height;
 	int			width;
 	int			len_ofmap;
@@ -102,8 +119,16 @@ typedef struct s_struct
 	int		zom;
 	int color;
 	int checkColorMap;
-	t_wall_cordinate	*wall_cordinate;
+	unsigned int	**buffer;
+	t_wall	 *wall;
+	t_cordinate cord;
+	t_vector	vect;
 	t_player player;
+	t_mlx 	mlx_info;
+	t_ceilling 	clg;
+	t_floor		flr;
+	t_dirct		drct;
+	t_direction dire;
 }	t_struct;
 
 
