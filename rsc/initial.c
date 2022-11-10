@@ -1,3 +1,61 @@
+double	x;
+
+	x = -1.00;
+	while (++x <= (double)main->v_num)
+	{
+		if ((x * GRID) < main->pos.axis.x && ((x + 1) * GRID) > main->pos.axis.x)
+		{
+			main->i_dis.v_left = main->pos.axis.x - (x * GRID);
+			main->i_dis.v_right = ((x + 1) * GRID) - main->pos.axis.x;
+		}
+	}
+}
+
+/*
+
+https://www.desmos.com/calculator/8imkdqdavd
+
+the pos of the player could be any pos 
+it could be btwn the gridlines
+or on one of the gridline
+---> this is just to check if the player pos was btwn
+gridlines so we can add the right distance  for the first initial 
+gridline hitting 
+
+* >>>> horizontal <<<< *
+find where is the pos of the player btwn the horizontal 
+lines or on the one of the gridlines
+?       (y - 1) < posY && (y + 1) > posY
+
+----- UP
+if player was looking up then
+? h_initial = posY - (y - 1);
+rayY - h_initial;
+
+----- DOWN
+if player was looking down then
+? h_initial = (y + 1) - posY;
+rayY + h_initial;
+
+* >>>> vertical <<<< *
+find where is the pos of the player btwn the vertical 
+lines or on the one of the gridlines
+?       (x - 1) < posX && (x + 1) > posX
+
+----- RIGHT
+if player is looking right then 
+? v_initial = (x + 1) - posX;
+rayX + v_initial;
+
+----- LEFT
+if player is looking left then
+? v_initial = posX - (x - 1);
+rayX - v_initial;
+
+*/
+
+
+
 void	initial(t_struct *cub)
 {
 	cub->mlx_info.height = 0;
@@ -11,4 +69,51 @@ void	initial(t_struct *cub)
 	cub->dire.up = 0.00;
 	cub->dire.left = 0.00;
 	cub->dire.right = 0.00;
+}
+
+void find_pos(t_struct *cub){
+
+    double	i;
+    double  j;
+    cub->virtical_num = cub->map_width;
+    cub->horizontal_num= cub->map_height; 
+
+	i = 0;
+    j = 0;
+	while (i <= (double)cub->horizontal_num)
+	{
+		if (cub->cord.y < ((i + 1) * size) && cub->cord.y > (i * size))
+		{
+			cub->dire.up = cub->cord.y - (i * size);
+			cub->dire.down = ((i + 1) * size) - cub->cord.y;
+		}
+        i++;
+	}
+
+	while (j <= (double)cub->virtical_num)
+	{
+		if ((j * size) < cub->cord.x && ((j + 1) * size) > cub->cord.x)
+		{
+			cub->dire.left = cub->cord.x - (j * size);
+			cub->dire.right = ((j + 1) * size) - cub->cord.x;
+		}
+	}
+}
+
+void	raycast(t_struct *cub)
+{
+	int	i;
+    i = 0;
+
+	cub->FOV = 60;
+	cub->NB_rays = WIN_W;
+	cub->angle = cub->vect.pos - ((double)cub->FOV / 2.00);
+	cub->raycast = (t_ray *)malloc(sizeof(t_ray) * cub->NB_rays);
+
+	while (i < cub->NB_rays)
+	{
+		init_ray(cub, &cub->raycast[i], cub->angle);
+		cub->angle = cub->angle +  (cub->FOV / (double)cub->NB_rays);
+        i++;
+	}
 }

@@ -99,9 +99,34 @@ typedef struct direction
 	double	right;
 	double	left;
 }	t_direction;
+
+typedef struct ray
+{
+	double		a;
+	int			num;
+	t_coord		ray;
+	t_coord		offset;
+	double		_tan;
+	t_coord		h_fcord;
+	t_coord		v_fcord;
+	double		h_fdis;
+	double		v_fdis;
+	t_cub_main	*main;
+	int			check_num;
+	t_coord		wc_temp;
+	double		f_dis;
+	double		h_line;
+	double		h_offset;
+	int			dir;
+	double		draw_end;
+	double		draw_start;
+}	t_ray;
+
 typedef struct s_struct
 {
 	char		**map;
+	int			map_height;
+	int			map_width;
 	int			height;
 	int			width;
 	int			len_ofmap;
@@ -117,9 +142,13 @@ typedef struct s_struct
 	float	cos_x;
 	float	sin_y;
 	int		zom;
+	int				NB_rays;
+	int FOV;
 	int color;
 	int checkColorMap;
 	unsigned int	**buffer;
+	int	horizontal_num;
+	int virtical_num;
 	t_wall	 *wall;
 	t_cordinate cord;
 	t_vector	vect;

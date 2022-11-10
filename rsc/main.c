@@ -65,8 +65,10 @@ int main(int ac, char **av)
 	cub.addr = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     //ft_draw_map(&cub);
     initial(&cub);
-    mlx_key_hook(cub.win_ptr, player_move, &cub);
-    mlx_loop(cub.mlx_ptr);
+    find_pos(&cub);
+    mlx_key_hook(cub.mlx_info.window, player_move, &cub.mlx);
+    mlx_hook(cub.mlx_info.window, 17, 1L << 17, &endgame, &cub);
+    mlx_loop(cub.mlx_info.mlx);
     // print(ft_jump_lines(&cub));
     // printf("F --> %d ",cub.flr.r);
     // printf("%d ",cub.flr.g);

@@ -254,6 +254,22 @@ char    **ft_jump_lines(t_struct *cub)
     }
     cub->len_ofmap = i;
     data[i] = NULL;
+    i = 0;
+    int max;
+    int cmp;
+    max = ft_strlen(data[i]);
+    cmp = 0;
+    while(data[i] != NULL)
+    {
+        if(ft_strlen(data[i] > max))
+        {
+            max = ft_strlen(data[i]);
+        }
+        cmp++;
+        i++;
+    }
+    cub->map_height = cmp;
+    cub->map_width = max;
     return (data);
 }
 
