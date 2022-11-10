@@ -20,7 +20,24 @@
 # include "../libft/libft.h"
 # define W_WIDTH 1020
 # define W_HEIGHT 580
-# define PI 3.14
+# define PI 3.14159265359
+# define PIH 1.57079632679
+# define PIT 4.71238898038
+# define RIGHT 82
+# define LEFT 76
+# define UP 85
+# define DOWN 68
+# define UD 50
+# define LR 60
+# define N 0
+# define S 1
+# define W 2
+# define E 3
+# define H 8
+# define V 10
+# define size 64.00
+# define WIN_H	512
+# define WIN_W	640
 # define rotationAngle PI / 2
 
 typedef struct s_floor
@@ -50,6 +67,17 @@ typedef struct  s_player{
 	int rotation_angle;
 	
 }  t_player;
+typedef struct cordinate
+{
+	double	x;
+	double	y;
+}	t_cordinate;
+
+typedef struct wall
+{
+	t_cordinate			*wall_c;
+	t_wall_cordinate	*next;
+}	t_wall;
 
 typedef struct s_struct
 {
@@ -74,6 +102,7 @@ typedef struct s_struct
 	int		zom;
 	int color;
 	int checkColorMap;
+	t_wall_cordinate	*wall_cordinate;
 	t_player player;
 }	t_struct;
 

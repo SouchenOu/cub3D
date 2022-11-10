@@ -32,11 +32,12 @@ int main(int ac, char **av)
     ft_check_alltextures(&cub);
     ft_check_rgb(&cub);
     ft_check_map(&cub);
+    ft_wall_cordinate(&cub);
     cub.mlx_ptr = mlx_init();
 	cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_HEIGHT, "cub3D");
     cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
 	cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
-    ft_draw_map(&cub);
+    //ft_draw_map(&cub);
     mlx_key_hook(cub.win_ptr, player_move, &cub);
     mlx_loop(cub.mlx_ptr);
     // print(ft_jump_lines(&cub));
