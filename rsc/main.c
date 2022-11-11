@@ -21,13 +21,29 @@ void print(char **str)
         i++;
     }
 }
-
+void buffer(t_struct *cub)
+{
+    int i;
+    int k;
+    i = 0;
+	while (i < W_HEIGHT)
+	{
+		k = 0;
+		while (k < W_WIDTH)
+        {
+            cub->buffer[i][k] = 0;
+            k++;
+        }
+        i++;
+	}
+    cub->check_buffer = 1;
+}
 int main(int ac, char **av)
 {
     t_struct cub;
     int i;
-    int k;
-    i = O;
+    i = 0;
+    cub->check_buffer = 0;
 
     if (ac != 2)
 		return (ft_putstr_fd("Usage : ./cub3D path/to/map.cub", 0), 0);
@@ -35,7 +51,7 @@ int main(int ac, char **av)
     ft_check_alltextures(&cub);
     ft_check_rgb(&cub);
     ft_check_map(&cub);
-    ft_wall_cordinate(&cub);
+    ft_get_wall_cordinate(&cub);
     //cub.mlx_ptr = mlx_init();
 	//cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_WIDTH, "cub3D");
     cub.mlx_info.mlx = mlx_init();
@@ -49,25 +65,15 @@ int main(int ac, char **av)
         i++;
 
     }
-
-	i = 0;
-	while (i < W_HEIGHT)
-	{
-		k = 0;
-		while (k < W_WIDTH)
-        {
-            cub.buffer[i][k] = 0;
-            k++;
-        }
-        i++;
-	}
+    buffer(&cub);
 	cub.img = mlx_new_image(cub.mlx_info.mlx, W_WIDTH,  W_HEIGHT);
 	cub.addr = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     //ft_draw_map(&cub);
     initial(&cub);
     find_pos(&cub);
-    mlx_key_hook(cub.mlx_info.window, player_move, &cub.mlx);
-    mlx_hook(cub.mlx_info.window, 17, 1L << 17, &endgame, &cub);
+    raycast(&cub);
+    //mlx_key_hook(cub.mlx_info.window, player_move, &cub.mlx);
+    //mlx_hook(cub.mlx_info.window, 17, 1L << 17, &finish, &cub);
     mlx_loop(cub.mlx_info.mlx);
     // print(ft_jump_lines(&cub));
     // printf("F --> %d ",cub.flr.r);

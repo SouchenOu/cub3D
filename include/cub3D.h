@@ -104,16 +104,16 @@ typedef struct ray
 {
 	double		a;
 	int			num;
-	t_coord		ray;
-	t_coord		offset;
-	double		_tan;
-	t_coord		h_fcord;
-	t_coord		v_fcord;
+	t_cordinate		ray_cordinate;
+	t_cordinate		offset;
+	double		tang;
+	t_cordinate		h_fcord;
+	t_cordinate		v_fcord;
 	double		h_fdis;
 	double		v_fdis;
-	t_cub_main	*main;
+	t_struct	*cub;
 	int			check_num;
-	t_coord		wc_temp;
+	t_cordinate		wc_temp;
 	double		f_dis;
 	double		h_line;
 	double		h_offset;
@@ -142,6 +142,8 @@ typedef struct s_struct
 	float	cos_x;
 	float	sin_y;
 	int		zom;
+	int		check_buffer;
+	int angle;
 	int				NB_rays;
 	int FOV;
 	int color;
@@ -149,11 +151,12 @@ typedef struct s_struct
 	unsigned int	**buffer;
 	int	horizontal_num;
 	int virtical_num;
-	t_wall	 *wall;
+	t_wall	 	*wall;
 	t_cordinate cord;
 	t_vector	vect;
-	t_player player;
-	t_mlx 	mlx_info;
+	t_player 	player;
+	t_mlx 		mlx_info;
+	t_ray		*raycast;
 	t_ceilling 	clg;
 	t_floor		flr;
 	t_dirct		drct;

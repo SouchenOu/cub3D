@@ -38,14 +38,14 @@ t_wall	*add_wall(t_wall *wall, double x, double y)
 }
 
 
-void	get_wall_coord(t_struct *cub)
+void	ft_get_wall_cordinate(t_struct *cub)
 {
 	int	x;
 	int	y;
 
 	cub->wall = create_Wall_node();
 	y = -1;
-	while (cub->.map[++y])
+	while (cub->map[++y])
 	{
 		x = -1;
 		while (cub->map[y][++x])

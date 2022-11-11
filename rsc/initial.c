@@ -1,15 +1,3 @@
-double	x;
-
-	x = -1.00;
-	while (++x <= (double)main->v_num)
-	{
-		if ((x * GRID) < main->pos.axis.x && ((x + 1) * GRID) > main->pos.axis.x)
-		{
-			main->i_dis.v_left = main->pos.axis.x - (x * GRID);
-			main->i_dis.v_right = ((x + 1) * GRID) - main->pos.axis.x;
-		}
-	}
-}
 
 /*
 
@@ -100,20 +88,4 @@ void find_pos(t_struct *cub){
 	}
 }
 
-void	raycast(t_struct *cub)
-{
-	int	i;
-    i = 0;
 
-	cub->FOV = 60;
-	cub->NB_rays = WIN_W;
-	cub->angle = cub->vect.pos - ((double)cub->FOV / 2.00);
-	cub->raycast = (t_ray *)malloc(sizeof(t_ray) * cub->NB_rays);
-
-	while (i < cub->NB_rays)
-	{
-		init_ray(cub, &cub->raycast[i], cub->angle);
-		cub->angle = cub->angle +  (cub->FOV / (double)cub->NB_rays);
-        i++;
-	}
-}
