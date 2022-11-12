@@ -6,141 +6,152 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 12:09:00 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/12 20:48:17 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-
-void	initial_raycast(t_struct *cub, t_ray *raycast, double angle)
+//3.14159265359 3.14159265359
+//PIr 1.57079632679 // 3.14159265359 / 2
+//PIl 4.71238898038 // 3 * 3.14159265359 / 2
+void	check_horizontal_vertical(t_ray *raycast)
 {
-	raycast->cub = cub;
-	raycast->a = deg_rad(lmt_angle(angle));
-	raycast->ray_cordinate.x = -1.00;
-	raycast->ray_cordinate.y = -1.00;
-	raycast->offset.x = -1.00;
-	raycast->offset.y = -1.00;
-	raycast->num = 0;
-	raycast->tang = 0.00;
-	raycast->v_fcord.x = 0.00;
-	raycast->v_fcord.y = 0.00;
-	raycast->v_fdis = 0.00;
-	raycast->h_fcord.y = 0.00;
-	raycast->h_fcord.x = 0.00;
-	raycast->h_fdis = 0.00;
-	raycast->check_num = -2;
-	raycast->wc_temp.x = 0.00;
-	raycast->wc_temp.y = 0.00;
-	raycast->f_dis = 0.00;
-	raycast->h_line = 0.00;
-	raycast->h_offset = 0.00;
-	raycast->dir = 0;
-}
-
-void	check_gridline(t_ray *raycast)
-{
-	horizontal_checker(raycast);
-	vertical_checker(raycast);
-	if (raycast->v_fdis < raycast->h_fdis)
-		get_fray_coord(raycast, 'v');
-	else if (raycast->v_fdis > raycast->h_fdis)
-		get_fray_coord(raycast, 'h');
-	raycast->f_dis = pythg(raycast->cub->cord.x, raycast->ray_cordinate.x, raycast->cub->cord.y, raycast->ray_cordinate.y);
-}
-//Vertical check
-/*void	vertical_checker(t_ray *raycast)
-{
-	raycast->tang = -tan(raycast->a);
-	if (raycast->a > PIH && raycast->a < PIT)
+	//horizontal // get ray vector
+	if (raycast->ray_looking_angle > 3.14159265359)                                                                             
 	{
-		raycast->ray_cordinate.x = ((raycast->cub->cord.x / size) * size) - (raycast->cub->dire.left);
-		raycast->ray_cordinate.y = ((raycast->cub->cord.x - raycast->ray_cordinate.x) * raycast->tang) + raycast->cub->cord.y;
-		raycast->check_num = raycast->cub->virtical_num;
-		set_offset(raycast, LEFT);
+		raycast->ray_cordinate.y = ((raycast->cub->cord.y / size_GRID) * size_GRID) - (raycast->cub->dire.up);
+		raycast->ray_cordinate.x = (raycast->cub->cord.y - raycast->ray_cordinate.y) / ((-tan(raycast->ray_looking_angle)) + raycast->cub->cord.x);
+		raycast->number_to_check = raycast->cub->horizontal_num;
+		raycast->offset.y = -size_GRID;
+		raycast->offset.x = -(raycast->offset.y) * raycast->tang;
+		raycast->dir = UP;
 	}
-	else if (raycast->a < PIH || raycast->a > PIT)
+	else if (raycast->ray_looking_angle < 3.14159265359)
 	{
-		raycast->ray_cordinate.x = ((raycast->cub->cord.x / size) * size) + (raycast->cub->dire.right);
-		raycast->ray_cordinate.y = (raycast->cub->cord.x - raycast->ray_cordinate.x) * raycast->tang + raycast->cub->cord.y;
-		raycast->check_num = raycast->cub->virtical_num;
-		set_offset(raycast, RIGHT);
+		raycast->ray_cordinate.y = ((raycast->cub->cord.y / size_GRID) * size_GRID) + (raycast->cub->dire.down);
+		raycast->ray_cordinate.x = (raycast->cub->cord.y - raycast->ray_cordinate.y) / ((-tan(raycast->ray_looking_angle)) + raycast->cub->cord.x);
+		raycast->number_to_check = raycast->cub->horizontal_num;
+		raycast->offset.y = size_GRID;
+		raycast->offset.x = -(raycast->offset.y) * raycast->tang;
+		raycast->dir = DOWN;
+		raycast->test = 'h';
 	}
-	else if (raycast->a == PI || raycast->a == 0)
+	else if (raycast->ray_looking_angle == 3.14159265359 || raycast->ray_looking_angle == 0)
 	{
 		raycast->ray_cordinate.x = raycast->cub->cord.x;
 		raycast->ray_cordinate.y = raycast->cub->cord.y;
-		raycast->check_num = -2;
+		raycast->number_to_check = -1;
+		raycast->dir = LR;
+		raycast->test = 'h';
+	}
+	//vertical // get ray vector
+	raycast->tang = -tan(raycast->ray_looking_angle);
+	if (raycast->ray_looking_angle > 1.57079632679 && raycast->ray_looking_angle < 4.71238898038)
+	{
+		raycast->ray_cordinate.x = ((raycast->cub->cord.x / size_GRID) * size_GRID) - (raycast->cub->dire.left);
+		raycast->ray_cordinate.y = ((raycast->cub->cord.x - raycast->ray_cordinate.x) * raycast->tang) + raycast->cub->cord.y;
+		raycast->number_to_check = raycast->cub->virtical_num;
+		raycast->offset.x = -size_GRID;
+		raycast->offset.y = -(raycast->offset.x) * raycast->tang;
+		raycast->dir = LEFT;
+		raycast->test = 'v';
+	}
+	else if (raycast->ray_looking_angle < 1.57079632679 || raycast->ray_looking_angle > 4.71238898038)
+	{
+		raycast->ray_cordinate.x = ((raycast->cub->cord.x / size_GRID) * size_GRID) + (raycast->cub->dire.right);
+		raycast->ray_cordinate.y = (raycast->cub->cord.x - raycast->ray_cordinate.x) * raycast->tang + raycast->cub->cord.y;
+		raycast->number_to_check = raycast->cub->virtical_num;
+		raycast->offset.x = size_GRID;
+		raycast->offset.y = -(raycast->offset.x) * raycast->tang;
+		raycast->dir = RIGHT;
+		raycast->test = 'v';
+	}
+	else if (raycast->ray_looking_angle == 3.14159265359 || raycast->ray_looking_angle == 0)
+	{
+		raycast->ray_cordinate.x = raycast->cub->cord.x;
+		raycast->ray_cordinate.y = raycast->cub->cord.y;
+		raycast->number_to_check = -1;
 		raycast->dir = UD;
 	}
-	check_loop(raycast, 'v');
-}
-// horizontal check
-void	horizontal_checker(t_ray *raycast)
-{
-	raycast->tang = -1 / tan(raycast->a);
-	if (raycast->a > PI)
+	if(raycast->test == 'h')
 	{
-		raycast->ray_cordinate.y = ((raycast->cub->cord.y / size) * size) - (raycast->cub->dire.up);
-		raycast->ray_cordinate.x = (raycast->cub->cord.y - raycast->ray_cordinate.y) * raycast->tang + raycast->cub->cord.x;
-		raycast->check_num = raycast->cub->horizontal_num;
-		set_offset(raycast, UP);
-	}
-	else if (raycast->a < PI)
+		check_if_wall_and_cal_dis(raycast, 'h');
+
+	}else if (raycast->test == 'v')
 	{
-		raycast->ray_cordinate.y = ((raycast->cub->cord.y / size) * size) + (raycast->cub->dire.down);
-		raycast->ray_cordinate.x = (raycast->cub->cord.y - raycast->ray_cordinate.y) * raycast->tang + raycast->cub->cord.x;
-		raycast->check_num = raycast->cub->horizontal_num;
-		set_offset(raycast, DOWN);
+		check_if_wall_and_cal_dis(raycast, 'v');
 	}
-	else if (raycast->a == PI || raycast->a == 0)
-	{
-		raycast->ray_cordinate.x = raycast->cub->cord.x;
-		raycast->ray_cordinate.y = raycast->cub->cord.y;
-		raycast->check_num = -2;
-		raycast->dir = LR;
-	}
-	check_loop(raycast, 'h');
+	if (raycast->virtical_distance < raycast->horizontal_distance)
+		ray_cordinate(raycast, 'v');
+	else if (raycast->virtical_distance > raycast->horizontal_distance)
+		ray_cordinate(raycast, 'h');
+	raycast->final_distance = pyt(raycast->cub->cord.x, raycast->ray_cordinate.x, raycast->cub->cord.y, raycast->ray_cordinate.y);
 }
 
-void	set_offset(t_ray *ray, int direction)
+int	check_limits(t_ray *raycast)
 {
-	if (direction == UP)
+	if ((raycast->ray_cordinate.x > 0&& raycast->ray_cordinate.y > 0))
 	{
-		ray->offset.y = -size;
-		ray->offset.x = -(ray->offset.y) * ray->tang;
-		ray->dir = UP;
+		if (raycast->ray_cordinate.x < ((double)raycast->cub->virtical_num) * size_GRID)
+		{
+			if (raycast->ray_cordinate.y < ((double)raycast->cub->horizontal_num) * size_GRID)
+				return (1);
+		}
 	}
-	else if (direction == DOWN)
-	{
-		ray->offset.y = size;
-		ray->offset.x = -(ray->offset.y) * ray->tang;
-		ray->dir = DOWN;
-	}
-	else if (direction == LEFT)
-	{
-		ray->offset.x = -size;
-		ray->offset.y = -(ray->offset.x) * ray->tang;
-		ray->dir = LEFT;
-	}
-	else if (direction == RIGHT)
-	{
-		ray->offset.x = size;
-		ray->offset.y = -(ray->offset.x) * ray->tang;
-		ray->dir = RIGHT;
-	}
-}*/
+	return (0);
+}
 
-/*void	check_loop(t_ray *raycast, int direction)
+void	ray_cordinate(t_ray *raycast, int direction)
+{
+	if (direction == 'v')
+	{
+		if (raycast->virt_cord.x > 0 && raycast->virt_cord.x > 0)
+		{
+			raycast->ray_cordinate.x = raycast->virt_cord.x;
+			raycast->ray_cordinate.y = raycast->virt_cord.y;
+		}
+		else
+		{
+			raycast->ray_cordinate.x = raycast->horizontal_cord.x;
+			raycast->ray_cordinate.y = raycast->horizontal_cord.y;
+		}
+	}
+	else if (direction == 'h')
+	{
+		if (raycast->horizontal_cord.x > 0 && raycast->horizontal_cord.y> 0)
+		{
+			raycast->ray_cordinate.x = raycast->horizontal_cord.x;
+			raycast->ray_cordinate.y = raycast->horizontal_cord.y;
+		}
+		else
+		{
+			raycast->ray_cordinate.x = raycast->horizontal_cord.x;
+			raycast->ray_cordinate.y = raycast->horizontal_cord.y;
+		}
+	}
+}
+void	check_if_wall_and_cal_dis(t_ray *raycast, int direction)
 {
 	int	i;
 
-	i = -1;
-	while (++i < raycast->check_num && limits(raycast))
+	i = 0;
+	while (i < raycast->number_to_check && (raycast->ray_cordinate.x > 0 && raycast->ray_cordinate.y > 0) && (raycast->ray_cordinate.x < ((double)raycast->cub->virtical_num) * size_GRID) && (raycast->ray_cordinate.y < ((double)raycast->cub->horizontal_num) * size_GRID))
 	{
 		if (is_wall(raycast, direction))
 		{
-			get_fray_dis(raycast, direction);
+			if (direction == 'v')
+			{
+				raycast->virt_cord.x = raycast->ray_cordinate.x;
+				raycast->virt_cord.y = raycast->ray_cordinate.y;
+				raycast->virtical_distance = pyt(raycast->cub->cord.x, raycast->virt_cord.x, raycast->cub->cord.y, raycast->virt_cord.y);
+			}
+			else if (direction == 'h')
+			{
+				raycast->horizontal_cord.x = raycast->ray_cordinate.x;
+				raycast->horizontal_cord.y = raycast->ray_cordinate.y;
+				raycast->horizontal_distance = pyt(raycast->cub->cord.x, raycast->horizontal_cord.x, raycast->cub->cord.y, raycast->horizontal_cord.y);
+			}
 			break ;
 		}
 		else
@@ -148,93 +159,69 @@ void	set_offset(t_ray *ray, int direction)
 			raycast->ray_cordinate.x += raycast->offset.x;
 			raycast->ray_cordinate.y += raycast->offset.y;
 		}
+		i++;
 	}
-	if (!limits(raycast))
-		get_fray_dis(raycast, direction);
-}*/
-/*int	limits(t_ray *raycast)
-{
-	if ((raycast->ray_cordinate.x > 0.00 && raycast->ray_cordinate.y > 0.00))
+	if (!check_limits(raycast))
 	{
-		if (raycast->ray_cordinate.x < ((double)raycast->main->virtical_num) * size)
-		{
-			if (raycast->ray_cordinate.y < ((double)raycast->cub->horizontal_num) * size)
-				return (1);
-		}
+		if (direction == 'v')
+			{
+				raycast->virt_cord.x = raycast->ray_cordinate.x;
+				raycast->virt_cord.y = raycast->ray_cordinate.y;
+				raycast->virtical_distance = pyt(raycast->cub->cord.x, raycast->virt_cord.x, raycast->cub->cord.y, raycast->virt_cord.y);
+			}
+			else if (direction == 'h')
+			{
+				raycast->horizontal_cord.x = raycast->ray_cordinate.x;
+				raycast->horizontal_cord.y = raycast->ray_cordinate.y;
+				raycast->horizontal_distance= pyt(raycast->cub->cord.x, raycast->horizontal_cord.x, raycast->cub->cord.y, raycast->horizontal_cord.y);
+			}
 	}
-	return (0);
 }
 
-void	get_fray_dis(t_ray *raycast, int direction)
-{
-	if (direction == 'v')
-	{
-		raycast->v_fcord.x = raycast->ray_cordinate.x;
-		raycast->v_fcord.y = raycast->ray_cordinate.y;
-		raycast->v_fdis = pythg(raycast->cub->cord.x, raycast->v_fcord.x, raycast->cub->cord.y, raycast->v_fcord.y);
-	}
-	else if (direction == 'h')
-	{
-		raycast->h_fcord.x = raycast->ray.x;
-		raycast->h_fcord.y = raycast->ray.y;
-		raycast->h_fdis = pythg(raycast->cub->cord.x, raycast->h_fcord.x, raycast->cub->cord.y, raycast->h_fcord.y);
-	}
-}*/
-/*void	get_fray_coord(t_ray *raycast, int direction)
-{
-	if (direction == 'v')
-	{
-		if (raycast->v_fcord.x > 0.00 && raycast->v_fcord.y > 0.00)
-		{
-			raycast->ray_cordinate.x = raycast->v_fcord.x;
-			raycast->ray_cordinate.y = raycast->v_fcord.y;
-		}
-		else
-		{
-			raycast->ray_cordinate.x = raycast->h_fcord.x;
-			raycast->ray_cordinate.y = raycast->h_fcord.y;
-		}
-	}
-	else if (direction == 'h')
-	{
-		if (raycast->h_fcord.x > 0.00 && raycast->h_fcord.y > 0.00)
-		{
-			raycast->ray_cordinate.x = raycast->h_fcord.x;
-			raycast->ray_cordinate.y = raycast->h_fcord.y;
-		}
-		else
-		{
-			raycast->ray_cordinate.x = raycast->v_fcord.x;
-			raycast->ray_cordinate.y = raycast->v_fcord.y;
-		}
-	}
-}*/
 
+/**Field of view is the extent of the observable world that is seen at a given time either through someone's eyes,
+ *  on a display screen, or through the viewfinder on a camera. Field of view (FOV) also describes the angle through which one can see that
+ *  observable world*/
 void	raycast(t_struct *cub)
 {
 	int	i;
-    int j;
     i = 0;
+	t_ray raycast;
 
-	cub->FOV = 60;
-	cub->NB_rays = WIN_W;
-	cub->angle = cub->vect.pos - ((double)cub->FOV / 2.00);
+	cub->FOV = 120;
+	cub->NB_rays =  W_WIDTH;
+	cub->looking_angle = cub->vect.pos - ((double)cub->FOV / 2);
 	cub->raycast = (t_ray *)malloc(sizeof(t_ray) * cub->NB_rays);
 
 	while (i < cub->NB_rays)
 	{
-		initial_raycast(cub, &cub->raycast[i], cub->angle);
-		cub->angle = cub->angle +  (cub->FOV / (double)cub->NB_rays);
+		raycast.cub = cub;
+		raycast.ray_looking_angle = degrees_to_radians(limite_angle(cub->looking_angle));
+		raycast.ray_cordinate.x = -1.00;
+		raycast.ray_cordinate.y = -1.00;
+		raycast.offset.x = -1.00;
+		raycast.offset.y = -1.00;
+		raycast.dir = 0;
+		raycast.number_to_check = -2;
+		raycast.tang = 0;
+		raycast.horizontal_distance = 0;
+		raycast.horizontal_cord.y = 0;
+		raycast.horizontal_cord.x = 0;
+		raycast.virt_cord.x = 0;
+		raycast.virt_cord.y = 0;
+		raycast.virtical_distance = 0;
+		
+		cub->looking_angle = cub->looking_angle +  (cub->FOV / (double)cub->NB_rays);
         i++;
 	}
 
     //start raycasting
 	i = 0;
 	if (cub->check_buffer)
-		buffer(cub);
+		ft_buffer(cub);
 	while (i < cub->NB_rays)
 	{
-		check_gridline(&cub->raycast[i]);
+		check_horizontal_vertical(&cub->raycast[i]);
 		//lets_do_raycast(&cub->raycast[i], i);
         i++;
 	}

@@ -58,15 +58,15 @@ void find_pos_player(t_struct *cub){
 	cub->mlx_info.width = 0;
     cub->cord.x = 100.00;
 	cub->cord.y = 220.00;
-    cub->vect.x = cos(deg_rad(280.00));
-	cub->vect.y = -sin(deg_rad(280.00));
+    cub->vect.x = cos(degrees_to_radians(280.00));
+	cub->vect.y = -sin(degrees_to_radians(280.00));
 	cub->vect.pos = 280.00;
     cub->dire.down = 0.00;
 	cub->dire.up = 0.00;
 	cub->dire.left = 0.00;
 	cub->dire.right = 0.00;
-    cub->virtical_num = cub->map_width;
-    cub->horizontal_num= cub->map_height; 
+    cub->virtical_num = cub->map_width;// nb characters
+    cub->horizontal_num= cub->map_height; //nb lignes
 
 	i = 0;
     j = 0;
@@ -76,6 +76,7 @@ void find_pos_player(t_struct *cub){
 		{
 			cub->dire.up = cub->cord.y - (i * size_GRID);
 			cub->dire.down = ((i + 1) * size_GRID) - cub->cord.y;
+
 		}
         i++;
 	}
@@ -87,6 +88,7 @@ void find_pos_player(t_struct *cub){
 			cub->dire.left = cub->cord.x - (j * size_GRID);
 			cub->dire.right = ((j + 1) * size_GRID) - cub->cord.x;
 		}
+		j++;
 	}
 }
 

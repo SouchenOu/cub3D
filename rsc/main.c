@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 13:19:24 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/12 20:49:02 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void print(char **str)
         i++;
     }
 }
-void buffer(t_struct *cub)
+void ft_buffer(t_struct *cub)
 {
     int i;
     int k;
@@ -55,7 +55,7 @@ int main(int ac, char **av)
     //cub.mlx_ptr = mlx_init();
 	//cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_WIDTH, "cub3D");
     cub.mlx_info.mlx = mlx_init();
-	cub.mlx_info.window = mlx_new_window(cub.mlx_info.mlx, W_WIDTH, W_WIDTH, "Souchen_ysmaili'Cub3d");
+	cub.mlx_info.window = mlx_new_window(cub.mlx_info.mlx, W_WIDTH, W_HEIGHT, "Souchen_ysmaili'Cub3d");
     //cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
 	//cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     cub.buffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
@@ -65,13 +65,13 @@ int main(int ac, char **av)
         i++;
 
     }
-    buffer(&cub);
+    ft_buffer(&cub);
 	cub.img = mlx_new_image(cub.mlx_info.mlx, W_WIDTH,  W_HEIGHT);
 	cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     //ft_draw_map(&cub);
     find_pos_player(&cub);
-    //raycast(&cub);
-    //mlx_key_hook(cub.mlx_info.window, player_move, &cub.mlx);
+    raycast(&cub);
+    //mlx_key_hook(cub.mlx_info.window,                                                                                               , &cub.mlx);
     //mlx_hook(cub.mlx_info.window, 17, 1L << 17, &finish, &cub);
     mlx_loop(cub.mlx_info.mlx);
     // print(ft_jump_lines(&cub));

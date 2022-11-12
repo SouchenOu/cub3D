@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 13:25:17 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/12 20:48:49 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,9 @@
 # include <fcntl.h>
 # include <math.h>
 # include "../libft/libft.h"
+# define PI 3.14159265359
 # define W_WIDTH 1020
 # define W_HEIGHT 580
-# define PI 3.14159265359
-# define PIH 1.57079632679
-# define PIT 4.71238898038
 # define RIGHT 82
 # define LEFT 76
 # define UP 85
@@ -36,7 +34,7 @@
 # define H 8
 # define V 10
 # define size_GRID 64.00
-# define rotationAngle PI / 2
+# define rotationAngle 3.14159265359 / 2
 
 typedef struct wall t_wall;
 typedef struct s_struct t_struct;
@@ -105,65 +103,62 @@ typedef struct direction
 
 typedef struct ray
 {
-	double		a;
-	int			num;
+	double			ray_looking_angle;
+	int				num;
 	t_cordinate		ray_cordinate;
 	t_cordinate		offset;
-	double		tang;
-	t_cordinate		h_fcord;
-	t_cordinate		v_fcord;
-	double		h_fdis;
-	double		v_fdis;
-	t_struct	*cub;
-	int			check_num;
-	t_cordinate		wc_temp;
-	double		f_dis;
-	double		h_line;
-	double		h_offset;
-	int			dir;
-	double		draw_end;
-	double		draw_start;
+	double			tang;
+	t_cordinate		horizontal_cord;
+	t_cordinate		virt_cord;
+	double			horizontal_distance;
+	double			virtical_distance;
+	t_struct		*cub;
+	int				number_to_check;
+	double			final_distance;
+	int				dir;
+	char	 		test;
 }	t_ray;
 
 typedef struct s_struct
 {
-	char		**map;
-	int			map_height;
-	int			map_width;
-	int			height;
-	int			width;
-	int			len_ofmap;
-	void		*mlx_ptr;
-    void		*win_ptr;
-	void		*img;
-	char		*addr;
-	int			bits_per_pixel;
-	int			line_length;
-	int			endian;
-	int			shift_x;
-	int			shift_y;
-	float		cos_x;
-	float		sin_y;
-	int			zom;
-	int			check_buffer;
-	int 		angle;
-	int			NB_rays;
-	int 		FOV;
-	int 		color;
-	int 		checkColorMap;
+	char			**map;
+	int				map_height;
+	int				map_width;
+	int				height;
+	int				width;
+	int				len_ofmap;
+	void			*mlx_ptr;
+    void			*win_ptr;
+	void			*img;
+	char			*addr;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+	int				shift_x;
+	int				shift_y;
+	float			cos_x;
+	float			sin_y;
+	int				zom;
+	int				direction;
+	int				check_buffer;
+	int 			looking_angle;
+	int				NB_rays;
+	int 			FOV;
+	int 			color;
+	int 			checkColorMap;
 	unsigned int	**buffer;
-	int			horizontal_num;
-	int 		virtical_num;
-	t_wall	 	*wall;
-	t_cordinate cord;
-	t_vector	vect;
-	t_player 	player;
-	t_mlx 		mlx_info;
-	t_ray		*raycast;
-	t_ceilling 	clg;
-	t_floor		flr;
-	t_dirct		drct;
-	t_direction dire;
+	int				horizontal_num;
+	int 			virtical_num;
+	t_wall	 		*wall;
+	t_cordinate 	cord;
+	t_vector		vect;
+	t_player 		player;
+	t_mlx 			mlx_info;
+	t_ray			*raycast;
+	t_ceilling 		clg;
+	t_floor			flr;
+	t_dirct			drct;
+	t_direction 	dire;
 }	t_struct;
 
 
@@ -192,14 +187,18 @@ void 	player_position(t_struct *cub);
 int		player_move(int key, t_struct *p);
 void 	update_ptayer(t_struct *cub);
 void 	print(char **str);
+double	degrees_to_radians(double a);
+double	limite_angle(double a);
+double	pyt(double x1, double x2, double y1, double y2);
+void 	find_pos_player(t_struct *cub);
+void	check_horizontal_vertical(t_ray *raycast);
+int		check_limits(t_ray *raycast);
+void	ray_cordinate(t_ray *raycast, int direction);
+void	check_if_wall_and_cal_dis(t_ray *raycast, int direction);
+void	raycast(t_struct *cub);
 t_wall	*create_Wall_node(void);
 void	wall_cordinate(t_wall *wall, double x, double y);
 t_wall	*add_wall(t_wall *wall, double x, double y);
 void	ft_get_wall_cordinate(t_struct *cub);
-void 	find_pos_player(t_struct *cub);
-double	deg_rad(double a);
-double	lmt_angle(double a);
-double	pythg(double x1, double x2, double y1, double y2);
-
-
+void ft_buffer(t_struct *cub);
 #endif
