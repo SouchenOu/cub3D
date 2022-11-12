@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   initial.c                                          :+:      :+:    :+:   */
+/*   find_pos_player.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 12:08:53 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/12 13:11:44 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
 
-/*https://www.desmos.com/calculator/8imkdqdavd
 
-the pos of the player could be any pos 
-it could be btwn the gridlines
-or on one of the gridline
----> this is just to check if the player pos was btwn
-gridlines so we can add the right distance  for the first initial 
-gridline hitting 
 
-* >>>> horizontal <<<< *
+
+/* >>>> horizontal <<<< *
 find where is the pos of the player btwn the horizontal 
 lines or on the one of the gridlines
 ?       (y - 1) < posY && (y + 1) > posY
@@ -55,9 +49,11 @@ rayX - v_initial;
 */
 
 
+//Player position (virtical or horizontal)
+void find_pos_player(t_struct *cub){
 
-void	initial(t_struct *cub)
-{
+    double	i;
+    double  j;
 	cub->mlx_info.height = 0;
 	cub->mlx_info.width = 0;
     cub->cord.x = 100.00;
@@ -65,16 +61,10 @@ void	initial(t_struct *cub)
     cub->vect.x = cos(deg_rad(280.00));
 	cub->vect.y = -sin(deg_rad(280.00));
 	cub->vect.pos = 280.00;
-    cub->i_dis.h_down = 0.00;
+    cub->dire.down = 0.00;
 	cub->dire.up = 0.00;
 	cub->dire.left = 0.00;
 	cub->dire.right = 0.00;
-}
-
-void find_pos(t_struct *cub){
-
-    double	i;
-    double  j;
     cub->virtical_num = cub->map_width;
     cub->horizontal_num= cub->map_height; 
 
@@ -82,20 +72,20 @@ void find_pos(t_struct *cub){
     j = 0;
 	while (i <= (double)cub->horizontal_num)
 	{
-		if (cub->cord.y < ((i + 1) * size) && cub->cord.y > (i * size))
+		if (cub->cord.y < ((i + 1) * size_GRID) && cub->cord.y > (i * size_GRID))
 		{
-			cub->dire.up = cub->cord.y - (i * size);
-			cub->dire.down = ((i + 1) * size) - cub->cord.y;
+			cub->dire.up = cub->cord.y - (i * size_GRID);
+			cub->dire.down = ((i + 1) * size_GRID) - cub->cord.y;
 		}
         i++;
 	}
 
 	while (j <= (double)cub->virtical_num)
 	{
-		if ((j * size) < cub->cord.x && ((j + 1) * size) > cub->cord.x)
+		if ((j * size_GRID) < cub->cord.x && ((j + 1) * size_GRID) > cub->cord.x)
 		{
-			cub->dire.left = cub->cord.x - (j * size);
-			cub->dire.right = ((j + 1) * size) - cub->cord.x;
+			cub->dire.left = cub->cord.x - (j * size_GRID);
+			cub->dire.right = ((j + 1) * size_GRID) - cub->cord.x;
 		}
 	}
 }

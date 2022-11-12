@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 12:19:37 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/12 13:25:17 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@
 # define V 10
 # define size_GRID 64.00
 # define rotationAngle PI / 2
+
+typedef struct wall t_wall;
+typedef struct s_struct t_struct;
 
 typedef struct s_floor
 {
@@ -164,6 +167,8 @@ typedef struct s_struct
 }	t_struct;
 
 
+
+
 int     get_height(char *map_file);
 int		get_width(char *map_file, int height);
 char    *ft_check_map(t_struct *cub);
@@ -191,6 +196,10 @@ t_wall	*create_Wall_node(void);
 void	wall_cordinate(t_wall *wall, double x, double y);
 t_wall	*add_wall(t_wall *wall, double x, double y);
 void	ft_get_wall_cordinate(t_struct *cub);
+void 	find_pos_player(t_struct *cub);
+double	deg_rad(double a);
+double	lmt_angle(double a);
+double	pythg(double x1, double x2, double y1, double y2);
 
 
 #endif

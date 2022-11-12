@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 09:00:25 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/12 13:19:24 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,10 @@ int main(int ac, char **av)
     }
     buffer(&cub);
 	cub.img = mlx_new_image(cub.mlx_info.mlx, W_WIDTH,  W_HEIGHT);
-	cub.addr = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
+	cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     //ft_draw_map(&cub);
-    initial(&cub);
-    find_pos(&cub);
-    raycast(&cub);
+    find_pos_player(&cub);
+    //raycast(&cub);
     //mlx_key_hook(cub.mlx_info.window, player_move, &cub.mlx);
     //mlx_hook(cub.mlx_info.window, 17, 1L << 17, &finish, &cub);
     mlx_loop(cub.mlx_info.mlx);
