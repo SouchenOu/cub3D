@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   initial.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
+/*   Updated: 2022/11/12 12:08:53 by souchen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/*
+#include "../include/cub3D.h"
 
-https://www.desmos.com/calculator/8imkdqdavd
+
+/*https://www.desmos.com/calculator/8imkdqdavd
 
 the pos of the player could be any pos 
 it could be btwn the gridlines

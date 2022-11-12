@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/09 10:55:30 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/12 12:19:37 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define E 3
 # define H 8
 # define V 10
-# define size 64.00
+# define size_GRID 64.00
 # define rotationAngle PI / 2
 
 typedef struct s_floor
@@ -81,7 +81,7 @@ typedef struct cordinate
 typedef struct wall
 {
 	t_cordinate			*wall_c;
-	t_wall_cordinate	*next;
+	t_wall				*next;
 }	t_wall;
 
 typedef struct mlx
@@ -130,27 +130,27 @@ typedef struct s_struct
 	int			height;
 	int			width;
 	int			len_ofmap;
-	void	*mlx_ptr;
-    void	*win_ptr;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-	int		shift_x;
-	int		shift_y;
-	float	cos_x;
-	float	sin_y;
-	int		zom;
-	int		check_buffer;
-	int angle;
-	int				NB_rays;
-	int FOV;
-	int color;
-	int checkColorMap;
+	void		*mlx_ptr;
+    void		*win_ptr;
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+	int			shift_x;
+	int			shift_y;
+	float		cos_x;
+	float		sin_y;
+	int			zom;
+	int			check_buffer;
+	int 		angle;
+	int			NB_rays;
+	int 		FOV;
+	int 		color;
+	int 		checkColorMap;
 	unsigned int	**buffer;
-	int	horizontal_num;
-	int virtical_num;
+	int			horizontal_num;
+	int 		virtical_num;
 	t_wall	 	*wall;
 	t_cordinate cord;
 	t_vector	vect;
@@ -183,8 +183,14 @@ int		ft_check_openmap(char **data);
 char    **ft_split_map(t_struct *cub);
 char    *ft_search_inmap(t_struct *cub, char *search, int len_ofsrch);
 void    ft_draw_map(t_struct *cub);
-void player_position(t_struct *cub);
-int	player_move(int key, t_struct *p);
-void update_ptayer(t_struct *cub);
-void print(char **str);
+void 	player_position(t_struct *cub);
+int		player_move(int key, t_struct *p);
+void 	update_ptayer(t_struct *cub);
+void 	print(char **str);
+t_wall	*create_Wall_node(void);
+void	wall_cordinate(t_wall *wall, double x, double y);
+t_wall	*add_wall(t_wall *wall, double x, double y);
+void	ft_get_wall_cordinate(t_struct *cub);
+
+
 #endif

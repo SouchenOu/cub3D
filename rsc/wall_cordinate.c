@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wall_cordinate.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
+/*   Updated: 2022/11/12 12:18:55 by souchen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/cub3D.h"
+
 
 t_wall	*create_Wall_node(void)
 {
@@ -10,14 +24,14 @@ t_wall	*create_Wall_node(void)
 }
 void	wall_cordinate(t_wall *wall, double x, double y)
 {
-	wall->wall_c[0].x = (x) * size;
-	wall->wall_c[0].y = (y) * size;
-	wall->wall_c[1].x = (x + 1) * size;
-	wall->wall_c[1].y = (y) * size;
-	wall->wall_c[2].x = (x) * size;
-	wall->wall_c[2].y = (y + 1) * size;
-	wall->wall_c[3].x = (x + 1) * size;
-	wall->wall_c[3].y = (y + 1) * size;
+	wall->wall_c[0].x = (x) * size_GRID;
+	wall->wall_c[0].y = (y) * size_GRID;
+	wall->wall_c[1].x = (x + 1) * size_GRID;
+	wall->wall_c[1].y = (y) * size_GRID;
+	wall->wall_c[2].x = (x) * size_GRID;
+	wall->wall_c[2].y = (y + 1) * size_GRID;
+	wall->wall_c[3].x = (x + 1) * size_GRID;
+	wall->wall_c[3].y = (y + 1) * size_GRID;
 }
 t_wall	*add_wall(t_wall *wall, double x, double y)
 {
