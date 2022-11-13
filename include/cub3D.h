@@ -110,6 +110,7 @@ typedef struct ray
 	double			tang;
 	t_cordinate		horizontal_cord;
 	t_cordinate		virt_cord;
+	t_cordinate		ray_cord_temp;
 	double			horizontal_distance;
 	double			virtical_distance;
 	t_struct		*cub;
