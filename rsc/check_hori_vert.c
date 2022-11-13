@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/13 20:23:03 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/13 20:40:12 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	check_horizontal_vertical(t_ray *raycast)
 		raycast->offset.y = -size_GRID;
 		raycast->offset.x = -(raycast->offset.y) * raycast->tang;
 		raycast->dir = UP;
+		raycast->test = 'h';
 	}
 	else if (raycast->ray_looking_angle < 3.14159265359)
 	{
@@ -43,7 +44,7 @@ void	check_horizontal_vertical(t_ray *raycast)
 		raycast->ray_cordinate.y = raycast->cub->cord.y;
 		raycast->number_to_check = -1;
 		raycast->dir = LR;
-		raycast->test = 'h';
+		
 	}
 	//vertical // get ray vector
 	raycast->tang = -tan(raycast->ray_looking_angle);
@@ -91,7 +92,7 @@ void	check_horizontal_vertical(t_ray *raycast)
 
 int	check_limits(t_ray *raycast)
 {
-	if ((raycast->ray_cordinate.x > 0&& raycast->ray_cordinate.y > 0))
+	if ((raycast->ray_cordinate.x > 0 && raycast->ray_cordinate.y > 0))
 	{
 		if (raycast->ray_cordinate.x < ((double)raycast->cub->virtical_num) * size_GRID)
 		{
@@ -106,7 +107,7 @@ int	check_limits(t_ray *raycast)
 //check if its a wall or not
 
 
-int	is_wall(t_ray *raycast, int direction)
+int	is_it_wall(t_ray *raycast, int direction)
 {
 	int cmp;
 	int i;
@@ -193,7 +194,7 @@ void	check_if_wall_and_cal_dis(t_ray *raycast, int direction)
 	i = 0;
 	while (i < raycast->number_to_check && (raycast->ray_cordinate.x > 0 && raycast->ray_cordinate.y > 0) && (raycast->ray_cordinate.x < ((double)raycast->cub->virtical_num) * size_GRID) && (raycast->ray_cordinate.y < ((double)raycast->cub->horizontal_num) * size_GRID))
 	{
-		if (is_wall(raycast, direction))
+		if (is_it_wall(raycast, direction))
 		{
 			if (direction == 'v')
 			{

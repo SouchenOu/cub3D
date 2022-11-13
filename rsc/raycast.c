@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/13 20:21:47 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/13 23:26:16 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	raycast(t_struct *cub)
     int j;
     i = 0;
 	t_ray raycast;
-
+	//The field of view (FoV) is the extent of the observable world that is seen at any given moment.
 	cub->FOV = 120;
-	cub->NB_rays =  W_WIDTH;
-	cub->looking_angle = cub->vect.pos - ((double)cub->FOV / 2);
+	cub->NB_rays =  W_WIDTH; // width of the screen
+	cub->looking_angle = 180 - ((double)cub->FOV / 2);
 	cub->raycast = (t_ray *)malloc(sizeof(t_ray) * cub->NB_rays);
 
 	while (i < cub->NB_rays)
@@ -33,7 +33,7 @@ void	raycast(t_struct *cub)
 		raycast.offset.x = -1;
 		raycast.offset.y = -1;
 		raycast.dir = 0;
-		raycast.number_to_check = -2;
+		raycast.number_to_check = -1;
 		raycast.tang = 0;
 		raycast.horizontal_distance = 0;
 		raycast.horizontal_cord.y = 0;
