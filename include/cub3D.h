@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 20:48:49 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/13 20:22:26 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ typedef struct s_struct
 	unsigned int	**buffer;
 	int				horizontal_num;
 	int 			virtical_num;
+	unsigned int 			**array;
 	t_wall	 		*wall;
 	t_cordinate 	cord;
 	t_vector		vect;

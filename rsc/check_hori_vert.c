@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   check_hori_vert.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 20:48:17 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/13 20:23:03 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ int	check_limits(t_ray *raycast)
 
 int	is_wall(t_ray *raycast, int direction)
 {
+	int cmp;
+	int i;
 	if (direction == 'v')
 	{
 		raycast->ray_cord_temp.x = raycast->ray_cordinate.x;

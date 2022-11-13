@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycast.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
+/*   Updated: 2022/11/13 20:21:47 by souchen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/cub3D.h"
+
 void	raycast(t_struct *cub)
 {
 	int	i;
@@ -46,12 +60,12 @@ void	raycast(t_struct *cub)
         i++;
 	}
     i = 0;
-	while (i < W_Height)
+	while (i < W_HEIGHT)
 	{
 		j = 0;
-		while (k < W_Width)
+		while (j < W_WIDTH)
         {
-            cub->data[i * W_Width + j] = cub->buffer[i][j];
+            cub->array[i * W_WIDTH + j] = cub->buffer[i][j];
             j++;
         }
         i++;
