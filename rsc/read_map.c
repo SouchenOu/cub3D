@@ -79,7 +79,21 @@ int	get_width(char *map_file, int height)
 	close(fd);
 	return (max);
 }
+char	*no_new_line(char *line)
+{
+	char	*newMap;
+	int		i;
 
+	newMap = (char *)malloc(sizeof(char) * (ft_strlen(line) - 1));
+	i = 0;
+	while (line[i] != '\n' && line[i])
+	{
+		newMap[i] = line[i];
+		i++;
+	}
+	newMap[i] = '\0';
+	return (newMap);
+}
 void	ft_read_maps(char *map_file, t_struct *cub)
 {
 	int		fd;
@@ -98,7 +112,7 @@ void	ft_read_maps(char *map_file, t_struct *cub)
 	cub->map = (char **) malloc(sizeof(char *) * (cub->height + 1));
 	while (i < cub->height)
 	{
-		get_line = get_next_line(fd);
+		get_line = no_new_line(get_next_line(fd));
         cub->map[i] = ft_strdup(get_line);
 		free(get_line);
 		i++;

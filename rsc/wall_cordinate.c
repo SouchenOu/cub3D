@@ -45,7 +45,7 @@ t_wall	*add_wall(t_wall *wall, double x, double y)
 	temporaire_wall->wall_c = (t_cordinate *)malloc(sizeof(t_cordinate) * 4);
 	wall_cordinate(temporaire_wall, x, y);
 	wall_node = wall;
-	while (wall_node->next)
+	while (wall_node->next != NULL)
 		wall_node = wall_node->next;
 	wall_node->next = temporaire_wall;
 	return (wall);
@@ -54,21 +54,45 @@ t_wall	*add_wall(t_wall *wall, double x, double y)
 
 void	ft_get_wall_cordinate(t_struct *cub)
 {
-	int	x;
-	int	y;
+	int	i;
+	int	j;
 
 	cub->wall = create_Wall_node();
-	y = -1;
-	while (cub->map[++y])
+	j = 0;
+	while (cub->map[j] != NULL)
 	{
-		x = -1;
-		while (cub->map[y][++x])
+		i = 0;
+		while (cub->map[j][i])
 		{
-			if (cub->map[y][x] == '1')
+			if (cub->map[j][i] == '1')
 			{
-				if (y != 0 || x != 0)
-					cub->wall = add_wall(cub->wall, (double)x, (double)y);
+				if (j != 0 || i != 0)
+					cub->wall = add_wall(cub->wall, (double)i, (double)j);
 			}
+			i++;
 		}
+		j++;
+	}
+}
+// to check if everythings okey!!
+void	print_node(t_wall *wall)
+{
+	t_wall	*temp;
+	int				i;
+	int				j;
+
+	temp = wall;
+	j = 1;
+	while (temp->next)
+	{
+		i = 0;
+		while (i < 4)
+		{
+			printf("%d x %f, y %f\n", i + 1, temp->wall_c[i].x, temp->wall_c[i].y);
+			i++;
+		}
+		printf("\n");
+		temp = temp->next;
+		j++;
 	}
 }
