@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_hori_vert.c                                  :+:      :+:    :+:   */
+/*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/13 20:40:12 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/12 20:48:17 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	check_horizontal_vertical(t_ray *raycast)
 		raycast->offset.y = -size_GRID;
 		raycast->offset.x = -(raycast->offset.y) * raycast->tang;
 		raycast->dir = UP;
-		raycast->test = 'h';
+		raycast->test = "horizontal";
 	}
 	else if (raycast->ray_looking_angle < 3.14159265359)
 	{
@@ -36,7 +36,7 @@ void	check_horizontal_vertical(t_ray *raycast)
 		raycast->offset.y = size_GRID;
 		raycast->offset.x = -(raycast->offset.y) * raycast->tang;
 		raycast->dir = DOWN;
-		raycast->test = 'h';
+		raycast->test = "horizontal";
 	}
 	else if (raycast->ray_looking_angle == 3.14159265359 || raycast->ray_looking_angle == 0)
 	{
@@ -44,7 +44,6 @@ void	check_horizontal_vertical(t_ray *raycast)
 		raycast->ray_cordinate.y = raycast->cub->cord.y;
 		raycast->number_to_check = -1;
 		raycast->dir = LR;
-		
 	}
 	//vertical // get ray vector
 	raycast->tang = -tan(raycast->ray_looking_angle);
@@ -56,7 +55,7 @@ void	check_horizontal_vertical(t_ray *raycast)
 		raycast->offset.x = -size_GRID;
 		raycast->offset.y = -(raycast->offset.x) * raycast->tang;
 		raycast->dir = LEFT;
-		raycast->test = 'v';
+		raycast->test = "virtical";
 	}
 	else if (raycast->ray_looking_angle < 1.57079632679 || raycast->ray_looking_angle > 4.71238898038)
 	{
@@ -66,7 +65,7 @@ void	check_horizontal_vertical(t_ray *raycast)
 		raycast->offset.x = size_GRID;
 		raycast->offset.y = -(raycast->offset.x) * raycast->tang;
 		raycast->dir = RIGHT;
-		raycast->test = 'v';
+		raycast->test = "virtical";
 	}
 	else if (raycast->ray_looking_angle == 3.14159265359 || raycast->ray_looking_angle == 0)
 	{
@@ -75,13 +74,13 @@ void	check_horizontal_vertical(t_ray *raycast)
 		raycast->number_to_check = -1;
 		raycast->dir = UD;
 	}
-	if(raycast->test == 'h')
+	if(!strncmp(raycast->test, "horizontal", 10))
 	{
-		check_if_wall_and_cal_dis(raycast, 'h');
+		check_if_wall_and_cal_dis(raycast, "horizontal");
 
-	}else if (raycast->test == 'v')
+	}else if (!strncmp(raycast->test, "virtical", 8))
 	{
-		check_if_wall_and_cal_dis(raycast, 'v');
+		check_if_wall_and_cal_dis(raycast, "virtical");
 	}
 	if (raycast->virtical_distance < raycast->horizontal_distance)
 		ray_cordinate(raycast, 'v');
@@ -107,11 +106,9 @@ int	check_limits(t_ray *raycast)
 //check if its a wall or not
 
 
-int	is_it_wall(t_ray *raycast, int direction)
+int	is_it_wall(t_ray *raycast, char *direction)
 {
-	int cmp;
-	int i;
-	if (direction == 'v')
+	if (!ft_strncmp(direction, "virtical", 8))
 	{
 		raycast->ray_cord_temp.x = raycast->ray_cordinate.x;
 		raycast->ray_cord_temp.y = find_x_or_y(raycast, direction);
@@ -121,9 +118,9 @@ int	is_it_wall(t_ray *raycast, int direction)
 				cmp = 0;
 			while (i < 4)
 			{
-				if (direction == 'h' && raycast->cub->wall->wall_c[i].x == raycast->ray_cord_temp.x + size_GRID && raycast->cub->wall->wall_c[i].y == raycast->ray_cord_temp.y)
+				if (!ft_strncmp(direction, "horizontal", 10) && raycast->cub->wall->wall_c[i].x == raycast->ray_cord_temp.x + size_GRID && raycast->cub->wall->wall_c[i].y == raycast->ray_cord_temp.y + size_GRID)
 					cmp++;
-				else if (direction == 'v' && raycast->cub->wall->wall_c[i].x == raycast->ray_cord_temp.x && raycast->cub->wall->wall_c[i].y == raycast->ray_cord_temp.y + size_GRID)
+				else if (!ft_strncmp(direction, "virtical", 8) && raycast->cub->wall->wall_c[i].x == raycast->ray_cord_temp.x && raycast->cub->wall->wall_c[i].y == raycast->ray_cord_temp.y + size_GRID)
 					cmp++;
 				if (raycast->cub->wall->wall_c[i].x == raycast->ray_cord_temp.x && raycast->cub->wall->wall_c[i].y == raycast->ray_cord_temp.y)
 					cmp++;
@@ -134,7 +131,7 @@ int	is_it_wall(t_ray *raycast, int direction)
 			raycast->cub->wall = raycast->cub->wall->next;
 		}
 	}
-	else if (direction == 'h')
+	else if (!ft_strncmp(direction, "horizontal", 10))
 	{
 		raycast->ray_cord_temp.y = raycast->ray_cordinate.y;
 		raycast->ray_cord_temp.x = find_x_or_y(raycast, direction);
@@ -187,22 +184,23 @@ double	find_x_or_y(t_ray *raycast, int destination)
 	return (i * size_GRID);
 }
 
-void	check_if_wall_and_cal_dis(t_ray *raycast, int direction)
+void	check_if_wall_and_cal_dis(t_ray *raycast, char *direction)
 {
 	int	i;
 
 	i = 0;
 	while (i < raycast->number_to_check && (raycast->ray_cordinate.x > 0 && raycast->ray_cordinate.y > 0) && (raycast->ray_cordinate.x < ((double)raycast->cub->virtical_num) * size_GRID) && (raycast->ray_cordinate.y < ((double)raycast->cub->horizontal_num) * size_GRID))
 	{
-		if (is_it_wall(raycast, direction))
+		//To calculate distance i should firstl check if the player look on a wall or not
+		if (is_wall(raycast, direction))
 		{
-			if (direction == 'v')
+			if (!ft_strncmp(direction, "virtical", 8))
 			{
 				raycast->virt_cord.x = raycast->ray_cordinate.x;
 				raycast->virt_cord.y = raycast->ray_cordinate.y;
 				raycast->virtical_distance = pyt(raycast->cub->cord.x, raycast->virt_cord.x, raycast->cub->cord.y, raycast->virt_cord.y);
 			}
-			else if (direction == 'h')
+			else if (!ft_strncmp(direction, "hozizontal", 10))
 			{
 				raycast->horizontal_cord.x = raycast->ray_cordinate.x;
 				raycast->horizontal_cord.y = raycast->ray_cordinate.y;
@@ -219,13 +217,13 @@ void	check_if_wall_and_cal_dis(t_ray *raycast, int direction)
 	}
 	if (!check_limits(raycast))
 	{
-		if (direction == 'v')
+		if (!ft_strncmp(direction, "virtical", 8))
 			{
 				raycast->virt_cord.x = raycast->ray_cordinate.x;
 				raycast->virt_cord.y = raycast->ray_cordinate.y;
 				raycast->virtical_distance = pyt(raycast->cub->cord.x, raycast->virt_cord.x, raycast->cub->cord.y, raycast->virt_cord.y);
 			}
-			else if (direction == 'h')
+			else if (!ft_strncmp(direction, "hozizontal", 10))
 			{
 				raycast->horizontal_cord.x = raycast->ray_cordinate.x;
 				raycast->horizontal_cord.y = raycast->ray_cordinate.y;

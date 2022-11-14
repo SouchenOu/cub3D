@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/13 23:49:25 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/12 20:49:02 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void print(char **str)
         i++;
     }
 }
-void ft_buffer(t_struct *cub)
+void ft_tab(t_struct *cub)
 {
     int i;
     int k;
@@ -36,49 +36,40 @@ void ft_buffer(t_struct *cub)
         }
         i++;
 	}
-    cub->check_buffer = 1;
+    cub->check = 0;
 }
 int main(int ac, char **av)
 {
     t_struct cub;
     int i;
     i = 0;
-    cub.check_buffer = 0;
 
     if (ac != 2)
 		return (ft_putstr_fd("Usage : ./cub3D path/to/map.cub", 0), 0);
 	ft_read_maps(av[1], &cub);
-    /*j = 0;
-    while(cub.map[j] != NULL)
-    {
-            printf("map[%d]= %s\n", i ,cub.map[j]);
-            j++;
-    }*/
     ft_check_alltextures(&cub);
     ft_check_rgb(&cub);
     ft_check_map(&cub);
     ft_get_wall_cordinate(&cub);
     //cub.mlx_ptr = mlx_init();
 	//cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_WIDTH, "cub3D");
-    cub.mlx_info.mlx = mlx_init();
-	cub.mlx_info.window = mlx_new_window(cub.mlx_info.mlx, W_WIDTH, W_HEIGHT, "Souchen_ysmaili'Cub3d");
+    cub.mlx.mlx_ptr = mlx_init();
+	cub.mlx.window = mlx_new_window(cub.mlx.mlx_ptr, W_WIDTH, W_HEIGHT, "Souchen_ysmaili'Cub3d");
     //cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
 	//cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
-    cub.buffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
+    cub.tab = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
 	while (i < W_HEIGHT)
     {
-        cub.buffer[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
+        cub.tab[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
         i++;
 
     }
-    ft_buffer(&cub);
-	cub.img = mlx_new_image(cub.mlx_info.mlx, W_WIDTH,  W_HEIGHT);
+    ft_tab(&cub);
+	cub.img = mlx_new_image(cub.mlx.mlx_ptr, W_WIDTH,  W_HEIGHT);
 	cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
-    player_position(&cub);
-    directionOfPlayer(&cub);
-    //find_pos_player(&cub);
-    ft_draw_map(&cub);
-    //raycast(&cub);
+    //ft_draw_map(&cub);
+    find_pos_player(&cub);
+    raycast(&cub);
     //mlx_key_hook(cub.mlx_info.window,                                                                                               , &cub.mlx);
     //mlx_hook(cub.mlx_info.window, 17, 1L << 17, &finish, &cub);
     mlx_loop(cub.mlx_info.mlx);
