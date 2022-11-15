@@ -125,6 +125,7 @@ void init_ray(t_struct *cub, t_ray *raycast, double looking_angle)
         raycast->ray_cord_temp.y = 0;
 		raycast->dest = 0;
 		raycast->h_line = 0;
+		raycast->final_distance = 0;
 
 		
 

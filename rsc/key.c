@@ -18,7 +18,7 @@ void	move_player(t_struct *cub)
 	int	i;
 
 	i = -1;
-	cub->looking_angle = cub->vect.pos - ((double)cub->FOV / 2.00);
+	cub->looking_angle = cub->p.vect.pos - ((double)cub->FOV / 2.00);
 	while (++i < cub->NB_rays)
 	{
 		cub->raycast[i].ray_looking_angle = degrees_to_radians(limite_angle(cub->looking_angle));
@@ -40,8 +40,8 @@ int	move(int key, void *param)
 	}
 	else if (key == K_S)
 	{
-		cub->cord.y -= (cub->p.vect.y * 5);
-		cub->cord.x -= (cub->p.vect.x * 5);
+		cub->p.cord.y -= (cub->p.vect.y * 5);
+		cub->p.cord.x -= (cub->p.vect.x * 5);
 	}
 	else if (key == K_AR_R)
 	{
@@ -59,16 +59,14 @@ int	move(int key, void *param)
 	}
 	else if (key == K_A)
 	{
-		cub->cord.y += (cub->p.vect.y * 5);
-		cub->cord.x += (cub->p.vect.x * 5) - 5;
+		cub->p.cord.y += (cub->p.vect.y * 5);
+		cub->p.cord.x += (cub->p.vect.x * 5) - 5;
 	}
 	else if (key == K_D)
 	{
-		cub->cord.y += (cub->p.vect.y * 5);
-		cub->cord.x += (cub->p.vect.x * 5) + 5;
+		cub->p.cord.y += (cub->p.vect.y * 5);
+		cub->p.cord.x += (cub->p.vect.x * 5) + 5;
 	}
-	if (key == K_ESC)
-		endgame(cub);
 	find_pos_player(cub);
 	move_player(cub);
 	return (0);

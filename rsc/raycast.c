@@ -30,8 +30,8 @@ void	lets_do_raycast(t_ray *raycast, int x)
 		sostra -= degrees_to_radians(360.00);
 	else if (sostra < degrees_to_radians(0.00))
 		sostra += degrees_to_radians(360.00);
-	raycast->dest = raycast->dest * cos(sostra);
-	raycast->h_line = (int)(size_GRID * (1.00 * W_HEIGHT)) / raycast->dest;
+	raycast->final_distance = raycast->final_distance * cos(sostra);
+	raycast->h_line = (int)(size_GRID * (1.00 * W_HEIGHT)) / raycast->final_distance;
 	if (raycast->h_line > (1.00 * W_HEIGHT))
 		raycast->h_line = (1.00 * W_HEIGHT);
 	start = (W_HEIGHT/ 2) - (int)(raycast->h_line / 2.00);
