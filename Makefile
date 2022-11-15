@@ -6,7 +6,7 @@
 #    By: souchen <souchen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/21 13:19:25 by yismaili          #+#    #+#              #
-#    Updated: 2022/11/12 20:45:52 by souchen          ###   ########.fr        #
+#    Updated: 2022/11/15 08:55:24 by souchen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ FLAGS = -g -Wall -Werror -Wextra -g #-fsanitize=address
 framework= -framework OpenGL -framework AppKit 
 RM = rm -rf
 
-FILES = rsc/read_map.c  rsc/main.c rsc/errors_handling.c raycaster/draw_map.c  rsc/find_pos_player.c rsc/wall_cordinate.c  rsc/func_math.c rsc/raycast.c
+FILES = rsc/read_map.c  rsc/main.c rsc/errors_handling.c raycaster/draw_map.c  rsc/find_pos_player.c rsc/wall_cordinate.c  rsc/func_math.c rsc/raycast.c rsc/check_hori_vert.c rsc/ray_cordinate.c
  
 
 OBJ_FILES= $(FILES:.c=.o)

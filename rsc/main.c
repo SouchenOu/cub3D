@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 20:49:02 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/15 08:56:54 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void ft_tab(t_struct *cub)
 		k = 0;
 		while (k < W_WIDTH)
         {
-            cub->buffer[i][k] = 0;
+            cub->tab[i][k] = 0;
             k++;
         }
         i++;
@@ -72,7 +72,7 @@ int main(int ac, char **av)
     raycast(&cub);
     //mlx_key_hook(cub.mlx_info.window,                                                                                               , &cub.mlx);
     //mlx_hook(cub.mlx_info.window, 17, 1L << 17, &finish, &cub);
-    mlx_loop(cub.mlx_info.mlx);
+    mlx_loop(cub.mlx.mlx_ptr);
     // print(ft_jump_lines(&cub));
     // printf("F --> %d ",cub.flr.r);
     // printf("%d ",cub.flr.g);

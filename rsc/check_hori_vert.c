@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   check_hori_vert.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 20:48:17 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:07:01 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ int	check_limits(t_ray *raycast)
 
 int	is_it_wall(t_ray *raycast, char *direction)
 {
+	int cmp;
+	int i;
 	if (!ft_strncmp(direction, "virtical", 8))
 	{
 		raycast->ray_cord_temp.x = raycast->ray_cordinate.x;
@@ -141,9 +143,9 @@ int	is_it_wall(t_ray *raycast, char *direction)
 				cmp = 0;
 			while (i < 4)
 			{
-				if (direction == 'h' && raycast->cub->wall->wall_c[i].x == raycast->ray_cord_temp.x + size_GRID && raycast->cub->wall->wall_c[i].y == raycast->ray_cord_temp.y)
+				if (!ft_strncmp(direction, "horizontal", 10) && raycast->cub->wall->wall_c[i].x == raycast->ray_cord_temp.x + size_GRID && raycast->cub->wall->wall_c[i].y == raycast->ray_cord_temp.y)
 					cmp++;
-				else if (direction == 'v' && raycast->cub->wall->wall_c[i].x == raycast->ray_cord_temp.x && raycast->cub->wall->wall_c[i].y == raycast->ray_cord_temp.y + size_GRID)
+				else if (!ft_strncmp(direction, "vertical", 8) && raycast->cub->wall->wall_c[i].x == raycast->ray_cord_temp.x && raycast->cub->wall->wall_c[i].y == raycast->ray_cord_temp.y + size_GRID)
 					cmp++;
 				if (raycast->cub->wall->wall_c[i].x == raycast->ray_cord_temp.x && raycast->cub->wall->wall_c[i].y == raycast->ray_cord_temp.y)
 					cmp++;
@@ -157,24 +159,24 @@ int	is_it_wall(t_ray *raycast, char *direction)
 	return (0);
 }
 
-double	find_x_or_y(t_ray *raycast, int destination)
+double	find_x_or_y(t_ray *raycast, char *destination)
 {
 	double	i;
 	double	nb;
 
 	i = 0;
-	if (destination == 'v')
+	if (!ft_strncmp(destination, "vertical", 8))
 		nb = (double)raycast->cub->horizontal_num;
-	if (destination == 'h')
+	if (!ft_strncmp(destination, "horizontal", 10))
 		nb = (double)raycast->cub->virtical_num;
 	while (i <= nb)
 	{
-		if (destination == 'v')
+		if (!ft_strncmp(destination, "vertical", 8))
 		{
 			if ((i * size_GRID) < raycast->ray_cordinate.y && ((i + 1) * size_GRID) > raycast->ray_cordinate.y)
 				return (i * size_GRID);
 		}
-		else if (destination == 'h')
+		else if (ft_strncmp(destination, "horizontal", 10))
 		{
 			if ((i * size_GRID) < raycast->ray_cordinate.x && ((i + 1) * size_GRID) > raycast->ray_cordinate.x)
 				return (i * size_GRID);
@@ -192,7 +194,7 @@ void	check_if_wall_and_cal_dis(t_ray *raycast, char *direction)
 	while (i < raycast->number_to_check && (raycast->ray_cordinate.x > 0 && raycast->ray_cordinate.y > 0) && (raycast->ray_cordinate.x < ((double)raycast->cub->virtical_num) * size_GRID) && (raycast->ray_cordinate.y < ((double)raycast->cub->horizontal_num) * size_GRID))
 	{
 		//To calculate distance i should firstl check if the player look on a wall or not
-		if (is_wall(raycast, direction))
+		if (is_it_wall(raycast, direction))
 		{
 			if (!ft_strncmp(direction, "virtical", 8))
 			{

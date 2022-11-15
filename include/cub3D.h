@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 20:48:49 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:05:51 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ typedef struct ray
 	int				number_to_check;
 	double			final_distance;
 	int				dir;
-	char	 		test[100];
+	char	 		*test;
 	double 			dest;
 	double			h_line;
 }	t_ray;
@@ -150,6 +150,7 @@ typedef struct s_struct
 	int 			color;
 	int 			checkColorMap;
 	unsigned int	**tab;
+	unsigned int 	*array;
 	int				horizontal_num;
 	int 			virtical_num;
 	t_wall	 		*wall;
@@ -165,43 +166,59 @@ typedef struct s_struct
 }	t_struct;
 
 
-
-
-int     get_height(char *map_file);
-int		get_width(char *map_file, int height);
-char    *ft_check_map(t_struct *cub);
-char	*get_next_line(int fd);
-void	ft_read_maps(char *map_file, t_struct *ptr);
-char    *ft_check_texture(t_struct *cub, char *dirct, int len);
-char    *ft_search_innewmap(char **new_map, char *search, int len_ofsrch);
-int		ft_check_alltextures(t_struct *cub);
-char    **ft_check_florclg(t_struct *cub, char *flor_clg, int len);
-int		ft_check_rgb(t_struct *cub);
-int		ft_check_double(t_struct *cub, char *dirct, int len);
-int		ft_check_alldouble(t_struct *cub);
-char    **ft_jump_lines(t_struct *cub);
-int 	ft_check_bgnend(char *data);
-char	*ft_strdup_map(const char *s1, int len);
-int		ft_check_openmap(char **data);
-char    **ft_split_map(t_struct *cub);
-char    *ft_search_inmap(t_struct *cub, char *search, int len_ofsrch);
+void	my_mlx_pixel_put(t_struct *ptr, int x, int y, int color);
+int 	ft_count_height(char **data);
+void    draw_cub(t_struct *ptr, int x, int y, int color);
 void    ft_draw_map(t_struct *cub);
 void 	player_position(t_struct *cub);
 int		player_move(int key, t_struct *p);
 void 	update_ptayer(t_struct *cub);
-void 	print(char **str);
+void	check_horizontal_vertical(t_ray *raycast);
+int		check_limits(t_ray *raycast);
+int		is_it_wall(t_ray *raycast, char *direction);
+double	find_x_or_y(t_ray *raycast, char *destination);
+void	check_if_wall_and_cal_dis(t_ray *raycast, char *direction);
+int		ft_strcmp(char *s1, char *s2);
+char    *ft_search_inmap(t_struct *cub, char *search, int len_ofsrch);
+char    *ft_search_innewmap(char **new_map, char *search, int len_ofsrch);
+char    **ft_split_map(t_struct *cub);
+char    *ft_check_texture(t_struct *cub, char *dirct, int len);
+int 	ft_check_alltextures(t_struct *cub);
+char    **ft_check_florclg(t_struct *cub, char *flor_clg, int len);
+int 	ft_check_rgb(t_struct *cub);
+int 	ft_check_double(t_struct *cub, char *dirct, int len);
+int 	ft_check_alldouble(t_struct *cub);
+char    **ft_jump_lines(t_struct *cub);
+int 	ft_check_bgnend(char *data);
+int 	ft_len_ofline(char *str);
+int 	count_direction(char **str);
+char    *ft_check_map(t_struct *cub);
+int 	ft_check_openmap(char **data);
+void 	find_pos_player(t_struct *cub);
 double	degrees_to_radians(double a);
 double	limite_angle(double a);
 double	pyt(double x1, double x2, double y1, double y2);
-void 	find_pos_player(t_struct *cub);
-void	check_horizontal_vertical(t_ray *raycast);
-int		check_limits(t_ray *raycast);
 void	ray_cordinate(t_ray *raycast, int direction);
-void	check_if_wall_and_cal_dis(t_ray *raycast, int direction);
+void	lets_do_raycast(t_ray *raycast, int x);
 void	raycast(t_struct *cub);
+char 	*get_next_line(int fd);
+int		get_height(char *map_file);
+int		get_width(char *map_file, int height);
+void	ft_read_maps(char *map_file, t_struct *cub);
 t_wall	*create_Wall_node(void);
 void	wall_cordinate(t_wall *wall, double x, double y);
 t_wall	*add_wall(t_wall *wall, double x, double y);
 void	ft_get_wall_cordinate(t_struct *cub);
-void ft_tab(t_struct *cub);
+void 	ft_tab(t_struct *cub);
+void 	print(char **str);
+
+
+
+
+
+
+
+
+
+
 #endif
