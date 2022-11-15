@@ -25,7 +25,7 @@ void	check_horizontal_vertical(t_ray *raycast)
 	if (raycast->ray_looking_angle > 3.14159265359)                                                                             
 	{
 		raycast->ray_cordinate.y = ((raycast->cub->p.cord.y / size_GRID) * size_GRID) - (raycast->cub->dire.up);
-		raycast->ray_cordinate.x = (raycast->cub->p.cord.y - raycast->ray_cordinate.y) * ((raycast->tang) + raycast->cub->p.cord.x);
+		raycast->ray_cordinate.x = (raycast->cub->p.cord.y - raycast->ray_cordinate.y) * raycast->tang + raycast->cub->p.cord.x;
 		raycast->number_to_check = raycast->cub->horizontal_num;
 		raycast->offset.y = -size_GRID;
 		raycast->offset.x = -(raycast->offset.y) * raycast->tang;
@@ -34,8 +34,7 @@ void	check_horizontal_vertical(t_ray *raycast)
 	}
 	if (raycast->ray_looking_angle < 3.14159265359 && raycast->ray_looking_angle != 0)
 	{
-		raycast->ray_cordinate.y = ((raycast->cub->p.cord.y / size_GRID) * size_GRID);
-		printf("here= %f\n", raycast->ray_cordinate.y);
+		raycast->ray_cordinate.y = ((raycast->cub->p.cord.y / size_GRID) * size_GRID)  + (raycast->cub->dire.down);
 		raycast->ray_cordinate.x = (raycast->cub->p.cord.y - raycast->ray_cordinate.y) * ((raycast->tang) + raycast->cub->p.cord.x);
 		raycast->number_to_check = raycast->cub->horizontal_num;
 		raycast->offset.y = size_GRID;

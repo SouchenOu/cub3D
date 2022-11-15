@@ -306,6 +306,10 @@ void initial(t_struct *cub);
 void	ft_ray(t_struct *cub);
 void init_ray(t_struct *cub, t_ray *raycast, double looking_angle);
 void	my_mlx_pixel_put(t_struct *ptr, int x, int y, long color);
+void	print_node(t_wall *wall);
+char	*no_new_line(char *line);
+
+
 
 
 

@@ -113,7 +113,7 @@ void	raycast(t_struct *cub)
 	}*/
     //start raycasting
 	i = 0;
-	if (cub->check)
+	if (cub->check == 1)
 		ft_tab(cub);
 	while (i < cub->NB_rays) // nb rays is the width of screen
 	{

@@ -57,11 +57,11 @@ void initial(t_struct *cub)
     /*we define the FOV to be 60 degrees through 
 	trial and experimentation (on how good it looks
 	 on screen)*/
-	cub->FOV = 60;
+	//cub->FOV = 60;
 	//Dimension of the Projection Plane = W_WIDTH
-	cub->NB_rays =  W_WIDTH;
-	cub->looking_angle = 280 - ((double)cub->FOV / 2);
-	cub->raycast = (t_ray *)malloc(sizeof(t_ray) * cub->NB_rays);
+	//cub->NB_rays =  W_WIDTH;
+	//cub->looking_angle = 280 - ((double)cub->FOV / 2);
+	//cub->raycast = (t_ray *)malloc(sizeof(t_ray) * cub->NB_rays);
 }
 
 void	ft_ray(t_struct *cub)
