@@ -43,8 +43,8 @@ void initial(t_struct *cub)
 {
     cub->mlx.height = 0;
 	cub->mlx.width = 0;
-    cub->p.cord.x = 200.00;
-	cub->p.cord.y = 300.00;
+    cub->p.cord.x = 100.00;
+	cub->p.cord.y = 220.00;
     cub->p.vect.x = cos(degrees_to_radians(280.00));
 	cub->p.vect.y = -sin(degrees_to_radians(280.00));
 	cub->p.vect.pos = 280.00;
@@ -159,7 +159,7 @@ int main(int ac, char **av)
 	cub.img = mlx_new_image(cub.mlx.mlx_ptr, W_WIDTH,  W_HEIGHT);
 	cub.array = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     //ft_draw_map(&cub);
-    initial(&cub);
+    initial(&cub);//normilay find and ft_ray
     find_pos_player(&cub);
     ft_ray(&cub);
 	

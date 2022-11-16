@@ -35,8 +35,8 @@ int	move(int key, void *param)
 	cub = (t_struct *) param;
 	if (key == K_W)
 	{
-		cub->cord.y += (cub->p.vect.y * 5);
-		cub->cord.x += (cub->p.vect.x * 5);
+		cub->p.cord.y += (cub->p.vect.y * 5);
+		cub->p.cord.x += (cub->p.vect.x * 5);
 	}
 	else if (key == K_S)
 	{
