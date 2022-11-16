@@ -23,7 +23,7 @@ void check_horizontal(t_ray *raycast)
 {
 	//int i ; 
 	//i = 0;
-	raycast->tang = -tan(raycast->ray_looking_angle);
+	raycast->tang = -1/tan(raycast->ray_looking_angle);
 	if (raycast->ray_looking_angle > 3.14159265359)                                                                             
 	{
 		raycast->ray_cordinate.y = ((raycast->cub->p.cord.y / size_GRID) * size_GRID) - (raycast->cub->dire.up);
@@ -49,7 +49,7 @@ void check_horizontal(t_ray *raycast)
 	{
 		raycast->ray_cordinate.x = raycast->cub->p.cord.x;
 		raycast->ray_cordinate.y = raycast->cub->p.cord.y;
-		raycast->number_to_check = -1;
+		raycast->number_to_check = -2;
 		raycast->dir = LR;
 	}
 	int i = 0;
@@ -173,30 +173,31 @@ int	check_limits(t_ray *raycast)
 
 
 //check if its a wall or not
-int check_with_walls(t_wall *wall, t_ray *raycast, char *direction)
+int check_with_walls(t_wall *wall, t_cordinate *cord, char *direction)
 {
 	int cmp = 0;
 	int i = 0;
-
-	while (wall->next)
+	t_cordinate	*temp;
+	temp = wall;
+	while (temp->next)
 		{
 				i = 0;
 				cmp = 0;
 			while (i < 4)
 			{
-				if (!ft_strncmp(direction, "horizontal", 10) && wall->wall_c[i].x == raycast->ray_cord_temp.x + size_GRID && wall->wall_c[i].y == raycast->ray_cord_temp.y + size_GRID)
+				if (!ft_strncmp(direction, "horizontal", 10) && temp->wall_c[i].x == cord->ray_cord_temp.x + size_GRID && temp->wall_c[i].y == cord->ray_cord_temp.y + size_GRID)
 				{
 					cmp++;
 				}
-				else if (!ft_strncmp(direction, "virtical", 8) && wall->wall_c[i].x == raycast->ray_cord_temp.x && wall->wall_c[i].y == raycast->ray_cord_temp.y + size_GRID)
+				else if (!ft_strncmp(direction, "virtical", 8) && temp->wall_c[i].x == cord->ray_cord_temp.x && temp->wall_c[i].y == cord->ray_cord_temp.y + size_GRID)
 					cmp++;
-				if (wall->wall_c[i].x == raycast->ray_cord_temp.x && wall->wall_c[i].y == raycast->ray_cord_temp.y)
+				if (temp->wall_c[i].x == cord->ray_cord_temp.x && temp->wall_c[i].y == cord->ray_cord_temp.y)
 					cmp++;
 				if (cmp == 2)
 					return (1);
 				i++;
 			}
-			raycast->wall = raycast->wall->next;
+			wall = temp->next;
 		}
 		return 0;
 }
@@ -209,7 +210,7 @@ int	is_it_wall(t_ray *raycast, char *direction)
 	{
 		raycast->ray_cord_temp.x = raycast->ray_cordinate.x;
 		raycast->ray_cord_temp.y = find_x_or_y(raycast, direction);
-		if(check_with_walls(raycast->cub->wall, raycast, direction) == 1){
+		if(check_with_walls(raycast->cub->wall, raycast->ray_cord_temp, direction) == 1){
 			return 1;
 		}
 	}
@@ -217,7 +218,7 @@ int	is_it_wall(t_ray *raycast, char *direction)
 	{
 		raycast->ray_cord_temp.y = raycast->ray_cordinate.y;
 		raycast->ray_cord_temp.x = find_x_or_y(raycast, direction);
-		if(check_with_walls(raycast->cub->wall, raycast, direction) == 1)
+		if(check_with_walls(raycast->cub->wall, raycast->ray_cord_temp, direction) == 1)
 		{
 			return 1;
 		}
