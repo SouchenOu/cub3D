@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/15 16:28:40 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/16 09:49:00 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,12 +302,16 @@ t_wall	*add_wall(t_wall *wall, double x, double y);
 void	ft_get_wall_cordinate(t_struct *cub);
 void 	ft_tab(t_struct *cub);
 void 	print(char **str);
-void initial(t_struct *cub);
+void 	initial(t_struct *cub);
 void	ft_ray(t_struct *cub);
-void init_ray(t_struct *cub, t_ray *raycast, double looking_angle);
+void 	init_ray(t_struct *cub, t_ray *raycast, double looking_angle);
 void	my_mlx_pixel_put(t_struct *ptr, int x, int y, long color);
 void	print_node(t_wall *wall);
 char	*no_new_line(char *line);
+void	move_player(t_struct *cub);
+int	move(int key, void *param);
+
+
 
 
 

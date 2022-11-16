@@ -20,23 +20,25 @@
 gridlines or on one the gridLine so we can have the right distance for
 gridline hitting */
 
-
+// if the player is between gredline we do  sostraction to get lq distqnce qui on a doit sostracter after when we calculate ray cordinate 
 //Player position (virtical or horizontal)
-void find_pos_player(t_struct *cub){
+void find_pos_player(t_struct *cub)
+{
 
     double	i;
     double  j;
 
 	i = 0;
     j = 0;
+
 	while (i <= (double)cub->horizontal_num)
 	{
 		if (cub->p.cord.y < ((i + 1) * size_GRID) && cub->p.cord.y > (i * size_GRID))
 		{
+		
 			cub->dire.up = cub->p.cord.y - (i * size_GRID);
 			cub->dire.down = ((i + 1) * size_GRID) - cub->p.cord.y;
-			printf("here1 = %f\n", cub->dire.up);
-			printf("here2 = %f\n", cub->dire.down);
+		
 
 		}
         i++;
@@ -48,8 +50,7 @@ void find_pos_player(t_struct *cub){
 		{
 			cub->dire.left = cub->p.cord.x - (j * size_GRID);
 			cub->dire.right = ((j + 1) * size_GRID) - cub->p.cord.x;
-			printf("here1 = %f\n", cub->dire.right);
-			printf("here2 = %f\n", cub->dire.left);
+	
 
 		}
 		j++;

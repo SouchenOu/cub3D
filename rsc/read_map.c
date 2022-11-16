@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:53:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/09/07 18:49:22 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/11/16 10:11:02 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,10 @@ int	get_height(char *map_file)
 	fd = open(map_file, O_RDONLY);
 	height = 0;
 	get_line = get_next_line(fd);
-	while (get_line)
+	while (get_line != NULL)
 	{
 		get_line = get_next_line(fd);
+		printf("get_line = %s\n", get_line);
 		height ++;
 	}
 	free(get_line);
@@ -109,6 +110,8 @@ void	ft_read_maps(char *map_file, t_struct *cub)
     }
     cub->height = get_height(map_file);
 	cub->width = get_width(map_file, cub->height);
+	printf("height = %d\n", cub->height);
+	printf("width = %d\n", cub->width);
 	cub->map = (char **) malloc(sizeof(char *) * (cub->height + 1));
 	while (i < cub->height)
 	{
@@ -118,5 +121,11 @@ void	ft_read_maps(char *map_file, t_struct *cub)
 		i++;
 	}
   	cub->map[i] = NULL;
+	 i = 0;
+	while(cub->map[i] != NULL)
+	{
+		printf("|%s|\n", cub->map[i]);
+		i++;
+	}
 	close(fd);
 }

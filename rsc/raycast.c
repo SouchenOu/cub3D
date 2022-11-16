@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/15 15:46:35 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/16 11:56:19 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	raycast(t_struct *cub)
     //int j;
     i = 0;
 	//double	sostra;
-	int		y = 0;
+	//int		y = 0;
 	//int		end;
 	//int		start;
 
@@ -135,12 +135,12 @@ void	raycast(t_struct *cub)
 		if (end >= W_HEIGHT)
 			end = W_HEIGHT- 1;
 		y = (start - 1);*/
-		while (y < 100)
+		/*while (y < 100)
 		{
 			cub->raycast->cub->tab[y][i] = 0xFFF0000;
 			cub->raycast->cub->check = 1;
 			y++;
-		}
+		}*/
        	 i++;
 	}
    

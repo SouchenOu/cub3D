@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/15 16:24:21 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/16 11:55:16 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ void initial(t_struct *cub)
 	cub->p.cord.y = 220.00;
     cub->p.vect.x = cos(degrees_to_radians(280.00));
 	cub->p.vect.y = -sin(degrees_to_radians(280.00));
-	cub->vect.pos = 280.00;
+	cub->p.vect.pos = 280.00;
     cub->dire.down = 0;
 	cub->dire.up = 0;
 	cub->dire.left = 0;
 	cub->dire.right = 0;
-    cub->virtical_num = cub->map_width;// nb characters
-    cub->horizontal_num= cub->map_height; //nb lignes
+    cub->virtical_num = cub->width;// nb characters
+    cub->horizontal_num= cub->height; //nb lignes
     /*we define the FOV to be 60 degrees through 
 	trial and experimentation (on how good it looks
 	 on screen)*/
@@ -85,7 +85,7 @@ void	ft_ray(t_struct *cub)
 		cub->looking_angle += (cub->FOV / (double)cub->NB_rays);
         i++;
 	}
-	while (data[y])
+	/*while (data[y])
     {
         x = 0;
         while (data[y][x])
@@ -97,7 +97,7 @@ void	ft_ray(t_struct *cub)
             x++;
         }
         y++;
-    }
+    }*/
 }
 
 void init_ray(t_struct *cub, t_ray *raycast, double looking_angle)
@@ -111,7 +111,6 @@ void init_ray(t_struct *cub, t_ray *raycast, double looking_angle)
 		raycast->dir = 0;
 		raycast->number_to_check = -2;
 		raycast->tang = 0;
-		raycast->cub->p.cord.x = 100.00;
 		//cub.p.cord.y = 220.00;
     	//cub.p.vect.x = cos(degrees_to_radians(280.00));
 		//cub.p.vect.y = -sin(degrees_to_radians(280.00));
@@ -163,9 +162,10 @@ int main(int ac, char **av)
     initial(&cub);
     find_pos_player(&cub);
     ft_ray(&cub);
+	
     //printf("cord = %f\n",cub.p.cord.x );
     raycast(&cub);                                                                                   
-    //mlx_key_hook(cub.mlx.window, &move, &cub.mlx);
+    mlx_key_hook(cub.mlx.window, &move, &cub.mlx);
 	//mlx_hook(cub.mlx.window, 17, 1L << 17, &endgame, &cub);
     mlx_loop(cub.mlx.mlx_ptr);
    

@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/12 12:18:55 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/16 11:30:45 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,17 @@ t_wall	*add_wall(t_wall *wall, double x, double y)
 {
 	t_wall	*wall_node;
 	t_wall	*temporaire_wall;
-
+	int i;
+	i = 0;
 	if (wall->next ==  NULL)
+	{
 		wall_cordinate(wall, 0, 0);
+	}
 	temporaire_wall = (t_wall *)malloc(sizeof(t_wall));
 	temporaire_wall->next = NULL;
 	temporaire_wall->wall_c = (t_cordinate *)malloc(sizeof(t_cordinate) * 4);
 	wall_cordinate(temporaire_wall, x, y);
+
 	wall_node = wall;
 	while (wall_node->next != NULL)
 		wall_node = wall_node->next;
@@ -73,6 +77,7 @@ void	ft_get_wall_cordinate(t_struct *cub)
 		}
 		j++;
 	}
+	//print_node(cub->wall);
 }
 // to check if everythings okey!!
 void	print_node(t_wall *wall)
@@ -83,7 +88,7 @@ void	print_node(t_wall *wall)
 
 	temp = wall;
 	j = 1;
-	while (temp->next)
+	while (temp->next != NULL)
 	{
 		i = 0;
 		while (i < 4)
