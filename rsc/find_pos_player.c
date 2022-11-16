@@ -39,6 +39,7 @@ void find_pos_player(t_struct *cub)
 			cub->dire.up = cub->p.cord.y - (i * size_GRID);
 			cub->dire.down = ((i + 1) * size_GRID) - cub->p.cord.y;
 		
+		
 
 		}
         i++;

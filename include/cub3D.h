@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/16 09:49:00 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/16 17:11:43 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,6 +254,7 @@ typedef struct s_ray
 	char	 		*test;
 	double 			dest;
 	double			h_line;
+	t_wall 			*wall;
 }	t_ray;
 
 
@@ -310,6 +311,12 @@ void	print_node(t_wall *wall);
 char	*no_new_line(char *line);
 void	move_player(t_struct *cub);
 int	move(int key, void *param);
+void check_horizontal(t_ray *raycast);
+void	check_vertical(t_ray *raycast);
+void check_vertical_horizontal(t_ray *raycast);
+int check_with_walls(t_wall *wall, t_ray *raycast, char *direction);
+
+
 
 
 

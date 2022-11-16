@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/16 11:56:19 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/16 16:12:28 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,8 @@ void	raycast(t_struct *cub)
 		ft_tab(cub);
 	while (i < cub->NB_rays) // nb rays is the width of screen
 	{
-		check_horizontal_vertical(&cub->raycast[i]);
-		//lets_do_raycast(&cub->raycast[i], i);
+		check_vertical_horizontal(&cub->raycast[i]);
+		lets_do_raycast(&cub->raycast[i], i);
 		/*sostra = degrees_to_radians(cub->raycast->cub->p.vect.pos) - cub->raycast->ray_looking_angle;
 		if (sostra > degrees_to_radians(359.00))
 			sostra -= degrees_to_radians(360.00);

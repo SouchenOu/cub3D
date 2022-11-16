@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/16 11:55:16 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/16 15:25:14 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void initial(t_struct *cub)
 {
     cub->mlx.height = 0;
 	cub->mlx.width = 0;
-    cub->p.cord.x = 100.00;
-	cub->p.cord.y = 220.00;
+    cub->p.cord.x = 200.00;
+	cub->p.cord.y = 300.00;
     cub->p.vect.x = cos(degrees_to_radians(280.00));
 	cub->p.vect.y = -sin(degrees_to_radians(280.00));
 	cub->p.vect.pos = 280.00;
