@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/17 10:49:21 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 15:02:29 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <math.h>
 # include "../libft/libft.h"
 # define PI 3.14159265359
-# define W_WIDTH 1020
-# define W_HEIGHT 580
+# define W_WIDTH 1500
+# define W_HEIGHT 1000
 # define RIGHT 82
 # define LEFT 76
 # define UP 85
@@ -210,7 +210,7 @@ typedef struct s_struct
 	int				zom;
 	int				direction;
 	int				check;
-	int 			looking_angle;
+	double 			looking_angle;
 	int				NB_rays;
 	int 			FOV;
 	int 			color;

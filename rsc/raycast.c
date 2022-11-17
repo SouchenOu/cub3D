@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/17 10:54:39 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 14:36:20 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ void	lets_do_raycast(t_ray *raycast, int j)
 	int		wallTopPixel;
 
 	sostra = degrees_to_radians(raycast->cub->p.vect.pos) - raycast->ray_looking_angle;
-	if (sostra > degrees_to_radians(359.00))
-		sostra -= degrees_to_radians(360.00);
+	//printf("hadi = %f\n", raycast->ray_looking_angle);
+	//printf("soustra = %f\n", sostra);
+	if (sostra > degrees_to_radians(360))
+		sostra -= degrees_to_radians(360);
 	else if (sostra < degrees_to_radians(0.00))
 		sostra += degrees_to_radians(360.00);
 	raycast->final_distance = raycast->final_distance * cos(sostra);
@@ -43,6 +45,7 @@ void	lets_do_raycast(t_ray *raycast, int j)
 	if (wallBottomPixel >= W_HEIGHT)
 		wallBottomPixel = W_HEIGHT - 1;
 	i = (wallTopPixel - 1);
+	//render the wall from wallTopPixel to wallBottomPixel
 	while (i < wallBottomPixel)
 	{
 		//copy all the color buffer to an sdl texture
@@ -118,7 +121,7 @@ void	raycast(t_struct *cub)
     //start raycasting
 	i = 0;
 	if (cub->check == 1)
-		ft_tab(cub);
+		ft_colorBuffer(cub);
 		// we loop to all this rays so for each one of the coloms draw the wall for each one 
 	while (i < cub->NB_rays) // nb rays is the width of screen
 	{

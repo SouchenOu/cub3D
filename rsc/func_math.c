@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/15 11:32:13 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 14:58:19 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Usually, in general geometry, we consider the measure of the angle in degrees (Â
 
 double	degrees_to_radians(double a)
 {
-	return ((a * 3.14159265359) / 180);
+	return ((a * 3.14159265359) / 180.000);
 }
 
 
@@ -42,13 +42,13 @@ double	pyt(double x1, double x2, double y1, double y2)
 
 double	limite_angle(double a)
 {
-	if (a >= 360)
+	if (a > 359.00)
 	{
-		a = a - 360;
+		a = a - 360.00;
 	}
-	else if (a < 0)
+	else if (a < 0.00)
 	{
-		a = a + 360; // 2PI
+		a = a + 360.00; // 2PI
 	}
 	return (a);
 }
