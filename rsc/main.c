@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/17 15:22:41 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 15:50:51 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void initial(t_struct *cub)
 	cub->mlx.width = 0;
     cub->p.cord.x = 100.00;
 	cub->p.cord.y = 220.00;
-    cub->p.vect.x = cos(degrees_to_radians(280.00));
-	cub->p.vect.y = -sin(degrees_to_radians(280.00));
+    cub->p.vect.x = cos(degrees_to_radians(180.00));
+	cub->p.vect.y = -sin(degrees_to_radians(180.00));
 	cub->p.vect.pos = 280.00;
     cub->dire.down = 0.00;
 	cub->dire.up = 0.00;
@@ -54,6 +54,9 @@ void initial(t_struct *cub)
 	cub->dire.right = 0.00;
     cub->virtical_num = cub->width;// nb characters
     cub->horizontal_num= cub->height; //nb lignes
+	cub->FOV = 60.00;
+	cub->NB_rays = W_WIDTH;
+	cub->looking_angle = cub->p.vect.pos - ((double)cub->FOV / 2.00);
 	
 
     /*we define the FOV to be 60 degrees through 
@@ -76,15 +79,12 @@ void	ft_ray(t_struct *cub)
 	x = 0;
 
 	data = ft_jump_lines(cub);
-	cub->FOV = 60.00;
-	cub->NB_rays = W_WIDTH;
-	cub->looking_angle = cub->p.vect.pos - ((double)cub->FOV / 2.00);
 	//printf("first lokking angle = %d\n", cub->looking_angle);
 	cub->raycast = (t_ray *)malloc(sizeof(t_ray) * cub->NB_rays);
 	i = 0;
 	while (i < cub->NB_rays)
 	{
-		init_ray(cub, &cub->raycast[i], cub->looking_angle);
+		initial_every_ray(cub, &cub->raycast[i], cub->looking_angle);
 		cub->looking_angle = cub->looking_angle + (cub->FOV / (double)cub->NB_rays);
 
         i++;
@@ -104,7 +104,7 @@ void	ft_ray(t_struct *cub)
     }*/
 }
 
-void init_ray(t_struct *cub, t_ray *raycast, double looking_angle)
+void initial_every_ray(t_struct *cub, t_ray *raycast, double looking_angle)
 {
 		raycast->cub = cub;
 		raycast->ray_looking_angle = degrees_to_radians(limite_angle(looking_angle));
@@ -147,6 +147,7 @@ int main(int ac, char **av)
     //ft_check_alltextures(&cub);
    // ft_check_rgb(&cub);
     //ft_check_map(&cub);
+
     //cub.mlx_ptr = mlx_init();
 	//cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_WIDTH, "cub3D");
     cub.mlx.mlx_ptr = mlx_init();

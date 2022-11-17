@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/17 15:35:09 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 15:51:06 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,7 +305,7 @@ void 	ft_colorBuffer(t_struct *cub);
 void 	print(char **str);
 void 	initial(t_struct *cub);
 void	ft_ray(t_struct *cub);
-void 	init_ray(t_struct *cub, t_ray *raycast, double looking_angle);
+void 	initial_every_ray(t_struct *cub, t_ray *raycast, double looking_angle);
 void	my_mlx_pixel_put(t_struct *ptr, int x, int y, long color);
 void	print_node(t_wall *wall);
 char	*no_new_line(char *line);
