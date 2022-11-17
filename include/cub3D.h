@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/16 17:11:43 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 10:49:21 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,8 +215,8 @@ typedef struct s_struct
 	int 			FOV;
 	int 			color;
 	int 			checkColorMap;
-	int				*array;
-	unsigned int	**tab;
+	int				*arrayColor;
+	unsigned int	**colorBuffer;
 	int				horizontal_num;
 	int 			virtical_num;
 	int scaleWidth;
@@ -253,7 +253,7 @@ typedef struct s_ray
 	int				dir;
 	char	 		*test;
 	double 			dest;
-	double			h_line;
+	double			wallStripHeight;
 	t_wall 			*wall;
 }	t_ray;
 
@@ -301,7 +301,7 @@ t_wall	*create_Wall_node(void);
 void	wall_cordinate(t_wall *wall, double x, double y);
 t_wall	*add_wall(t_wall *wall, double x, double y);
 void	ft_get_wall_cordinate(t_struct *cub);
-void 	ft_tab(t_struct *cub);
+void 	ft_colorBuffer(t_struct *cub);
 void 	print(char **str);
 void 	initial(t_struct *cub);
 void	ft_ray(t_struct *cub);
@@ -314,7 +314,8 @@ int	move(int key, void *param);
 void check_horizontal(t_ray *raycast);
 void	check_vertical(t_ray *raycast);
 void check_vertical_horizontal(t_ray *raycast);
-int check_with_walls(t_wall *wall, t_ray *raycast, char *direction);
+int check_with_walls(t_wall *wall, t_cordinate cord, char *direction);
+
 
 
 

@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/16 16:12:28 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 10:54:39 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
  * by tracing rays from the view point into the viewing volume*/
 
 
-void	lets_do_raycast(t_ray *raycast, int x)
+void	lets_do_raycast(t_ray *raycast, int j)
 {
 	double	sostra;
-	int		y;
-	int		end;
-	int		start;
+	int		i;
+	int		wallBottomPixel ;
+	int		wallTopPixel;
 
 	sostra = degrees_to_radians(raycast->cub->p.vect.pos) - raycast->ray_looking_angle;
 	if (sostra > degrees_to_radians(359.00))
@@ -31,20 +31,24 @@ void	lets_do_raycast(t_ray *raycast, int x)
 	else if (sostra < degrees_to_radians(0.00))
 		sostra += degrees_to_radians(360.00);
 	raycast->final_distance = raycast->final_distance * cos(sostra);
-	raycast->h_line = (int)(size_GRID * (1.00 * W_HEIGHT)) / raycast->final_distance;
-	if (raycast->h_line > (1.00 * W_HEIGHT))
-		raycast->h_line = (1.00 * W_HEIGHT);
-	start = (W_HEIGHT/ 2) - (int)(raycast->h_line / 2.00);
-	if (start < 0)
-		start = 0;
-	end = (W_HEIGHT/ 2) + (int)(raycast->h_line / 2.00);
-	if (end >= W_HEIGHT)
-		end = W_HEIGHT- 1;
-	y = (start - 1);
-	while (++y < end)
+	raycast->wallStripHeight= (int)(size_GRID * (1.00 * W_HEIGHT)) / raycast->final_distance;
+	if (raycast->wallStripHeight> (1.00 * W_HEIGHT))
+		raycast->wallStripHeight= (1.00 * W_HEIGHT);
+	//wallTopPixel is the top of the wall
+	wallTopPixel = (W_HEIGHT/ 2) - (int)(raycast->wallStripHeight/ 2.00);
+	if (wallTopPixel < 0)
+		wallTopPixel = 0; // the minimum we can have is 0
+		//wallBottomPixel is the Bottom or end of the wall
+	wallBottomPixel = (W_HEIGHT/ 2) + (int)(raycast->wallStripHeight/ 2.00);
+	if (wallBottomPixel >= W_HEIGHT)
+		wallBottomPixel = W_HEIGHT - 1;
+	i = (wallTopPixel - 1);
+	while (i < wallBottomPixel)
 	{
-		raycast->cub->tab[y][x] = 0xFFF0000;
+		//copy all the color buffer to an sdl texture
+		raycast->cub->colorBuffer[i][j] = 0xFFF0000;
 		raycast->cub->check = 1;
+		i++;
 	}
 }
 
@@ -66,8 +70,8 @@ void	raycast(t_struct *cub)
     i = 0;
 	//double	sostra;
 	//int		y = 0;
-	//int		end;
-	//int		start;
+	//int		wallBottomPixel;
+	//int		wallTopPixel;
 
 	//t_ray raycast;
 
@@ -115,6 +119,7 @@ void	raycast(t_struct *cub)
 	i = 0;
 	if (cub->check == 1)
 		ft_tab(cub);
+		// we loop to all this rays so for each one of the coloms draw the wall for each one 
 	while (i < cub->NB_rays) // nb rays is the width of screen
 	{
 		check_vertical_horizontal(&cub->raycast[i]);
@@ -151,7 +156,10 @@ void	raycast(t_struct *cub)
 		j = 0;
 		while (j < W_WIDTH)
         {
-            cub->array[i * W_WIDTH + j] = cub->tab[i][j];
+            cub->arrayColor[i * W_WIDTH + j] = cub->colorBuffer[i][j];
+			// i: how many pixels and colones i have
+			//j is how many rays i have
+			//i * W_Width + j to get the dimension in one dimensional array
 			//printf("array[%d] = %d \n", i * W_WIDTH + j , cub->array[i * W_WIDTH + j]);
             j++;
         }

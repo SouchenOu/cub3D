@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/16 17:12:33 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 10:21:44 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,18 @@
 
 // now calculate the ray cordinate by using player cordinate and his looking angle
 //horizontal // calculate the  ray is vector
+
+
+
+
+/*******The basic idea of raycasting is as follows: the map is a 2D square grid, and each square can either be 0 (= no wall), 
+ * or a positive value (= a wall with a certain color or texture).
+For every x of the screen (i.e. for every vertical stripe of the screen), send out a ray that starts at the player
+location and with a direction that depends on both the player's looking direction, and the x-coordinate of the screen.
+Then, let this ray move forward on the 2D map, until it hits a map square that is a wall. If it hit a wall, calculate the distance
+of this hit point to the player, and use this distance to calculate how high this wall has to be drawn on the screen: the further away
+the wall, the smaller it's on screen, and the closer, the higher it appears to be. These are all 2D calculations. This image shows a 
+	op down overview of two such rays (red) that start at the player (green dot) and hit blue walls:*/
 void check_horizontal(t_ray *raycast)
 {
 	//int i ; 
@@ -52,13 +64,19 @@ void check_horizontal(t_ray *raycast)
 		raycast->number_to_check = -2;
 		raycast->dir = LR;
 	}
-	int i = 0;
+	//int i = 0;
 	//x cordinate should not be sup than screen width && y cordinate should not be  sup than screen height
-		while (i < raycast->number_to_check && check_limits(raycast) == 1)
-		{
+		//while (i < raycast->number_to_check && check_limits(raycast) == 1)
+		//{
 			//To calculate distance i should firstl check if the player look on a wall or not
 			/******Each time the ray will hit a grid line horizontally or vertically, that point actually should be the position where we can check if it's a wall or not*/
-			if (is_it_wall(raycast, raycast->test))
+/***To find the first wall that a ray encounters on its way, you have to let it start at the player's position,
+ *  and then all the time, check whether or not the ray is inside a wall. If it's inside a wall (hit), 
+ * then the loop can stop, calculate the distance, and draw the wall with the correct height. 
+ * If the ray position is not in a wall, you have to trace it further: add a certain value to its position, 
+ * in the direction of the direction of this ray, and for this new position, again check if it's inside a wall or not.
+ *  Keep doing this until finally a wall is hit.*/
+			/*if (is_it_wall(raycast, raycast->test))
 			{
 				if (!ft_strncmp(raycast->test, "horizontal", 10))
 				{
@@ -87,7 +105,7 @@ void check_horizontal(t_ray *raycast)
 				raycast->horizontal_cord.y = raycast->ray_cordinate.y;
 				raycast->horizontal_distance= pyt(raycast->cub->p.cord.x, raycast->horizontal_cord.x, raycast->cub->p.cord.y, raycast->horizontal_cord.y);
 			}
-		}
+		}*/
 }
 void	check_vertical(t_ray *raycast)
 {
@@ -123,12 +141,12 @@ void	check_vertical(t_ray *raycast)
 	}
 	/************************************************************************************************************************/
 	//x cordinate should not be sup than screen width && y cordinate should not be  sup than screen height
-	int i = 0;
-		while (i < raycast->number_to_check && (raycast->ray_cordinate.x > 0 && raycast->ray_cordinate.y > 0) && (raycast->ray_cordinate.x < ((double)raycast->cub->virtical_num) * size_GRID) && (raycast->ray_cordinate.y < ((double)raycast->cub->horizontal_num) * size_GRID))
-		{
+	//int i = 0;
+		//while (i < raycast->number_to_check && (raycast->ray_cordinate.x > 0 && raycast->ray_cordinate.y > 0) && (raycast->ray_cordinate.x < ((double)raycast->cub->virtical_num) * size_GRID) && (raycast->ray_cordinate.y < ((double)raycast->cub->horizontal_num) * size_GRID))
+		//{
 			//printf("yea\n");
 			//To calculate distance i should firstl check if the player look on a wall or not
-			if (is_it_wall(raycast, raycast->test))
+			/*if (is_it_wall(raycast, raycast->test))
 			{
 				if (!ft_strncmp(raycast->test, "virtical", 8))
 				{
@@ -153,7 +171,7 @@ void	check_vertical(t_ray *raycast)
 					raycast->virt_cord.y = raycast->ray_cordinate.y;
 					raycast->virtical_distance = pyt(raycast->cub->p.cord.x, raycast->virt_cord.x, raycast->cub->p.cord.y, raycast->virt_cord.y);
 				}
-		}
+		}*/
 	//*****************************************************************************/
 	//printf("distance final = %f\n", raycast->final_distance);
 }
@@ -173,11 +191,11 @@ int	check_limits(t_ray *raycast)
 
 
 //check if its a wall or not
-int check_with_walls(t_wall *wall, t_cordinate *cord, char *direction)
+int check_with_walls(t_wall *wall, t_cordinate cord, char *direction)
 {
 	int cmp = 0;
 	int i = 0;
-	t_cordinate	*temp;
+	t_wall	*temp;
 	temp = wall;
 	while (temp->next)
 		{
@@ -185,13 +203,13 @@ int check_with_walls(t_wall *wall, t_cordinate *cord, char *direction)
 				cmp = 0;
 			while (i < 4)
 			{
-				if (!ft_strncmp(direction, "horizontal", 10) && temp->wall_c[i].x == cord->ray_cord_temp.x + size_GRID && temp->wall_c[i].y == cord->ray_cord_temp.y + size_GRID)
+				if (!ft_strncmp(direction, "horizontal", 10) && temp->wall_c[i].x == cord.x + size_GRID && temp->wall_c[i].y == cord.y + size_GRID)
 				{
 					cmp++;
 				}
-				else if (!ft_strncmp(direction, "virtical", 8) && temp->wall_c[i].x == cord->ray_cord_temp.x && temp->wall_c[i].y == cord->ray_cord_temp.y + size_GRID)
+				else if (!ft_strncmp(direction, "virtical", 8) && temp->wall_c[i].x == cord.x && temp->wall_c[i].y == cord.y + size_GRID)
 					cmp++;
-				if (temp->wall_c[i].x == cord->ray_cord_temp.x && temp->wall_c[i].y == cord->ray_cord_temp.y)
+				if (temp->wall_c[i].x == cord.x && temp->wall_c[i].y == cord.y)
 					cmp++;
 				if (cmp == 2)
 					return (1);
@@ -260,17 +278,14 @@ double	find_x_or_y(t_ray *raycast, char *destination)
 void check_vertical_horizontal(t_ray *raycast)
 {
 	check_vertical(raycast);
-	printf("x = raycast->vert_cord.x= %f", raycast->ray_cordinate.x);
-	printf("y = raycast->vert_cord.y = %f", raycast->ray_cordinate.y);
 	check_horizontal(raycast);
-	printf("x = raycast->horizontal_cord.x= %f", raycast->ray_cordinate.x);
-	printf("y = raycast->horizontal_cord.y = %f", raycast->ray_cordinate.y);
+	
 	if (raycast->virtical_distance < raycast->horizontal_distance)
 		ray_cordinate(raycast, 'v');
 	else if (raycast->virtical_distance > raycast->horizontal_distance)
 		ray_cordinate(raycast, 'h');
 	raycast->final_distance = pyt(raycast->cub->cord.x, raycast->ray_cordinate.x, raycast->cub->cord.y, raycast->ray_cordinate.y);
-	//printf("distance = %f\n", raycast->final_distance);
+	printf("distance = %f\n", raycast->final_distance);
 }
 
 

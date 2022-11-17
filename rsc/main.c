@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/16 15:25:14 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 10:17:42 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void print(char **str)
         i++;
     }
 }
-void ft_tab(t_struct *cub)
+void ft_colorBuffer(t_struct *cub)
 {
     int i;
     int k;
@@ -31,7 +31,7 @@ void ft_tab(t_struct *cub)
 		k = 0;
 		while (k < W_WIDTH)
         {
-            cub->tab[i][k] = 0;
+            cub->colorBuffer[i][k] = 0;
             k++;
         }
         i++;
@@ -148,16 +148,17 @@ int main(int ac, char **av)
 	cub.mlx.window = mlx_new_window(cub.mlx.mlx_ptr, W_WIDTH, W_HEIGHT, "Souchen_ysmaili'Cub3d");
     //cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
 	//cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
-    cub.tab = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
+    cub.colorBuffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
 	while (i < W_HEIGHT)
     {
-        cub.tab[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
+        cub.colorBuffer[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
         i++;
 
     }
-    ft_tab(&cub);
+    ft_colorBuffer(&cub);
 	cub.img = mlx_new_image(cub.mlx.mlx_ptr, W_WIDTH,  W_HEIGHT);
-	cub.array = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
+	// creat mlx texture to display the color buffer
+	cub.arrayColor = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     //ft_draw_map(&cub);
     initial(&cub);//normilay find and ft_ray
     find_pos_player(&cub);
