@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/17 14:36:20 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 15:41:04 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ void	raycast(t_struct *cub)
 	i = 0;
 	if (cub->check == 1)
 		ft_colorBuffer(cub);
+		// we need to know every cub cordinate to check after if the cordinate of the ray is inside or outside a wall 
+	ft_get_wall_cordinate(cub);
 		// we loop to all this rays so for each one of the coloms draw the wall for each one 
 	while (i < cub->NB_rays) // nb rays is the width of screen
 	{

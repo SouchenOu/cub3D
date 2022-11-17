@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/17 15:01:41 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 15:22:41 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,6 @@ void ft_colorBuffer(t_struct *cub)
 
 void initial(t_struct *cub)
 {
-	ft_colorBuffer(cub);
-	cub->img = mlx_new_image(cub->mlx.mlx_ptr, W_WIDTH,  W_HEIGHT);
-	// creat mlx texture to display the color buffer
-	cub->arrayColor = (int *)mlx_get_data_addr(cub->img, &cub->bits_per_pixel, &cub->line_length, &cub->endian);
     cub->mlx.height = 0;
 	cub->mlx.width = 0;
     cub->p.cord.x = 100.00;
@@ -58,8 +54,7 @@ void initial(t_struct *cub)
 	cub->dire.right = 0.00;
     cub->virtical_num = cub->width;// nb characters
     cub->horizontal_num= cub->height; //nb lignes
-	find_pos_player(cub);
-    ft_ray(cub);
+	
 
     /*we define the FOV to be 60 degrees through 
 	trial and experimentation (on how good it looks
@@ -91,7 +86,6 @@ void	ft_ray(t_struct *cub)
 	{
 		init_ray(cub, &cub->raycast[i], cub->looking_angle);
 		cub->looking_angle = cub->looking_angle + (cub->FOV / (double)cub->NB_rays);
-		printf("here lokking angle = %f\n", cub->looking_angle );
 
         i++;
 	}
@@ -153,7 +147,6 @@ int main(int ac, char **av)
     //ft_check_alltextures(&cub);
    // ft_check_rgb(&cub);
     //ft_check_map(&cub);
-    ft_get_wall_cordinate(&cub);
     //cub.mlx_ptr = mlx_init();
 	//cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_WIDTH, "cub3D");
     cub.mlx.mlx_ptr = mlx_init();
@@ -167,14 +160,14 @@ int main(int ac, char **av)
         i++;
 
     }
-    /*ft_colorBuffer(&cub);
+    ft_colorBuffer(&cub);
 	cub.img = mlx_new_image(cub.mlx.mlx_ptr, W_WIDTH,  W_HEIGHT);
 	// creat mlx texture to display the color buffer
-	cub.arrayColor = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);*/
+	cub.arrayColor = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     //ft_draw_map(&cub);
     initial(&cub);//normilay find and ft_ray
-    //find_pos_player(&cub);
-    //ft_ray(&cub);
+    find_pos_player(&cub);
+    ft_ray(&cub);
 	
     //printf("cord = %f\n",cub.p.cord.x );
     raycast(&cub);                                                                                   

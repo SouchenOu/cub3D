@@ -6,22 +6,12 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/16 11:30:45 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 15:38:43 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-
-t_wall	*create_Wall_node(void)
-{
-	t_wall	*wall;
-
-	wall = (t_wall*)malloc(sizeof(t_wall));
-	wall->wall_c = (t_cordinate *)malloc(sizeof(t_cordinate) * 4);
-	wall->next = NULL;
-	return (wall);
-}
 void	wall_cordinate(t_wall *wall, double x, double y)
 {
 	wall->wall_c[0].x = (x) * size_GRID;
@@ -39,15 +29,10 @@ t_wall	*add_wall(t_wall *wall, double x, double y)
 	t_wall	*temporaire_wall;
 	int i;
 	i = 0;
-	if (wall->next ==  NULL)
-	{
-		wall_cordinate(wall, 0, 0);
-	}
 	temporaire_wall = (t_wall *)malloc(sizeof(t_wall));
 	temporaire_wall->next = NULL;
 	temporaire_wall->wall_c = (t_cordinate *)malloc(sizeof(t_cordinate) * 4);
 	wall_cordinate(temporaire_wall, x, y);
-
 	wall_node = wall;
 	while (wall_node->next != NULL)
 		wall_node = wall_node->next;
@@ -55,13 +40,14 @@ t_wall	*add_wall(t_wall *wall, double x, double y)
 	return (wall);
 }
 
-
+// each node its an wall , it have cordinate x,y and next node (next wall)
 void	ft_get_wall_cordinate(t_struct *cub)
 {
 	int	i;
 	int	j;
-
-	cub->wall = create_Wall_node();
+	cub->wall = (t_wall*)malloc(sizeof(t_wall));
+	cub->wall->wall_c = (t_cordinate *)malloc(sizeof(t_cordinate) * 4);
+	cub->wall->next = NULL;
 	j = 0;
 	while (cub->map[j] != NULL)
 	{
@@ -70,8 +56,7 @@ void	ft_get_wall_cordinate(t_struct *cub)
 		{
 			if (cub->map[j][i] == '1')
 			{
-				if (j != 0 || i != 0)
-					cub->wall = add_wall(cub->wall, (double)i, (double)j);
+				cub->wall = add_wall(cub->wall, (double)i, (double)j);
 			}
 			i++;
 		}

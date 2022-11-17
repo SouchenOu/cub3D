@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/17 15:02:29 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/17 15:35:09 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define E 3
 # define H 8
 # define V 10
-# define size_GRID 64.00
+# define size_GRID 50.00
 # define rotationAngle 3.14159265359 / 2
 
 
@@ -310,8 +310,8 @@ void	my_mlx_pixel_put(t_struct *ptr, int x, int y, long color);
 void	print_node(t_wall *wall);
 char	*no_new_line(char *line);
 void	move_player(t_struct *cub);
-int	move(int key, void *param);
-void check_horizontal(t_ray *raycast);
+int		move(int key, void *param);
+void 	check_horizontal(t_ray *raycast);
 void	check_vertical(t_ray *raycast);
 void check_vertical_horizontal(t_ray *raycast);
 int check_with_walls(t_wall *wall, t_cordinate cord, char *direction);
