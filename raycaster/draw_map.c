@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:48:33 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/18 23:20:09 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/19 00:08:34 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,9 @@ void    ft_draw_map(t_struct *cub)
         }
         y++;
     }
-    drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F);   
-    draw_player(cub, cub->player.position_x, cub->player.position_y , 0xfffff);
+    //drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F);  
+    raycast(cub);
+    //draw_player(cub, cub->player.position_x, cub->player.position_y , 0xfffff);
     mlx_put_image_to_window(cub->mlx.mlx_ptr , cub->mlx.window, cub->img, 0, 0);
 }
 

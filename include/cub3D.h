@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/18 23:05:12 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/19 00:06:18 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,10 +319,11 @@ void	move_player(t_struct *cub);
 int		move(int key, void *param);
 void 	check_horizontal(t_ray *raycast);
 void	check_vertical(t_ray *raycast);
-void check_vertical_horizontal(t_ray *raycast);
+void check_vertical_horizontal(t_ray *raycast, t_struct *cub);
 int check_with_walls(t_wall *wall, t_cordinate cord, char *direction);
 void directionOfPlayer(t_struct *cub);
 void    ft_draw_map(t_struct *cub);
+void ddaForLine(t_struct *cub,int x_0, int y_0, int x_1, int y_1, int color);
 
 
 

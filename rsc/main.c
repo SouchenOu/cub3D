@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/18 23:18:21 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/19 00:11:00 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ int main(int ac, char **av)
     //printf("cord = %f\n",cub.p.cord.x );
     //raycast(&cub);
 	                                                                                   
-    //mlx_key_hook(cub.mlx.window, &move, &cub);
+    mlx_key_hook(cub.mlx.window, &move, &cub);
 	//mlx_hook(cub.mlx.window, 17, 1L << 17, &endgame, &cub);
     mlx_loop(cub.mlx.mlx_ptr);
    
