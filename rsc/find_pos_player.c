@@ -33,11 +33,11 @@ void find_pos_player(t_struct *cub)
 
 	while (i <= (double)cub->horizontal_num)
 	{
-		if (cub->p.cord.y < ((i + 1) * size_GRID) && cub->p.cord.y > (i * size_GRID))
+		if (cub->player.position_y < ((i + 1) * size_GRID) && cub->player.position_y > (i * size_GRID))
 		{
 		
-			cub->dire.up = cub->p.cord.y - (i * size_GRID);
-			cub->dire.down = ((i + 1) * size_GRID) - cub->p.cord.y;
+			cub->dire.up = cub->player.position_y - (i * size_GRID);
+			cub->dire.down = ((i + 1) * size_GRID) - cub->player.position_y;
 		
 		
 
@@ -47,10 +47,10 @@ void find_pos_player(t_struct *cub)
 
 	while (j <= (double)cub->virtical_num)
 	{
-		if ((j * size_GRID) < cub->p.cord.x && ((j + 1) * size_GRID) > cub->p.cord.x)
+		if ((j * size_GRID) < cub->player.position_x && ((j + 1) * size_GRID) > cub->player.position_x)
 		{
-			cub->dire.left = cub->p.cord.x - (j * size_GRID);
-			cub->dire.right = ((j + 1) * size_GRID) - cub->p.cord.x;
+			cub->dire.left = cub->player.position_x - (j * size_GRID);
+			cub->dire.right = ((j + 1) * size_GRID) - cub->player.position_x;
 	
 
 		}

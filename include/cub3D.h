@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/17 15:51:06 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/18 23:05:12 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,12 +138,18 @@ typedef struct s_dirct
 	char *west_path;
 	char *east_path;
 }	t_dirct;
+
 typedef struct  s_player{
-	int position_x;
-	int position_y;
-	int rotation_angle;
+	
+	double	position_x;
+	double 	position_y;
+	double 	rottAngle;
+	double  rottSpeed;
+	int 	walkDrctn;
+	int		walkDown;
 	
 }  t_player;
+
 
 typedef struct vector
 {
@@ -215,12 +221,12 @@ typedef struct s_struct
 	int 			FOV;
 	int 			color;
 	int 			checkColorMap;
-	int				*arrayColor;
+	char			*arrayColor;
 	unsigned int	**colorBuffer;
 	int				horizontal_num;
 	int 			virtical_num;
-	int scaleWidth;
-	int scaleHeight;
+	int 			scaleWidth;
+	int 			scaleHeight;
 	t_wall	 		*wall;
 	t_cordinate 	cord;
 	t_vector		vect;
@@ -284,7 +290,7 @@ char    **ft_jump_lines(t_struct *cub);
 int 	ft_check_bgnend(char *data);
 int 	ft_len_ofline(char *str);
 int 	count_direction(char **str);
-char    *ft_check_map(t_struct *cub);
+int		ft_check_map(t_struct *cub);
 int 	ft_check_openmap(char **data);
 void 	find_pos_player(t_struct *cub);
 double	degrees_to_radians(double a);
@@ -296,7 +302,7 @@ void	raycast(t_struct *cub);
 char 	*get_next_line(int fd);
 int		get_height(char *map_file);
 int		get_width(char *map_file, int height);
-void	ft_read_maps(char *map_file, t_struct *cub);
+int		ft_read_maps(char *map_file, t_struct *cub);
 t_wall	*create_Wall_node(void);
 void	wall_cordinate(t_wall *wall, double x, double y);
 t_wall	*add_wall(t_wall *wall, double x, double y);
@@ -315,6 +321,8 @@ void 	check_horizontal(t_ray *raycast);
 void	check_vertical(t_ray *raycast);
 void check_vertical_horizontal(t_ray *raycast);
 int check_with_walls(t_wall *wall, t_cordinate cord, char *direction);
+void directionOfPlayer(t_struct *cub);
+void    ft_draw_map(t_struct *cub);
 
 
 

@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:48:33 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/15 16:26:19 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/18 23:20:09 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	my_mlx_pixel_put(t_struct *ptr, int x, int y, long color)
 
 	if (x > 0 && y > 0 && x < W_WIDTH && y < W_HEIGHT)
 	{
-		dst = ptr->addr + (y * ptr->line_length + x
+		dst = ptr->arrayColor + (y * ptr->line_length + x
 				* (ptr->bits_per_pixel / 8));
 		*(unsigned int *)dst = color;
 	}
@@ -43,6 +43,37 @@ int ft_count_height(char **data)
       i++;  
     }
    return (len); 
+}
+
+void    ft_draw_map(t_struct *cub)
+{
+    int x;
+    int y;
+    char    **data;
+    int     len;
+
+    y = 0;
+    len = 0;
+    data = ft_jump_lines(cub);
+    //cub->fovAngle = 60 * (M_PI / 180);
+    cub->NB_rays = W_WIDTH;
+    // cub->rayAngle = cub->player.rottAngle;
+    while (data[y])
+    {
+        x = 0;
+        while (data[y][x])
+        {
+            if (data[y][x] == '1')
+                draw_cub(cub, x, y, 0xFFF0000);
+            else if (data[y][x] == '0')
+                draw_cub(cub, x, y, 0);
+            x++;
+        }
+        y++;
+    }
+    drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F);   
+    draw_player(cub, cub->player.position_x, cub->player.position_y , 0xfffff);
+    mlx_put_image_to_window(cub->mlx.mlx_ptr , cub->mlx.window, cub->img, 0, 0);
 }
 
 void    draw_cub(t_struct *ptr, int x, int y, int color)
@@ -70,31 +101,46 @@ void    draw_cub(t_struct *ptr, int x, int y, int color)
 }
 
 
-
+void directionOfPlayer(t_struct *cub)
+{
+    char** data = ft_jump_lines(cub);
+    int gred_y = floor(cub->player.position_y/cub->scaleHeight);
+    int gred_x = floor(cub->player.position_x/cub->scaleWidth);
+    if (data[gred_y][gred_x] == 'N')
+        cub->player.rottAngle = M_PI / 2;
+    if (data[gred_y][gred_x] == 'S')
+        cub->player.rottAngle = M_PI * (3/ 2);
+    if (data[gred_y][gred_x] == 'W')
+        cub->player.rottAngle = M_PI;
+    if (data[gred_y][gred_x] == 'E')
+        cub->player.rottAngle = 0;
+}
 
 void player_position(t_struct *cub){
     int i = 0;
     int j = 0;
-    cub->player.rotation_angle = PI / 2;
    char** data = ft_jump_lines(cub);
-   while(data[i] != NULL)
-   {
-        printf("data : %s\n", data[i]);
-        i++;
-   }
+   int  height = ft_count_height(data);
+   
+    cub->scaleHeight = W_HEIGHT/ height;
+    cub->scaleWidth = W_WIDTH/ cub->width;
+    cub->player.rottSpeed = 0.174533;
+    cub->player.walkDrctn = 0;
    
    while (data[i])
    {
-    j = 0;
-    while(data[i][j]){
-        if (data[i][j] == 'E'|| data[i][j] == 'N' || data[i][j] == 'S' || data[i][j] == 'W'){
-          cub->player.position_x = j + cos(cub->player.rotation_angle) * 40;
-         cub->player.position_y = i + sin(cub->player.rotation_angle) * 40;
-        return ;
+        j = 0;
+        while(data[i][j])
+        {
+            if (data[i][j] == 'E'|| data[i][j] == 'N' || data[i][j] == 'S' || data[i][j] == 'W')
+            {
+                cub->player.position_x = j * cub->scaleWidth;
+                cub->player.position_y = i * cub->scaleHeight;
+                return ;
+            }
+            j++;
         }
-        j++;
-    }
-    i++;
+        i++;
    } 
 }
 

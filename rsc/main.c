@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/17 15:50:51 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/18 23:18:21 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void initial(t_struct *cub)
 	cub->mlx.width = 0;
     cub->p.cord.x = 100.00;
 	cub->p.cord.y = 220.00;
-    cub->p.vect.x = cos(degrees_to_radians(180.00));
-	cub->p.vect.y = -sin(degrees_to_radians(180.00));
+    cub->p.vect.x = cos(degrees_to_radians(280.00));
+	cub->p.vect.y = -sin(degrees_to_radians(280.00));
 	cub->p.vect.pos = 280.00;
     cub->dire.down = 0.00;
 	cub->dire.up = 0.00;
@@ -56,7 +56,7 @@ void initial(t_struct *cub)
     cub->horizontal_num= cub->height; //nb lignes
 	cub->FOV = 60.00;
 	cub->NB_rays = W_WIDTH;
-	cub->looking_angle = cub->p.vect.pos - ((double)cub->FOV / 2.00);
+	cub->looking_angle = cub->player.rottAngle - ((double)cub->FOV / 2.00);
 	
 
     /*we define the FOV to be 60 degrees through 
@@ -143,9 +143,14 @@ int main(int ac, char **av)
     if (ac != 2)
 		return (ft_putstr_fd("Usage : ./cub3D path/to/map.cub", 0), 0);
     
-	ft_read_maps(av[1], &cub);
-    //ft_check_alltextures(&cub);
-   // ft_check_rgb(&cub);
+	if (ft_read_maps(av[1], &cub) == 0)
+        return (0);
+	if (!ft_check_alltextures(&cub))
+        return (0); 
+	if (!ft_check_rgb(&cub))
+        return (0);
+	if (!ft_check_map(&cub))
+        return (0);
     //ft_check_map(&cub);
 
     //cub.mlx_ptr = mlx_init();
@@ -154,25 +159,29 @@ int main(int ac, char **av)
 	cub.mlx.window = mlx_new_window(cub.mlx.mlx_ptr, W_WIDTH, W_HEIGHT, "Souchen_ysmaili'Cub3d");
     //cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
 	//cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
-    cub.colorBuffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
+    /*cub.colorBuffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
 	while (i < W_HEIGHT)
     {
         cub.colorBuffer[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
         i++;
 
     }
-    ft_colorBuffer(&cub);
+    ft_colorBuffer(&cub);*/
 	cub.img = mlx_new_image(cub.mlx.mlx_ptr, W_WIDTH,  W_HEIGHT);
 	// creat mlx texture to display the color buffer
-	cub.arrayColor = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
-    //ft_draw_map(&cub);
-    initial(&cub);//normilay find and ft_ray
-    find_pos_player(&cub);
+	cub.arrayColor = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
+	initial(&cub);//normilay find and ft_ray
     ft_ray(&cub);
+	player_position(&cub);
+	find_pos_player(&cub);
+    directionOfPlayer(&cub);
+    ft_draw_map(&cub);
+    
 	
     //printf("cord = %f\n",cub.p.cord.x );
-    raycast(&cub);                                                                                   
-    mlx_key_hook(cub.mlx.window, &move, &cub);
+    //raycast(&cub);
+	                                                                                   
+    //mlx_key_hook(cub.mlx.window, &move, &cub);
 	//mlx_hook(cub.mlx.window, 17, 1L << 17, &endgame, &cub);
     mlx_loop(cub.mlx.mlx_ptr);
    

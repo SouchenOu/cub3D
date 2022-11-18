@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/17 15:41:04 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/18 23:15:19 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void	raycast(t_struct *cub)
         }
         i++;
 	}
-	mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.window,cub->img, 0, 0);
+	//mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.window,cub->img, 0, 0);
 }
 
 
