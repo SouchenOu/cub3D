@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:48:33 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/19 00:08:34 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/19 03:34:07 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,61 @@ void    ft_draw_map(t_struct *cub)
         }
         y++;
     }
-    //drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F);  
     raycast(cub);
+    //drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F);  
+    //raycast(cub);
+    //ft_ray(cub);
+    //drawRaysOfplyer(cub,cub->player.position_x, cub->player.position_y , 0xFFFF0F);   
     //draw_player(cub, cub->player.position_x, cub->player.position_y , 0xfffff);
     mlx_put_image_to_window(cub->mlx.mlx_ptr , cub->mlx.window, cub->img, 0, 0);
 }
+
+void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
+{
+    int i = 0;
+    (void) x;
+    (void) y;
+    (void) color;
+    //(void) cub;
+    //(void) raycast;
+   // double angleIncrem = (M_PI / 3) / cub->NB_rays;
+    cub->looking_angle = cub->player.rottAngle - ((double)cub->FOV / 2.00);
+    //cub->ray.rayAngle = cub->player.rottAngle - (M_PI / 6);  
+    while (i < cub->NB_rays)
+    {  
+        initial_every_ray(cub, &cub->raycast[i], cub->looking_angle);
+        printf("here\n");
+		//cub->looking_angle = cub->looking_angle + (cub->FOV / (double)cub->NB_rays);
+        /*raycast->cub = cub;
+        cub->raycast->ray_cordinate.x = -1.00;
+		cub->raycast->ray_cordinate.y = -1.00;
+		cub->raycast->offset.x = -1.00;
+		cub->raycast->offset.y = -1.00;
+		cub->raycast->dir = 0.00;
+		cub->raycast->number_to_check = -2;
+		cub->raycast->tang = 0;
+		cub->raycast->horizontal_distance = 0.00;
+		cub->raycast->horizontal_cord.y = 0.00;
+		cub->raycast->horizontal_cord.x = 0.00;
+		cub->raycast->virt_cord.x = 0.00;
+		cub->raycast->virt_cord.y = 0.00;
+		cub->raycast->virtical_distance = 0.00;
+        cub->raycast->ray_cord_temp.x = 0.00;
+        cub->raycast->ray_cord_temp.y = 0.00;
+		cub->raycast->dest = 0.00;
+		cub->raycast->wallStripHeight = 0.00;
+		cub->raycast->final_distance = 0.00;*/
+
+        //cub->ray.rayAngle = normalizeAngle(cub->ray.rayAngle);
+        //cub->raycast->ray_looking_angle = degrees_to_radians(limite_angle(cub->looking_angle));
+        //raycast(cub);
+        //check_vertical_horizontal(&cub->raycast[i]);
+        //ddaForLine(cub, x, y, cub->raycast->ray_cordinate.y, cub->raycast->ray_cordinate.y,color);
+        cub->looking_angle += (cub->FOV / (double)cub->NB_rays);
+        i++;
+   } 
+}
+
 
 void    draw_cub(t_struct *ptr, int x, int y, int color)
 {
@@ -145,21 +195,6 @@ void player_position(t_struct *cub){
    } 
 }
 
-int	player_move(int key, t_struct *p)
-{
-	if (key == 125)
-		p->player.position_y += 1;
-	if (key == 126)
-		p->player.position_y -= 1;
-	if (key == 124)
-		p->player.position_x += 1;
-	if (key == 123)
-		p->player.position_x -= 1;
-    mlx_destroy_image(p->mlx_ptr, p->img);
-    p->img = mlx_new_image(p->mlx_ptr, W_WIDTH, W_HEIGHT);
-    update_ptayer(p);
-    return (0);
-}
 void update_ptayer(t_struct *cub){
     int     x;
     int     y;

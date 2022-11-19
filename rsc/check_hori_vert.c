@@ -6,31 +6,12 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/19 00:06:10 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/19 03:31:01 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-//3.14159265359 3.14159265359
-//PIr 1.57079632679 // 3.14159265359 / 2
-//PIl 4.71238898038 // 3 * 3.14159265359 / 2
-//Depending on the looking angle of the player we can decide where the ray is actually hitting vertically (left or right) and horizontally (up or down
-
-// now calculate the ray cordinate by using player cordinate and his looking angle
-//horizontal // calculate the  ray is vector
-
-
-
-
-/*******The basic idea of raycasting is as follows: the map is a 2D square grid, and each square can either be 0 (= no wall), 
- * or a positive value (= a wall with a certain color or texture).
-For every x of the screen (i.e. for every vertical stripe of the screen), send out a ray that starts at the player
-location and with a direction that depends on both the player's looking direction, and the x-coordinate of the screen.
-Then, let this ray move forward on the 2D map, until it hits a map square that is a wall. If it hit a wall, calculate the distance
-of this hit point to the player, and use this distance to calculate how high this wall has to be drawn on the screen: the further away
-the wall, the smaller it's on screen, and the closer, the higher it appears to be. These are all 2D calculations. This image shows a 
-	op down overview of two such rays (red) that start at the player (green dot) and hit blue walls:*/
 void check_horizontal(t_ray *raycast)
 {
 	//int i ; 
@@ -39,7 +20,7 @@ void check_horizontal(t_ray *raycast)
 	if (raycast->ray_looking_angle > 3.14159265359)                                                                             
 	{
 		raycast->ray_cordinate.y = ((raycast->cub->player.position_y / size_GRID) * size_GRID) - (raycast->cub->dire.up);
-		raycast->ray_cordinate.x = (raycast->cub->player.position_y - raycast->ray_cordinate.y) * raycast->tang + raycast->cub->player.position_x;
+		raycast->ray_cordinate.x = ((raycast->cub->player.position_y - raycast->ray_cordinate.y) * raycast->tang) + raycast->cub->player.position_x;
 		raycast->number_to_check = raycast->cub->horizontal_num;  // nb lignes here 
 		raycast->offset.y = -size_GRID;
 		raycast->offset.x = -(raycast->offset.y) * raycast->tang;
@@ -116,7 +97,7 @@ void	check_vertical(t_ray *raycast)
 	if (raycast->ray_looking_angle > 1.57079632679 && raycast->ray_looking_angle < 4.71238898038)
 	{
 		raycast->ray_cordinate.x = ((raycast->cub->player.position_x / size_GRID) * size_GRID) - (raycast->cub->dire.left);
-		raycast->ray_cordinate.y = (raycast->cub->player.position_x - raycast->ray_cordinate.x) * raycast->tang + raycast->cub->player.position_y;
+		raycast->ray_cordinate.y = ((raycast->cub->player.position_x - raycast->ray_cordinate.x) * raycast->tang) + raycast->cub->player.position_y;
 		raycast->number_to_check = raycast->cub->virtical_num;
 		raycast->offset.x = -size_GRID;
 		raycast->offset.y = -(raycast->offset.x) * raycast->tang;
@@ -293,7 +274,7 @@ double	find_x_or_y(t_ray *raycast, char *destination)
 }
 
 
-void check_vertical_horizontal(t_ray *raycast, t_struct *cub)
+void check_vertical_horizontal(t_ray *raycast)
 {
 	check_vertical(raycast);
 	check_horizontal(raycast);
@@ -302,38 +283,8 @@ void check_vertical_horizontal(t_ray *raycast, t_struct *cub)
 		ray_cordinate(raycast, 'v');
 	else if (raycast->virtical_distance > raycast->horizontal_distance)
 		ray_cordinate(raycast, 'h');
-	raycast->final_distance = pyt(raycast->cub->cord.x, raycast->ray_cordinate.x, raycast->cub->cord.y, raycast->ray_cordinate.y);
-	ddaForLine(cub, cub->player.position_x, cub->player.position_y, cub->raycast->ray_cordinate.x, cub->raycast->ray_cordinate.y, 0xFFFF0F);
+	raycast->final_distance = pyt(raycast->cub->player.position_x, raycast->ray_cordinate.x, raycast->cub->player.position_y, raycast->ray_cordinate.y);
+	
 
 }
 
-void ddaForLine(t_struct *cub,int x_0, int y_0, int x_1, int y_1, int color)
-{
-    // calculate dstnc_x & dstnc_y
-    int dstnc_x = x_1 - x_0;
-    int dstnc_y = y_1 - y_0;
- 
-    // calculate steps required for generating pixels
-    int steps;
-    if (abs(dstnc_x) > abs(dstnc_y))
-        steps = abs(dstnc_x);
-    else
-        steps = abs(dstnc_y);
-    // calculate increment in x & y for each steps
-    float x_inc = dstnc_x / (float)steps;
-    float y_inc = dstnc_y / (float)steps;
-    // Put pixel for each step
-    float x = x_0;
-    float y = y_0;
-    int i = 0;
-    while (i <= steps)
-    {
-       my_mlx_pixel_put(cub, x, y, color);
-       x += x_inc; // increment in x at each step
-       y += y_inc; // increment in y at each step
-       i++;
-    }
-}
-/**Field of view is the extent of the observable world that is seen at a given time either through someone's eyes,
- *  on a display screen, or through the viewfinder on a camera. Field of view (FOV) also describes the angle through which one can see that
- *  observable world*/

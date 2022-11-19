@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/19 00:11:00 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/19 03:34:32 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ void initial(t_struct *cub)
 {
     cub->mlx.height = 0;
 	cub->mlx.width = 0;
-    cub->p.cord.x = 100.00;
-	cub->p.cord.y = 220.00;
-    cub->p.vect.x = cos(degrees_to_radians(280.00));
-	cub->p.vect.y = -sin(degrees_to_radians(280.00));
-	cub->p.vect.pos = 280.00;
+    //cub->p.cord.x = 100.00;
+	//cub->p.cord.y = 220.00;
+    cub->p.vect.x = cos(degrees_to_radians(cub->player.rottAngle));
+	cub->p.vect.y = -sin(degrees_to_radians(cub->player.rottAngle));
+	//cub->p.vect.pos = 280.00;
     cub->dire.down = 0.00;
 	cub->dire.up = 0.00;
 	cub->dire.left = 0.00;
@@ -135,11 +135,79 @@ void initial_every_ray(t_struct *cub, t_ray *raycast, double looking_angle)
 		
 
 }
+void check_nextSteep(t_struct *cub)
+{
+  double  new_x;
+  double  new_y;
+
+    new_x = cub->player.position_x + (cos(cub->player.rottAngle) * ((double)cub->player.walkDrctn * 4));
+    new_y = cub->player.position_y + (sin(cub->player.rottAngle) * ((double)cub->player.walkDrctn * 4));
+    if (check_wall(cub, new_x, new_y) != 1)
+    {
+        cub->player.position_x = new_x;
+        cub->player.position_y = new_y;
+    }   
+}
+
+void check_downSteep(t_struct *cub)
+{
+  double  new_x;
+  double  new_y;
+
+    new_x = cub->player.position_x + (cos(cub->player.rottAngle + (M_PI/2)) * ((double)cub->player.walkDown * 4));
+    new_y = cub->player.position_y + (sin(cub->player.rottAngle + (M_PI/2)) * ((double)cub->player.walkDown * 4));
+    if (check_wall(cub, new_x, new_y) != 1)
+    {
+        cub->player.position_x = new_x;
+        cub->player.position_y = new_y;
+    }   
+}
+ int check_wall(t_struct *cub, double x, double y)
+ {
+    char **map;
+    map = ft_jump_lines(cub);
+    int gred_y = (int)(y/cub->scaleHeight); /*The value to round down to the nearest integer*/
+    int gred_x = (int)(x/cub->scaleWidth);
+    if (!map[gred_y])
+        return (1);
+    if ( map[gred_y][gred_x] == '1' ||  !map[gred_y])
+        return (1);
+    return (0);
+ }
+int	player_move(int key, t_struct *cub)
+{ 
+    cub->player.walkDrctn = 0;
+	if (key == 1){
+        cub->player.walkDrctn = -1;
+		check_nextSteep(cub);
+    }
+	else if (key == 13){
+        cub->player.walkDrctn = 1;
+       check_nextSteep(cub);
+    }
+	else if (key == 2){
+        cub->player.walkDown = 1;
+		check_downSteep(cub);
+    }
+	else if (key == 0){
+        cub->player.walkDown= -1;
+		check_downSteep(cub);
+    }
+    else if (key == 124)
+        cub->player.rottAngle += cub->player.rottSpeed;
+	else if (key == 123)
+        cub->player.rottAngle -= cub->player.rottSpeed;
+    mlx_destroy_image(cub->mlx.mlx_ptr , cub->img);
+    cub->img = mlx_new_image(cub->mlx.mlx_ptr , W_WIDTH, W_HEIGHT);
+    ft_draw_map(cub);
+    return (0);
+}
 int main(int ac, char **av)
 {
     int i;
     i = 0;
     t_struct cub;
+	//t_ray raycast;
     if (ac != 2)
 		return (ft_putstr_fd("Usage : ./cub3D path/to/map.cub", 0), 0);
     
@@ -151,37 +219,25 @@ int main(int ac, char **av)
         return (0);
 	if (!ft_check_map(&cub))
         return (0);
-    //ft_check_map(&cub);
 
-    //cub.mlx_ptr = mlx_init();
-	//cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_WIDTH, "cub3D");
     cub.mlx.mlx_ptr = mlx_init();
 	cub.mlx.window = mlx_new_window(cub.mlx.mlx_ptr, W_WIDTH, W_HEIGHT, "Souchen_ysmaili'Cub3d");
-    //cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
-	//cub.addr = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
-    /*cub.colorBuffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
-	while (i < W_HEIGHT)
-    {
-        cub.colorBuffer[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
-        i++;
-
-    }
-    ft_colorBuffer(&cub);*/
 	cub.img = mlx_new_image(cub.mlx.mlx_ptr, W_WIDTH,  W_HEIGHT);
-	// creat mlx texture to display the color buffer
 	cub.arrayColor = mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
-	initial(&cub);//normilay find and ft_ray
-    ft_ray(&cub);
 	player_position(&cub);
 	find_pos_player(&cub);
     directionOfPlayer(&cub);
+	initial(&cub);//normilay find and ft_ray
+	ft_ray(&cub);
     ft_draw_map(&cub);
+
     
 	
     //printf("cord = %f\n",cub.p.cord.x );
     //raycast(&cub);
 	                                                                                   
     mlx_key_hook(cub.mlx.window, &move, &cub);
+	//mlx_key_hook(cub.mlx.window, &move, &player_move);
 	//mlx_hook(cub.mlx.window, 17, 1L << 17, &endgame, &cub);
     mlx_loop(cub.mlx.mlx_ptr);
    
