@@ -6,7 +6,7 @@
 /*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/19 03:26:19 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/19 03:47:31 by souchen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	raycast(t_struct *cub)
 		printf("i = %d\n", i);
 		check_vertical_horizontal(&cub->raycast[i]);
 		ddaForLine(cub, cub->player.position_x, cub->player.position_y , cub->raycast->ray_cordinate.x, cub->raycast->ray_cordinate.y, 0xFFFF0F);
-		
+		mlx_put_image_to_window(cub->mlx.mlx_ptr , cub->mlx.window, cub->img, 0, 0);
         i++;
 		
 	}
