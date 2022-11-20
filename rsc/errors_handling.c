@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yismaili < yismaili@student.1337.ma>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/18 23:00:20 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/11 15:42:47 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ char    *ft_check_texture(t_struct *cub, char *dirct, int len)
     return (path);
 }
 
-// check if there is all textures in our map 
 int ft_check_alltextures(t_struct *cub)
 {
     if (ft_check_alldouble(cub) == 0)
@@ -137,7 +136,6 @@ int ft_check_alltextures(t_struct *cub)
         return (ft_putstr_fd("East texure not fount\n",1), 0);
     return (1);
 }
-
 
 char    **ft_check_florclg(t_struct *cub, char *flor_clg, int len)
 {
@@ -200,7 +198,6 @@ int ft_check_rgb(t_struct *cub)
     return (1);
 }
 
-
 int ft_check_double(t_struct *cub, char *dirct, int len)
 {
     int cunt;
@@ -258,6 +255,7 @@ char    **ft_jump_lines(t_struct *cub)
     data[i] = NULL;
     return (data);
 }
+
 int ft_check_bgnend(char *data)
 {
     int i;

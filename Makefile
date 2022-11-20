@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: souchen <souchen@student.42.fr>            +#+  +:+       +#+         #
+#    By: yismaili < yismaili@student.1337.ma>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/21 13:19:25 by yismaili          #+#    #+#              #
-#    Updated: 2022/11/18 23:27:55 by souchen          ###   ########.fr        #
+#    Updated: 2022/11/18 12:34:49 by yismaili         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,14 +22,14 @@ FLAGS = -g -Wall -Werror -Wextra -g #-fsanitize=address
 framework= -framework OpenGL -framework AppKit 
 RM = rm -rf
 
-FILES = rsc/read_map.c  rsc/main.c rsc/errors_handling.c raycaster/draw_map.c raycaster/raycasting.c  rsc/find_pos_player.c rsc/wall_cordinate.c  rsc/func_math.c rsc/raycast.c rsc/check_hori_vert.c rsc/ray_cordinate.c rsc/key.c
+FILES = rsc/read_map.c  rsc/main.c rsc/errors_handling.c raycaster/draw_map.c  raycaster/raycasting.c 
  
 
 OBJ_FILES= $(FILES:.c=.o)
 
 MSG = Everything is fcleaned!
 HEADER = ./include/cub3D.h
-CREATER = yismaili && souchen
+CREATER = #yismaili && souchen
 LIBFT = libft/libft.a
 NAME = cub3D
 

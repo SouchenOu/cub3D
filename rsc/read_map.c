@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: souchen <souchen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yismaili < yismaili@student.1337.ma>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:53:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/18 22:55:53 by souchen          ###   ########.fr       */
+/*   Updated: 2022/11/11 15:36:38 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int	get_height(char *map_file)
 	return (height);
 }
 
-
 int	get_width(char *map_file, int height)
 {
 	int		fd;
@@ -81,21 +80,6 @@ int	get_width(char *map_file, int height)
 	return (max);
 }
 
-char	*no_new_line(char *line)
-{
-	char	*newMap;
-	int		i;
-
-	newMap = (char *)malloc(sizeof(char) * (ft_strlen(line) - 1));
-	i = 0;
-	while (line[i] != '\n' && line[i])
-	{
-		newMap[i] = line[i];
-		i++;
-	}
-	newMap[i] = '\0';
-	return (newMap);
-}
 int	ft_read_maps(char *map_file, t_struct *cub)
 {
 	int		fd;
@@ -123,4 +107,3 @@ int	ft_read_maps(char *map_file, t_struct *cub)
 	close(fd);
 	return (1);
 }
-
