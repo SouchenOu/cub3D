@@ -6,7 +6,7 @@
 /*   By: yismaili < yismaili@student.1337.ma>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:48:33 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/18 18:53:14 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/11/20 13:42:26 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	my_mlx_pixel_put(t_struct *ptr, int x, int y, long color)
 
 	if (x > 0 && y > 0 && x < W_WIDTH && y < W_HEIGHT)
 	{
-		dst = ptr->addr + (y * ptr->line_length + x
+		dst = (char *)ptr->addr + (y * ptr->line_length + x
 				* (ptr->bits_per_pixel / 8));
-		*(unsigned int *)dst = color;
+		*(int *)dst = color;
 	}
 }
 
@@ -46,7 +46,7 @@ int ft_count_height(char **data)
    return (len); 
 }
 
-void    draw_cub(t_struct *ptr, int x, int y, int color)
+/*void    draw_cub(t_struct *ptr, int x, int y, int color)
 {
     int start_x;
     int start_y;
@@ -68,22 +68,22 @@ void    draw_cub(t_struct *ptr, int x, int y, int color)
          }
         i++;
     }
-}
+}*/
 
 void    ft_draw_map(t_struct *cub)
 {
-    int x;
-    int y;
+    //int x;
+    //int y;
     char    **data;
     int     len;
 
-    y = 0;
+    //y = 0;
     len = 0;
     data = ft_jump_lines(cub);
     //cub->fovAngle = 60 * (M_PI / 180);
     cub->numOfRays = W_WIDTH;
     // cub->rayAngle = cub->player.rottAngle;
-    while (data[y])
+    /*while (data[y])
     {
         x = 0;
         while (data[y][x])
@@ -95,9 +95,9 @@ void    ft_draw_map(t_struct *cub)
             x++;
         }
         y++;
-    }
+    }*/
     drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F);   
-    draw_player(cub, cub->player.position_x, cub->player.position_y , 0xfffff); 
+    //draw_player(cub, cub->player.position_x, cub->player.position_y , 0xfffff); 
     mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);
 }
 
