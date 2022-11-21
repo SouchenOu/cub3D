@@ -103,7 +103,6 @@ typedef struct s_struct
 	int 		scaleWidth;
 	t_player 	player;
 	double		numOfRays;
-	//double		fovAngle;
 	double 		rayAngle;
 	unsigned int 		**color_buffer;
 	t_ray       ray;
@@ -115,7 +114,16 @@ typedef struct s_struct
 	t_direction 	dire;
 	double wallStripHeight;
 	int check_test;
-	
+	double x_nextVrtcl;
+	double y_nextVrtcl;
+	double x_nextHrzntal;
+	double y_nextHrzntal;
+	double hrzntlDstnc;
+	double vrtclDstnc;
+
+
+	double rayx;
+	double rayy;
 }	t_struct;
 
 
@@ -164,8 +172,14 @@ double	degrees_to_radians(double a);
 void find_pos_player_in_gridline(t_struct *cub);
 double	limite_angle(double a);
 int	is_ceiling(unsigned int **buffer, int i, int k);
-
 int	is_floor(unsigned int **buffer, int i, int k);
+int	limitsvert(t_struct *cub);
+int	limitshori(t_struct *cub);
+void calcule_distance(t_struct *cub, int test);
+
+void	check_func(t_struct *cub, int op);
+
+
 
 
 

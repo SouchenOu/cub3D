@@ -134,7 +134,7 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
         /***********/
             
 
-	        sostra = limite_angle(cub->player.rottAngle) - cub->ray.rayAngle;
+	        sostra = degrees_to_radians(cub->player.rottAngle) - cub->ray.rayAngle;
 	        //printf("hadi = %f\n", raycast->ray_looking_angle);
 	        if (sostra > degrees_to_radians(360))
 		        sostra -= degrees_to_radians(360);
@@ -310,8 +310,8 @@ void castHrzntalRays(t_struct *cub)
         x_incrmnt *= -1;
     x_nextHrzntal = x_hrzntlIntrsctn;
     y_nextHrzntal = y_hrzntlIntrsctn;
-    bool check = false;
-    while (x_nextHrzntal >= 0 && x_nextHrzntal < W_WIDTH && y_nextHrzntal >= 0 && y_nextHrzntal < W_HEIGHT )
+    //bool check = false;
+    while (x_nextHrzntal >= 0 && x_nextHrzntal > 0 && y_nextHrzntal > 0 && cub->x_nextHrzntal < ((double)cub->height) * cub->scaleHeight && y_nextHrzntal  < ((double)cub->width) * cub->scaleWidth )
     {
         if (check_wall(cub, x_nextHrzntal, y_nextHrzntal))
         {
@@ -319,17 +319,30 @@ void castHrzntalRays(t_struct *cub)
             //  printf("hrzntal x ---> %f\n", y_nextHrzntal);
             cub->ray.horzWallHitX = x_nextHrzntal;
             cub->ray.horzWallHitY = y_nextHrzntal;
-            check = true;
+            cub->hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY , cub->player.position_x, cub->player.position_y);
             break;
         }
         x_nextHrzntal += x_incrmnt;
         y_nextHrzntal += y_incrmnt;
      }
-     if (!check)
+     if (!(x_nextHrzntal > 0 && y_nextHrzntal > 0 && (x_nextHrzntal < ((double)cub->height) * cub->scaleHeight) && (y_nextHrzntal  < ((double)cub->width) * cub->scaleWidth)))
      {
-        cub->ray.horzWallHitX = 1e9;
-        cub->ray.horzWallHitY = 1e9;
+            cub->ray.horzWallHitX = x_nextHrzntal;
+            cub->ray.horzWallHitY = y_nextHrzntal;
+            cub->hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY , cub->player.position_x, cub->player.position_y);
      }
+}
+int	limitshori(t_struct *cub)
+{
+	if ((cub->x_nextHrzntal > 0.00 && cub->y_nextHrzntal > 0.00))
+	{
+		if (cub->x_nextHrzntal < ((double)cub->height) * cub->scaleHeight)
+		{
+			if (cub->y_nextHrzntal  < ((double)cub->width) * cub->scaleWidth)
+				return (1);
+		}
+	}
+	return (0);
 }
 
 void castVrtcalRays(t_struct *cub)
@@ -361,30 +374,67 @@ void castVrtcalRays(t_struct *cub)
         y_incrmntVrtcl *= -1;
     x_nextVrtcl = x_vrticlIntrsctn;
     y_nextVrtcl = y_vrtclIntrsctn;
-    bool check = false;
-    while (x_nextVrtcl >= 0 && x_nextVrtcl < W_WIDTH && y_nextVrtcl >= 0 && y_nextVrtcl < W_HEIGHT)
+    //bool check = false;
+    while (x_nextVrtcl >= 0 && x_nextVrtcl > 0.00 && y_nextVrtcl > 0.00 && (x_nextVrtcl < ((double)cub->height) * cub->scaleHeight) && (y_nextVrtcl  < ((double)cub->width) * cub->scaleWidth))
     {
         if (check_wall(cub, x_nextVrtcl, y_nextVrtcl))
         {
             cub->ray.vrticlWallHitX = x_nextVrtcl;
             cub->ray.vrtclWallHitY = y_nextVrtcl;
-            check = true;
+            cub->vrtclDstnc = calculDistance(cub->ray.vrticlWallHitX, cub->ray.vrtclWallHitY , cub->player.position_x, cub->player.position_y);
             break;
         }
         x_nextVrtcl += x_incrmntVrtcl;
         y_nextVrtcl += y_incrmntVrtcl;
      }
-     if (!check)
+     if (!(x_nextVrtcl > 0.00 && y_nextVrtcl > 0.00 && (x_nextVrtcl < ((double)cub->height) * cub->scaleHeight) && (y_nextVrtcl  < ((double)cub->width) * cub->scaleWidth)))
      {
-        cub->ray.vrticlWallHitX = 1e9;
-        cub->ray.vrtclWallHitY = 1e9;
+            cub->ray.vrticlWallHitX = x_nextVrtcl;
+            cub->ray.vrtclWallHitY = y_nextVrtcl;
+            cub->vrtclDstnc = calculDistance(cub->ray.vrticlWallHitX, cub->ray.vrtclWallHitY , cub->player.position_x, cub->player.position_y);
      }
 }
 
+int	limitsvert(t_struct *cub)
+{
+	if ((cub->x_nextVrtcl > 0.00 && cub->y_nextVrtcl > 0.00))
+	{
+		if (cub->x_nextVrtcl < ((double)cub->height) * cub->scaleHeight)
+		{
+			if (cub->y_nextVrtcl  < ((double)cub->width) * cub->scaleWidth)
+				return (1);
+		}
+	}
+	return (0);
+}
+void calcule_distance(t_struct *cub, int test)
+{
+    if(test == 'v')
+    {
+         cub->ray.vrticlWallHitX = cub->x_nextVrtcl;
+         cub->ray.vrtclWallHitY = cub->y_nextVrtcl;
+        cub->vrtclDstnc = calculDistance(cub->ray.vrticlWallHitX, cub->ray.vrtclWallHitY , cub->player.position_x, cub->player.position_y);
+
+    }
+    else if(test == 'h')
+    {
+         cub->ray.horzWallHitX = cub->x_nextHrzntal;
+        cub->ray.horzWallHitY = cub->y_nextHrzntal;
+        cub->hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY , cub->player.position_x, cub->player.position_y);
+
+    }
+
+}
+
+
+
+
+
+
 void castAllRays(t_struct *cub)
 {
-    double hrzntlDstnc = 0;
-    double vrtclDstnc = 0;
+    //double hrzntlDstnc = 0;
+    //double vrtclDstnc = 0;
 
     cub->ray.wallHit_x = 0;
     cub->ray.wallHit_y = 0;
@@ -405,7 +455,7 @@ void castAllRays(t_struct *cub)
         cub->ray.rayFacingLeft = 1;
     castVrtcalRays(cub);
     castHrzntalRays(cub);
-    if (cub->ray.vrtclWallHitY != 1e9 && cub->ray.vrticlWallHitX != 1e9)
+    /*if (cub->ray.vrtclWallHitY != 1e9 && cub->ray.vrticlWallHitX != 1e9)
         hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY, cub->player.position_x, cub->player.position_y);
     if (cub->ray.horzWallHitX != 1e9 && cub->ray.horzWallHitY != 1e9)
         vrtclDstnc = calculDistance(cub->ray.vrticlWallHitX, cub->ray.vrtclWallHitY, cub->player.position_x, cub->player.position_y);
@@ -420,5 +470,46 @@ void castAllRays(t_struct *cub)
         cub->ray.wallHit_x = cub->ray.horzWallHitX;
         cub->ray.wallHit_y = cub->ray.horzWallHitY;
         cub->ray.Distance  = hrzntlDstnc;
+    }*/
+    if(cub->vrtclDstnc < cub->hrzntlDstnc)
+    {
+       check_func(cub, 'v');
     }
+    else if(cub->vrtclDstnc > cub->hrzntlDstnc)
+    {
+        check_func(cub, 'h');
+    }
+    cub->ray.Distance = calculDistance(cub->player.position_x, cub->rayx, cub->player.position_y, cub->rayy);
+   // printf("final_dist = %f\n", cub->ray.Distance);
 }
+
+void	check_func(t_struct *cub, int op)
+{
+	if (op == 'v')
+	{
+		if ( cub->ray.vrticlWallHitX > 0.00 && cub->ray.vrtclWallHitY  > 0.00)
+		{
+			cub->rayx = cub->ray.vrticlWallHitX;
+			cub->rayy = cub->ray.vrtclWallHitY ;
+		}
+		else
+		{
+			cub->rayx = cub->ray.horzWallHitX;
+			cub->rayy = cub->ray.horzWallHitY;
+		}
+	}
+	else if (op == 'h')
+	{
+		if (cub->ray.horzWallHitX > 0.00 && cub->ray.horzWallHitY > 0.00)
+		{
+			cub->rayx = cub->ray.horzWallHitX;
+			cub->rayy = cub->ray.horzWallHitY;
+		}
+		else
+		{
+			cub->rayx = cub->ray.vrticlWallHitX;
+			cub->rayy = cub->ray.vrtclWallHitY;
+		}
+	}
+}
+

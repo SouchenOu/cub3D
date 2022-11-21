@@ -76,6 +76,7 @@ int main(int ac, char **av)
 
     }*/
     //ft_colorBuffer(&cub);
+    
     player_position(&cub);
     directionOfPlayer(&cub);
     ft_draw_map(&cub);
