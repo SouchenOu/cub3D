@@ -134,7 +134,7 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
         /***********/
             
 
-	        sostra = degrees_to_radians(cub->player.rottAngle) - cub->ray.rayAngle;
+	        sostra = limite_angle(cub->player.rottAngle) - cub->ray.rayAngle;
 	        //printf("hadi = %f\n", raycast->ray_looking_angle);
 	        if (sostra > degrees_to_radians(360))
 		        sostra -= degrees_to_radians(360);
@@ -178,7 +178,7 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 				            cub->addr[i * W_WIDTH + k] = cub->color_buffer[i][k];
 		        }
 	        }
-	            //mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);
+	            mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);
             
    } 
 
@@ -283,7 +283,7 @@ double calculDistance(double wallHit_x, double wallHit_y, double x, double y)
     
 void castHrzntalRays(t_struct *cub)
 {
-    double x_hrzntlIntrsctn;
+  double x_hrzntlIntrsctn;
     double y_hrzntlIntrsctn;
     double y_incrmnt;
     double x_incrmnt;
@@ -310,8 +310,8 @@ void castHrzntalRays(t_struct *cub)
         x_incrmnt *= -1;
     x_nextHrzntal = x_hrzntlIntrsctn;
     y_nextHrzntal = y_hrzntlIntrsctn;
-    //bool check = false;
-    while (x_nextHrzntal >= 0 && x_nextHrzntal > 0 && y_nextHrzntal > 0 && cub->x_nextHrzntal < ((double)cub->height) * cub->scaleHeight && y_nextHrzntal  < ((double)cub->width) * cub->scaleWidth )
+    bool check = false;
+    while (x_nextHrzntal >= 0 &&  x_nextHrzntal < W_WIDTH && y_nextHrzntal >= 0 && y_nextHrzntal < W_HEIGHT )
     {
         if (check_wall(cub, x_nextHrzntal, y_nextHrzntal))
         {
@@ -320,25 +320,29 @@ void castHrzntalRays(t_struct *cub)
             cub->ray.horzWallHitX = x_nextHrzntal;
             cub->ray.horzWallHitY = y_nextHrzntal;
             cub->hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY , cub->player.position_x, cub->player.position_y);
+            check = true;
             break;
         }
         x_nextHrzntal += x_incrmnt;
         y_nextHrzntal += y_incrmnt;
      }
-     if (!(x_nextHrzntal > 0 && y_nextHrzntal > 0 && (x_nextHrzntal < ((double)cub->height) * cub->scaleHeight) && (y_nextHrzntal  < ((double)cub->width) * cub->scaleWidth)))
+     //if (!limits(cub,x_nextHrzntal,y_nextHrzntal))
+     if(!check )
      {
-            cub->ray.horzWallHitX = x_nextHrzntal;
-            cub->ray.horzWallHitY = y_nextHrzntal;
-            cub->hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY , cub->player.position_x, cub->player.position_y);
+            //cub->ray.horzWallHitX = x_nextHrzntal;
+            //cub->ray.horzWallHitY = y_nextHrzntal;
+            //cub->hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY , cub->player.position_x, cub->player.position_y);
+            cub->ray.horzWallHitX = 1e9;
+            cub->ray.horzWallHitY = 1e9;
      }
 }
-int	limitshori(t_struct *cub)
+int	limits(t_struct *cub , double x, double y)
 {
-	if ((cub->x_nextHrzntal > 0.00 && cub->y_nextHrzntal > 0.00))
+	if ((x > 0.00 && y > 0.00))
 	{
-		if (cub->x_nextHrzntal < ((double)cub->height) * cub->scaleHeight)
+		if (x < ((double)cub->height) * cub->scaleHeight)
 		{
-			if (cub->y_nextHrzntal  < ((double)cub->width) * cub->scaleWidth)
+			if (y  < ((double)cub->width) * cub->scaleWidth)
 				return (1);
 		}
 	}
@@ -347,7 +351,7 @@ int	limitshori(t_struct *cub)
 
 void castVrtcalRays(t_struct *cub)
 {
-    double y_vrtclIntrsctn;
+        double y_vrtclIntrsctn;
     double x_vrticlIntrsctn;
     double x_incrmntVrtcl;
     double y_incrmntVrtcl;
@@ -374,39 +378,32 @@ void castVrtcalRays(t_struct *cub)
         y_incrmntVrtcl *= -1;
     x_nextVrtcl = x_vrticlIntrsctn;
     y_nextVrtcl = y_vrtclIntrsctn;
-    //bool check = false;
-    while (x_nextVrtcl >= 0 && x_nextVrtcl > 0.00 && y_nextVrtcl > 0.00 && (x_nextVrtcl < ((double)cub->height) * cub->scaleHeight) && (y_nextVrtcl  < ((double)cub->width) * cub->scaleWidth))
+    bool check = false;
+    while (x_nextVrtcl >= 0  && x_nextVrtcl < W_WIDTH && y_nextVrtcl >= 0 && y_nextVrtcl < W_HEIGHT)
     {
         if (check_wall(cub, x_nextVrtcl, y_nextVrtcl))
         {
-            cub->ray.vrticlWallHitX = x_nextVrtcl;
-            cub->ray.vrtclWallHitY = y_nextVrtcl;
+            //cub->ray.vrticlWallHitX = x_nextVrtcl;
+            //cub->ray.vrtclWallHitY = y_nextVrtcl;
+            check = true;
             cub->vrtclDstnc = calculDistance(cub->ray.vrticlWallHitX, cub->ray.vrtclWallHitY , cub->player.position_x, cub->player.position_y);
             break;
         }
         x_nextVrtcl += x_incrmntVrtcl;
         y_nextVrtcl += y_incrmntVrtcl;
      }
-     if (!(x_nextVrtcl > 0.00 && y_nextVrtcl > 0.00 && (x_nextVrtcl < ((double)cub->height) * cub->scaleHeight) && (y_nextVrtcl  < ((double)cub->width) * cub->scaleWidth)))
+     //if (!limits(cub,x_nextVrtcl, y_nextVrtcl ))
+     if(!check)
      {
-            cub->ray.vrticlWallHitX = x_nextVrtcl;
+            /*cub->ray.vrticlWallHitX = x_nextVrtcl;
             cub->ray.vrtclWallHitY = y_nextVrtcl;
-            cub->vrtclDstnc = calculDistance(cub->ray.vrticlWallHitX, cub->ray.vrtclWallHitY , cub->player.position_x, cub->player.position_y);
+            cub->vrtclDstnc = calculDistance(cub->ray.vrticlWallHitX, cub->ray.vrtclWallHitY , cub->player.position_x, cub->player.position_y);*/
+            cub->ray.vrticlWallHitX=1e9;
+            cub->ray.vrtclWallHitY=1e9;
      }
 }
 
-int	limitsvert(t_struct *cub)
-{
-	if ((cub->x_nextVrtcl > 0.00 && cub->y_nextVrtcl > 0.00))
-	{
-		if (cub->x_nextVrtcl < ((double)cub->height) * cub->scaleHeight)
-		{
-			if (cub->y_nextVrtcl  < ((double)cub->width) * cub->scaleWidth)
-				return (1);
-		}
-	}
-	return (0);
-}
+
 void calcule_distance(t_struct *cub, int test)
 {
     if(test == 'v')
@@ -434,7 +431,7 @@ void calcule_distance(t_struct *cub, int test)
 void castAllRays(t_struct *cub)
 {
     //double hrzntlDstnc = 0;
-    //double vrtclDstnc = 0;
+   // double vrtclDstnc = 0;
 
     cub->ray.wallHit_x = 0;
     cub->ray.wallHit_y = 0;
@@ -445,6 +442,7 @@ void castAllRays(t_struct *cub)
     cub->ray.rayFacingLeft = 0;
     cub->ray.vrticlWallHitX = 0;
     cub->ray.vrtclWallHitY = 0;
+    cub->ray.aquale  = 0;
     if (cub->ray.rayAngle > 0 && cub->ray.rayAngle < M_PI)
         cub->ray.rayFacingDown = 1;
     else
@@ -453,6 +451,10 @@ void castAllRays(t_struct *cub)
         cub->ray.rayFacingRight = 1;
     else
         cub->ray.rayFacingLeft = 1;
+    /*if(cub->ray.rayAngle == 0 || cub->ray.rayAngle == M_PI)
+    {
+        cub->ray.aquale = 1;
+    }*/
     castVrtcalRays(cub);
     castHrzntalRays(cub);
     /*if (cub->ray.vrtclWallHitY != 1e9 && cub->ray.vrticlWallHitX != 1e9)
