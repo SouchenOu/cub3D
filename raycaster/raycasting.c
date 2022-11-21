@@ -88,18 +88,31 @@ void draw_player(t_struct *cub, int x, int y, int color)
 
 void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 {
-    int i = 0;
+    int i = -1;
+    double	sostra;
+	int		wallBottomPixel ;
+	int		wallTopPixel;
+    int k;
+    //(void) x;
+    //(void) y;
+    //(void) color;
+    cub->wallStripHeight= 0;
     double angleIncrem = (M_PI / 3) / cub->numOfRays;
     cub->ray.rayAngle = cub->player.rottAngle - (M_PI / 6); 
-    while (i < cub->numOfRays)
+    if(cub->check_test == 1)
+    {
+        ft_colorBuffer(cub);
+    }
+    while (++i < cub->numOfRays)
     {  
         cub->ray.rayAngle = normalizeAngle(cub->ray.rayAngle);
         castAllRays(cub);
         ddaForLine(cub, x, y, cub->ray.wallHit_x, cub->ray.wallHit_y,color);
         //creat  a 3D projection of our walls (manipulate the pixel colors of our color buffer)
         // drawing the walls
-        double distanceProjPlane = (W_WIDTH / 2) / tan( M_PI / 6) ; 
-        double projectedWallHeight = cub->scaleHeight / cub->ray.Distance * distanceProjPlane;
+        // our objectiv here is to calcul WallStripHeight and WallButtomPixel and WallTopPixel
+        /*double distanceProjPlanefromPlayer = (W_WIDTH/ 2) / tan( limite_angle(cub->fovAngle) / 2) ; 
+        double projectedWallHeight = (cub->scaleHeight / cub->ray.Distance) * distanceProjPlanefromPlayer;
         int wallStripHeight = (int) projectedWallHeight;
         int wallTopPixel = (W_HEIGHT / 2) - (wallStripHeight) / 2;
         if(wallTopPixel < 0)
@@ -117,40 +130,82 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
             // each one of coloms represent each one of rays
             cub->addr[(W_WIDTH * y) + (i)] =  0xFFF0000;
             y++;
+        }*/
+        /***********/
+            
+
+	        sostra = limite_angle(cub->player.rottAngle) - cub->ray.rayAngle;
+	        //printf("hadi = %f\n", raycast->ray_looking_angle);
+	        if (sostra > degrees_to_radians(360))
+		        sostra -= degrees_to_radians(360);
+	        else if (sostra < degrees_to_radians(0.00))
+		        sostra += degrees_to_radians(360.00);
+	        cub->ray.Distance = cub->ray.Distance * cos(sostra);
+	        cub->wallStripHeight= (int)(cub->scaleHeight * (1.00 * W_HEIGHT)) / cub->ray.Distance;
+	        if (cub->wallStripHeight> (1.00 * W_HEIGHT))
+		        cub->wallStripHeight= (1.00 * W_HEIGHT);
+	        //wallTopPixel is the top of the wall
+	        wallTopPixel = (W_HEIGHT/ 2) - (int)(cub->wallStripHeight/ 2.00);
+	        if (wallTopPixel < 0)
+		        wallTopPixel = 0; // the minimum we can have is 0
+		        //wallBottomPixel is the Bottom or end of the wall
+	        wallBottomPixel = (W_HEIGHT/ 2) + (int)(cub->wallStripHeight/ 2.00);
+	        if (wallBottomPixel >= W_HEIGHT)
+		        wallBottomPixel = W_HEIGHT - 1;
+	        y = (wallTopPixel - 1);
+	        //render the wall from wallTopPixel to wallBottomPixel
+	        while (++y < wallBottomPixel)
+	        {
+		        //copy all the color buffer to an sdl texture
+                if ((y > -1 && y < W_HEIGHT) && (i > -1 && x < W_WIDTH))
+                    cub->color_buffer[y][i] = 0xFFF0000;
+                cub->check_test = 1;
+	        }
+            cub->ray.rayAngle += angleIncrem;
         }
             //lets_do_raycast(cub, i);
-            cub->ray.rayAngle += angleIncrem;
-            i++;
+            i = -1;
+	        while (++i < W_HEIGHT)
+	        {
+		        k = -1;
+		        while (++k < W_WIDTH)
+		        {
+			        if (is_ceiling(cub->color_buffer, i, k))
+				            cub->addr[i * W_WIDTH + k] = 0xadd8e6;
+			        else if (is_floor(cub->color_buffer, i, k))
+				            cub->addr[i * W_WIDTH + k] = 0x4B6C57;
+			        else
+				            cub->addr[i * W_WIDTH + k] = cub->color_buffer[i][k];
+		        }
+	        }
+	            //mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);
+            
    } 
-   /*for(int x = 0; x < W_WIDTH; x++)
-   {
-        for(int y = 0; y < W_HEIGHT; y++)
-        {
-            cub->addr[(W_WIDTH * y) + x] = cub->color_buffer[x][y];
-        }
 
-   }
-   
-   	mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr ,cub->img, 0, 0);*/
-    /*int j;	
-	i = 0;
-	while (i < W_HEIGHT)
+int	is_ceiling(unsigned int **buffer, int i, int k)
+{
+	if (i == 0)
+		return (1);
+	while (--i > -1)
 	{
-		j = 0;
-		while (j < W_WIDTH)
-        {
-            cub->addr[i * W_WIDTH + j] = cub->color_buffer[i][j];
-			// i: how many pixels and colones i have
-			//j is how many rays i have
-			//i * W_Width + j to get the dimension in one dimensional array
-			//printf("array[%d] = %d \n", i * W_WIDTH + j , cub->array[i * W_WIDTH + j]);
-            j++;
-        }
-        i++;
-	}*/
-	    mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr,cub->img, 0, 0);
-
+		if (buffer[i][k] != 0)
+			return (0);
+	}
+	return (1);
 }
+
+int	is_floor(unsigned int **buffer, int i, int k)
+{
+	if (i == 0)
+		return (1);
+	while (++i < W_HEIGHT)
+	{
+		if (buffer[i][k] != 0)
+			return (0);
+	}
+	return (1);
+}
+
 
 
 
@@ -197,8 +252,8 @@ void ddaForLine(t_struct *cub,int x_0, int y_0, int x_1, int y_1, int color)
  {
     char **map;
     map = ft_jump_lines(cub);
-    int gred_y = (int)(y/cub->scaleHeight); /*The value to round down to the nearest integer*/
-    int gred_x = (int)(x/cub->scaleWidth);
+    int gred_y = (int)(y / cub->scaleHeight); /*The value to round down to the nearest integer*/
+    int gred_x = (int)(x / cub->scaleWidth);
     if (!map[gred_y])
         return (1);
     if ( map[gred_y][gred_x] == '1' ||  !map[gred_y])

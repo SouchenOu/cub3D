@@ -46,7 +46,7 @@ int ft_count_height(char **data)
    return (len); 
 }
 
-/*void    draw_cub(t_struct *ptr, int x, int y, int color)
+void    draw_cub(t_struct *ptr, int x, int y, int color)
 {
     int start_x;
     int start_y;
@@ -68,7 +68,7 @@ int ft_count_height(char **data)
          }
         i++;
     }
-}*/
+}
 
 void    ft_draw_map(t_struct *cub)
 {
@@ -80,10 +80,10 @@ void    ft_draw_map(t_struct *cub)
     //y = 0;
     len = 0;
     data = ft_jump_lines(cub);
-    //cub->fovAngle = 60 * (M_PI / 180);
+    cub->fovAngle = 60 * (M_PI / 180);
     cub->numOfRays = W_WIDTH;
-    // cub->rayAngle = cub->player.rottAngle;
-    /*while (data[y])
+     cub->rayAngle = cub->player.rottAngle;
+   /* while (data[y])
     {
         x = 0;
         while (data[y][x])
@@ -97,7 +97,7 @@ void    ft_draw_map(t_struct *cub)
         y++;
     }*/
     drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F);   
-    //draw_player(cub, cub->player.position_x, cub->player.position_y , 0xfffff); 
+    draw_player(cub, cub->player.position_x, cub->player.position_y , 0xfffff); 
     mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);
 }
 

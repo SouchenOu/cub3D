@@ -19,8 +19,8 @@
 # include <stdbool.h>
 # include <math.h>
 # include "../libft/libft.h"
-# define W_WIDTH 1020
-# define W_HEIGHT 510
+# define W_WIDTH 1080
+# define W_HEIGHT 700
 
 typedef struct s_floor
 {
@@ -73,6 +73,14 @@ typedef struct  s_ray{
     double  vrtclWallHitY;
 	
 }  t_ray;
+typedef struct s_direction {
+
+	double left;
+	double right;
+	double up;
+	double down;
+
+}t_direction;
 
 typedef struct s_struct
 {
@@ -97,11 +105,16 @@ typedef struct s_struct
 	double		numOfRays;
 	//double		fovAngle;
 	double 		rayAngle;
-	unsigned int 		*color_buffer;
+	unsigned int 		**color_buffer;
 	t_ray       ray;
 	double		rays[100000];
 	int FOV;
 	int check;
+	double fovAngle;
+	double tang;
+	t_direction 	dire;
+	double wallStripHeight;
+	int check_test;
 	
 }	t_struct;
 
@@ -148,6 +161,12 @@ void	print(char **str);
 void	lets_do_raycast(t_struct *cub, int j);
 void 	ft_colorBuffer(t_struct *cub);
 double	degrees_to_radians(double a);
+void find_pos_player_in_gridline(t_struct *cub);
+double	limite_angle(double a);
+int	is_ceiling(unsigned int **buffer, int i, int k);
+
+int	is_floor(unsigned int **buffer, int i, int k);
+
 
 
 #endif

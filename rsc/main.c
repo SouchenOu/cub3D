@@ -22,7 +22,7 @@ void print(char **str)
     }
 }
 
-/*void ft_colorBuffer(t_struct *cub)
+void ft_colorBuffer(t_struct *cub)
 {
     int i;
     int k;
@@ -37,12 +37,13 @@ void print(char **str)
         }
         i++;
 	}
-    cub->check = 0;
-}*/
+    cub->check_test = 0;
+}
 
 int main(int ac, char **av)
 {
     t_struct cub;
+    int i ;
 
     if (ac != 2)
 		return (ft_putstr_fd("Usage : ./cub3D path/to/map.cub", 0), 0);
@@ -56,12 +57,18 @@ int main(int ac, char **av)
         return (0);
     cub.mlx_ptr = mlx_init();
 	cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_HEIGHT, "cub3D");
+    cub.color_buffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
+	i = -1;
+	while (++i < W_HEIGHT)
+		cub.color_buffer[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
+	ft_colorBuffer(&cub);
     cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
 	cub.addr = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     //int i = 0;
     //how much memory do we have to allocate to store this long buffer of colors
     // i will use w_width * w_height pixels
-    cub.color_buffer = (unsigned int *)malloc((unsigned int) W_HEIGHT * (unsigned int ) W_WIDTH * sizeof(unsigned int *));
+    //cub.color_buffer = (unsigned int *)malloc((unsigned int) W_HEIGHT * (unsigned int) W_WIDTH * sizeof(unsigned int ));
+     //cub.color_buffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
     /*while (i < W_HEIGHT)
     {
         cub.color_buffer[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));

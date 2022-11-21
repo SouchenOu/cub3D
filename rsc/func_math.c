@@ -21,3 +21,17 @@ double	degrees_to_radians(double a)
 {
 	return ((a * 3.14159265359) / 180);
 }
+
+
+double	limite_angle(double a)
+{
+	if (a > 359.00)
+	{
+		a = a - 360.00;
+	}
+	else if (a < 0.00)
+	{
+		a = a + 360.00; // 2PI
+	}
+	return (a);
+}

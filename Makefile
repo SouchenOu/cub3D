@@ -22,7 +22,7 @@ FLAGS = -g -Wall -Werror -Wextra -g #-fsanitize=address
 framework= -framework OpenGL -framework AppKit 
 RM = rm -rf
 
-FILES = rsc/read_map.c  rsc/main.c rsc/errors_handling.c raycaster/draw_map.c  raycaster/raycasting.c rsc/func_math.c
+FILES = rsc/read_map.c  rsc/main.c rsc/errors_handling.c raycaster/draw_map.c  raycaster/raycasting.c rsc/func_math.c rsc/find_position_player.c
  
 
 OBJ_FILES= $(FILES:.c=.o)
