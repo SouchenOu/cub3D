@@ -96,6 +96,8 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
         cub->ray.rayAngle = normalizeAngle(cub->ray.rayAngle);
         castAllRays(cub);
         ddaForLine(cub, x, y, cub->ray.wallHit_x, cub->ray.wallHit_y,color);
+        //creat  a 3D projection of our walls (manipulate the pixel colors of our color buffer)
+        // drawing the walls
         double distanceProjPlane = (W_WIDTH / 2) / tan( M_PI / 6) ; 
         double projectedWallHeight = cub->scaleHeight / cub->ray.Distance * distanceProjPlane;
         int wallStripHeight = (int) projectedWallHeight;
@@ -112,6 +114,7 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
         {
             //w_width * y means : how many rows 
             // i how is the shift in horizontal
+            // each one of coloms represent each one of rays
             cub->addr[(W_WIDTH * y) + (i)] =  0xFFF0000;
             y++;
         }
