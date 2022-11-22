@@ -119,7 +119,7 @@ void player_position(t_struct *cub){
         {
             if (data[i][j] == 'E'|| data[i][j] == 'N' || data[i][j] == 'S' || data[i][j] == 'W')
             {
-                cub->player.position_x = j * cub->scaleWidth;
+                 cub->player.position_x = j * cub->scaleWidth;
                 cub->player.position_y = i * cub->scaleHeight;
                 return ;
             }
@@ -154,6 +154,7 @@ int	player_move(int key, t_struct *cub)
         cub->player.rottAngle -= cub->player.rottSpeed;
     mlx_destroy_image(cub->mlx_ptr, cub->img);
     cub->img = mlx_new_image(cub->mlx_ptr, W_WIDTH, W_HEIGHT);
+    find_pos_player_in_gridline(cub);
     ft_draw_map(cub);
     return (0);
 }

@@ -93,8 +93,10 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 	int		wallBottomPixel ;
 	int		wallTopPixel;
     int k;
-    //(void) x;
-    //(void) y;
+    int o;
+    o = 0;
+    (void) x;
+    (void) y;
     (void) color;
     cub->wallStripHeight= 0;
     double angleIncrem = (M_PI / 3) / cub->numOfRays;
@@ -116,7 +118,7 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 	        else if (sostra < degrees_to_radians(0.00))
 		        sostra += degrees_to_radians(360.00);
 	        cub->ray.Distance = cub->ray.Distance * cos(sostra);
-	        cub->wallStripHeight= (int)(cub->scaleHeight * (1.00 * W_HEIGHT)) / cub->ray.Distance;
+	        cub->wallStripHeight= (int)((cub->scaleHeight) * (1.00 * W_HEIGHT)) / cub->ray.Distance;
 	        if (cub->wallStripHeight> (1.00 * W_HEIGHT))
 		        cub->wallStripHeight= (1.00 * W_HEIGHT);
 	        //wallTopPixel is the top of the wall
@@ -127,13 +129,13 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 	        wallBottomPixel = (W_HEIGHT/ 2) + (int)(cub->wallStripHeight/ 2.00);
 	        if (wallBottomPixel >= W_HEIGHT)
 		        wallBottomPixel = W_HEIGHT - 1;
-	        y = (wallTopPixel - 1);
+	        o = (wallTopPixel - 1);
 	        //render the wall from wallTopPixel to wallBottomPixel
-	        while (++y < wallBottomPixel)
+	        while (++o < wallBottomPixel)
 	        {
 		        //copy all the color buffer to an sdl texture
-                if ((y > -1 && y < W_HEIGHT) && (i > -1 && x < W_WIDTH))
-                    cub->color_buffer[y][i] = 0xFFF0000;
+                if ((o > -1 && o < W_HEIGHT) && (i > -1 && i < W_WIDTH))
+                    cub->color_buffer[o][i] = 0xFFF0000;
                 cub->check_test = 1;
 	        }
             cub->ray.rayAngle += angleIncrem;
@@ -293,13 +295,13 @@ void castHrzntalRays(t_struct *cub)
 
     bool check = false;
     int i = 0;
-    while ( i < cub->height && x_nextHrzntal > 0 &&  x_nextHrzntal < W_WIDTH && y_nextHrzntal > 0 && y_nextHrzntal < W_HEIGHT )
+    while ( i < cub->height * cub->scaleHeight && x_nextHrzntal > 0 &&  x_nextHrzntal < W_WIDTH && y_nextHrzntal > 0 && y_nextHrzntal < W_HEIGHT )
     {
         if (check_wall(cub, x_nextHrzntal, y_nextHrzntal))
         {
             cub->ray.horzWallHitX = x_nextHrzntal;
-            cub->ray.horzWallHitX= y_nextHrzntal;
-            cub->hrzntlDstnc = pythg(cub->player.position_x,  cub->ray.horzWallHitX , cub->player.position_y, cub->ray.horzWallHitX);
+            cub->ray.horzWallHitY= y_nextHrzntal;
+            cub->hrzntlDstnc = pythg(cub->player.position_x,  cub->ray.horzWallHitX , cub->player.position_y, cub->ray.horzWallHitY);
             check = true;
             break;
         }
@@ -315,7 +317,7 @@ void castHrzntalRays(t_struct *cub)
         printf("here\n");
             cub->ray.horzWallHitX = x_nextHrzntal;
             cub->ray.horzWallHitY = y_nextHrzntal;
-            cub->hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY , cub->player.position_x, cub->player.position_y);
+            cub->hrzntlDstnc = pythg(cub->player.position_x,  cub->ray.horzWallHitX , cub->player.position_y, cub->ray.horzWallHitY);
             //cub->ray.horzWallHitX = 1e9;
             //cub->ray.horzWallHitY = 1e9;
      }
@@ -324,7 +326,7 @@ void castHrzntalRays(t_struct *cub)
 
 void castVrtcalRays(t_struct *cub)
 {
-        double y_vrtclIntrsctn;
+       double y_vrtclIntrsctn;
     double x_vrticlIntrsctn;
     double x_incrmntVrtcl;
     double y_incrmntVrtcl;
@@ -342,8 +344,8 @@ void castVrtcalRays(t_struct *cub)
     x_incrmntVrtcl = cub->scaleWidth;
     if (cub->ray.rayFacingLeft)
         x_incrmntVrtcl *= -1;
-    if (cub->ray.rayFacingLeft)
-        x_vrticlIntrsctn -= 1;
+     if (cub->ray.rayFacingLeft)
+         x_vrticlIntrsctn -= 1;
     y_incrmntVrtcl =  x_incrmntVrtcl  * tan(cub->ray.rayAngle);
     if (cub->ray.rayFacingUp && y_incrmntVrtcl > 0)
         y_incrmntVrtcl *= -1;
@@ -358,7 +360,7 @@ void castVrtcalRays(t_struct *cub)
     y_nextVrtcl = y_vrtclIntrsctn;
     bool check = false;
     int i = 0;
-    while ( i < cub->width &&  x_nextVrtcl > 0 && y_nextVrtcl > 0 && x_nextVrtcl < W_WIDTH  && y_nextVrtcl < W_HEIGHT)
+    while ( i < cub->width * cub->scaleWidth &&  x_nextVrtcl > 0 && y_nextVrtcl > 0 && x_nextVrtcl < W_WIDTH  && y_nextVrtcl < W_HEIGHT)
     {
         if (check_wall(cub, x_nextVrtcl, y_nextVrtcl))
         {
@@ -382,7 +384,7 @@ void castVrtcalRays(t_struct *cub)
             printf("here\n");
             cub->ray.vrticlWallHitX = x_nextVrtcl;
             cub->ray.vrtclWallHitY = y_nextVrtcl;
-           cub->vrtclDstnc = pythg(cub->player.position_x, cub->ray.vrticlWallHitX, cub->player.position_y, cub->ray.vrtclWallHitY );
+             cub->vrtclDstnc = pythg(cub->player.position_x, cub->ray.vrticlWallHitX, cub->player.position_y, cub->ray.vrtclWallHitY );
             //cub->ray.vrticlWallHitX=1e9;
             //cub->ray.vrtclWallHitY=1e9;
      }

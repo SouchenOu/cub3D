@@ -75,8 +75,11 @@ int main(int ac, char **av)
         i++;
 
     }*/
+   
     //ft_colorBuffer(&cub);
-    
+     //cub.player.position_x = 200;
+     //cub.player.position_y = 120;
+    find_pos_player_in_gridline(&cub);
     player_position(&cub);
     directionOfPlayer(&cub);
     ft_draw_map(&cub);

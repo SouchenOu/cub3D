@@ -30,7 +30,7 @@ void find_pos_player_in_gridline(t_struct *cub)
 
 	while (i <= (double)cub->height)
 	{
-		if (cub->player.position_y < ((i + 1) * cub->scaleHeight) && cub->player.position_y > (i * cub->scaleHeight))
+		if (cub->player.position_y  < ((i + 1) * cub->scaleHeight) && cub->player.position_y > (i * cub->scaleHeight))
 		{
 		
 			cub->dire.up = cub->player.position_y - (i * cub->scaleHeight);
