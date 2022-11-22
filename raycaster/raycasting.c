@@ -381,7 +381,6 @@ void castVrtcalRays(t_struct *cub)
      //if (!limits(cub,x_nextVrtcl, y_nextVrtcl ))
      if( x_nextVrtcl <= 0 || y_nextVrtcl <= 0 || x_nextVrtcl >= W_WIDTH  || y_nextVrtcl >= W_HEIGHT)
      {
-            printf("here\n");
             cub->ray.vrticlWallHitX = x_nextVrtcl;
             cub->ray.vrtclWallHitY = y_nextVrtcl;
              cub->vrtclDstnc = pythg(cub->player.position_x, cub->ray.vrticlWallHitX, cub->player.position_y, cub->ray.vrtclWallHitY );
@@ -473,7 +472,6 @@ void castAllRays(t_struct *cub)
         check_func(cub, 'h');
     }
     cub->ray.Distance = pythg(cub->player.position_x, cub->rayx, cub->player.position_y, cub->rayy);
-    printf("final_dist = %f\n", cub->ray.Distance);
 }
 
 void	check_func(t_struct *cub, int op)
