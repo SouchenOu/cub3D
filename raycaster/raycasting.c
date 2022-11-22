@@ -95,7 +95,7 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
     int k;
     //(void) x;
     //(void) y;
-    //(void) color;
+    (void) color;
     cub->wallStripHeight= 0;
     double angleIncrem = (M_PI / 3) / cub->numOfRays;
     cub->ray.rayAngle = cub->player.rottAngle - (M_PI / 6); 
@@ -107,34 +107,9 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
     {  
         cub->ray.rayAngle = normalizeAngle(cub->ray.rayAngle);
         castAllRays(cub);
-        ddaForLine(cub, x, y, cub->ray.wallHit_x, cub->ray.wallHit_y,color);
-        //creat  a 3D projection of our walls (manipulate the pixel colors of our color buffer)
-        // drawing the walls
-        // our objectiv here is to calcul WallStripHeight and WallButtomPixel and WallTopPixel
-        /*double distanceProjPlanefromPlayer = (W_WIDTH/ 2) / tan( limite_angle(cub->fovAngle) / 2) ; 
-        double projectedWallHeight = (cub->scaleHeight / cub->ray.Distance) * distanceProjPlanefromPlayer;
-        int wallStripHeight = (int) projectedWallHeight;
-        int wallTopPixel = (W_HEIGHT / 2) - (wallStripHeight) / 2;
-        if(wallTopPixel < 0)
-        {
-            wallTopPixel = 0;
-        }
-        int wallBottomPixel = (W_HEIGHT / 2) + (wallStripHeight / 2);
-        if(wallBottomPixel > W_HEIGHT)
-            wallBottomPixel = W_HEIGHT;
-        int y = 0;
-        while(y < wallBottomPixel)
-        {
-            //w_width * y means : how many rows 
-            // i how is the shift in horizontal
-            // each one of coloms represent each one of rays
-            cub->addr[(W_WIDTH * y) + (i)] =  0xFFF0000;
-            y++;
-        }*/
-        /***********/
-            
-
-	        sostra = limite_angle(cub->player.rottAngle) - cub->ray.rayAngle;
+        //ddaForLine(cub, x, y, cub->ray.wallHit_x, cub->ray.wallHit_y,color);
+  
+	        sostra = (cub->player.rottAngle) - cub->ray.rayAngle;
 	        //printf("hadi = %f\n", raycast->ray_looking_angle);
 	        if (sostra > degrees_to_radians(360))
 		        sostra -= degrees_to_radians(360);
@@ -308,46 +283,44 @@ void castHrzntalRays(t_struct *cub)
         x_incrmnt *= -1;
     if (cub->ray.rayFacingRight && x_incrmnt < 0)
         x_incrmnt *= -1;
+    if(cub->ray.aquale  == 1)
+    {
+       x_hrzntlIntrsctn = cub->player.position_x;
+       y_hrzntlIntrsctn = cub->player.position_y;
+    }
     x_nextHrzntal = x_hrzntlIntrsctn;
     y_nextHrzntal = y_hrzntlIntrsctn;
+
     bool check = false;
-    while (x_nextHrzntal >= 0 &&  x_nextHrzntal < W_WIDTH && y_nextHrzntal >= 0 && y_nextHrzntal < W_HEIGHT )
+    int i = 0;
+    while ( i < cub->height && x_nextHrzntal > 0 &&  x_nextHrzntal < W_WIDTH && y_nextHrzntal > 0 && y_nextHrzntal < W_HEIGHT )
     {
         if (check_wall(cub, x_nextHrzntal, y_nextHrzntal))
         {
-            // printf("hrzntal x ---> %f\n", x_nextHrzntal);
-            //  printf("hrzntal x ---> %f\n", y_nextHrzntal);
             cub->ray.horzWallHitX = x_nextHrzntal;
-            cub->ray.horzWallHitY = y_nextHrzntal;
-            cub->hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY , cub->player.position_x, cub->player.position_y);
+            cub->ray.horzWallHitX= y_nextHrzntal;
+            cub->hrzntlDstnc = pythg(cub->player.position_x,  cub->ray.horzWallHitX , cub->player.position_y, cub->ray.horzWallHitX);
             check = true;
             break;
         }
-        x_nextHrzntal += x_incrmnt;
-        y_nextHrzntal += y_incrmnt;
+        else {
+                x_nextHrzntal += x_incrmnt;
+                y_nextHrzntal += y_incrmnt;
+        }
+        i++;
      }
      //if (!limits(cub,x_nextHrzntal,y_nextHrzntal))
-     if(!check )
+     if(x_nextHrzntal <= 0 ||  x_nextHrzntal >= W_WIDTH || y_nextHrzntal <= 0 || y_nextHrzntal >= W_HEIGHT )
      {
-            //cub->ray.horzWallHitX = x_nextHrzntal;
-            //cub->ray.horzWallHitY = y_nextHrzntal;
-            //cub->hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY , cub->player.position_x, cub->player.position_y);
-            cub->ray.horzWallHitX = 1e9;
-            cub->ray.horzWallHitY = 1e9;
+        printf("here\n");
+            cub->ray.horzWallHitX = x_nextHrzntal;
+            cub->ray.horzWallHitY = y_nextHrzntal;
+            cub->hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY , cub->player.position_x, cub->player.position_y);
+            //cub->ray.horzWallHitX = 1e9;
+            //cub->ray.horzWallHitY = 1e9;
      }
 }
-int	limits(t_struct *cub , double x, double y)
-{
-	if ((x > 0.00 && y > 0.00))
-	{
-		if (x < ((double)cub->height) * cub->scaleHeight)
-		{
-			if (y  < ((double)cub->width) * cub->scaleWidth)
-				return (1);
-		}
-	}
-	return (0);
-}
+
 
 void castVrtcalRays(t_struct *cub)
 {
@@ -376,30 +349,42 @@ void castVrtcalRays(t_struct *cub)
         y_incrmntVrtcl *= -1;
     if (cub->ray.rayFacingDown && y_incrmntVrtcl < 0)
         y_incrmntVrtcl *= -1;
+    if(cub->ray.aquale  == 1)
+    {
+        x_vrticlIntrsctn = cub->player.position_x;
+        y_vrtclIntrsctn = cub->player.position_y;
+    }
     x_nextVrtcl = x_vrticlIntrsctn;
     y_nextVrtcl = y_vrtclIntrsctn;
     bool check = false;
-    while (x_nextVrtcl >= 0  && x_nextVrtcl < W_WIDTH && y_nextVrtcl >= 0 && y_nextVrtcl < W_HEIGHT)
+    int i = 0;
+    while ( i < cub->width &&  x_nextVrtcl > 0 && y_nextVrtcl > 0 && x_nextVrtcl < W_WIDTH  && y_nextVrtcl < W_HEIGHT)
     {
         if (check_wall(cub, x_nextVrtcl, y_nextVrtcl))
         {
-            //cub->ray.vrticlWallHitX = x_nextVrtcl;
-            //cub->ray.vrtclWallHitY = y_nextVrtcl;
+
+            cub->ray.vrticlWallHitX = x_nextVrtcl;
+            cub->ray.vrtclWallHitY = y_nextVrtcl;
             check = true;
-            cub->vrtclDstnc = calculDistance(cub->ray.vrticlWallHitX, cub->ray.vrtclWallHitY , cub->player.position_x, cub->player.position_y);
+            cub->vrtclDstnc = pythg(cub->player.position_x, cub->ray.vrticlWallHitX, cub->player.position_y, cub->ray.vrtclWallHitY );
             break;
         }
-        x_nextVrtcl += x_incrmntVrtcl;
-        y_nextVrtcl += y_incrmntVrtcl;
+        else {
+                x_nextVrtcl += x_incrmntVrtcl;
+                y_nextVrtcl += y_incrmntVrtcl;
+        }
+        
+        i++;
      }
      //if (!limits(cub,x_nextVrtcl, y_nextVrtcl ))
-     if(!check)
+     if( x_nextVrtcl <= 0 || y_nextVrtcl <= 0 || x_nextVrtcl >= W_WIDTH  || y_nextVrtcl >= W_HEIGHT)
      {
-            /*cub->ray.vrticlWallHitX = x_nextVrtcl;
+            printf("here\n");
+            cub->ray.vrticlWallHitX = x_nextVrtcl;
             cub->ray.vrtclWallHitY = y_nextVrtcl;
-            cub->vrtclDstnc = calculDistance(cub->ray.vrticlWallHitX, cub->ray.vrtclWallHitY , cub->player.position_x, cub->player.position_y);*/
-            cub->ray.vrticlWallHitX=1e9;
-            cub->ray.vrtclWallHitY=1e9;
+           cub->vrtclDstnc = pythg(cub->player.position_x, cub->ray.vrticlWallHitX, cub->player.position_y, cub->ray.vrtclWallHitY );
+            //cub->ray.vrticlWallHitX=1e9;
+            //cub->ray.vrtclWallHitY=1e9;
      }
 }
 
@@ -431,7 +416,7 @@ void calcule_distance(t_struct *cub, int test)
 void castAllRays(t_struct *cub)
 {
     //double hrzntlDstnc = 0;
-   // double vrtclDstnc = 0;
+    //double vrtclDstnc = 0;
 
     cub->ray.wallHit_x = 0;
     cub->ray.wallHit_y = 0;
@@ -442,6 +427,8 @@ void castAllRays(t_struct *cub)
     cub->ray.rayFacingLeft = 0;
     cub->ray.vrticlWallHitX = 0;
     cub->ray.vrtclWallHitY = 0;
+    cub->rayx = 0.00;
+    cub->rayy = 0.00;
     cub->ray.aquale  = 0;
     if (cub->ray.rayAngle > 0 && cub->ray.rayAngle < M_PI)
         cub->ray.rayFacingDown = 1;
@@ -451,10 +438,10 @@ void castAllRays(t_struct *cub)
         cub->ray.rayFacingRight = 1;
     else
         cub->ray.rayFacingLeft = 1;
-    /*if(cub->ray.rayAngle == 0 || cub->ray.rayAngle == M_PI)
+    if(cub->ray.rayAngle == 0 || cub->ray.rayAngle == M_PI)
     {
         cub->ray.aquale = 1;
-    }*/
+    }
     castVrtcalRays(cub);
     castHrzntalRays(cub);
     /*if (cub->ray.vrtclWallHitY != 1e9 && cub->ray.vrticlWallHitX != 1e9)
@@ -473,6 +460,8 @@ void castAllRays(t_struct *cub)
         cub->ray.wallHit_y = cub->ray.horzWallHitY;
         cub->ray.Distance  = hrzntlDstnc;
     }*/
+    //printf("vertDest = %f\n", cub->vrtclDstnc);
+    //printf("horidest = %f\n",cub->hrzntlDstnc);
     if(cub->vrtclDstnc < cub->hrzntlDstnc)
     {
        check_func(cub, 'v');
@@ -481,8 +470,8 @@ void castAllRays(t_struct *cub)
     {
         check_func(cub, 'h');
     }
-    cub->ray.Distance = calculDistance(cub->player.position_x, cub->rayx, cub->player.position_y, cub->rayy);
-   // printf("final_dist = %f\n", cub->ray.Distance);
+    cub->ray.Distance = pythg(cub->player.position_x, cub->rayx, cub->player.position_y, cub->rayy);
+    printf("final_dist = %f\n", cub->ray.Distance);
 }
 
 void	check_func(t_struct *cub, int op)

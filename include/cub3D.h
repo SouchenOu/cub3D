@@ -22,6 +22,10 @@
 # define W_WIDTH 1080
 # define W_HEIGHT 700
 
+
+
+
+typedef struct s_struct	t_struct;
 typedef struct s_floor
 {
 	int r;
@@ -72,6 +76,8 @@ typedef struct  s_ray{
 	double  vrticlWallHitX;
     double  vrtclWallHitY;
 	double aquale;
+	double h_line;
+	t_struct  *cub;
 	
 }  t_ray;
 typedef struct s_direction {
@@ -170,15 +176,17 @@ void	print(char **str);
 void	lets_do_raycast(t_struct *cub, int j);
 void 	ft_colorBuffer(t_struct *cub);
 double	degrees_to_radians(double a);
-void find_pos_player_in_gridline(t_struct *cub);
+void 	find_pos_player_in_gridline(t_struct *cub);
 double	limite_angle(double a);
-int	is_ceiling(unsigned int **buffer, int i, int k);
-int	is_floor(unsigned int **buffer, int i, int k);
-int	limits(t_struct *cub , double x, double y);
+int		is_ceiling(unsigned int **buffer, int i, int k);
+int		is_floor(unsigned int **buffer, int i, int k);
+int		limits(t_struct *cub , double x, double y);
 
-void calcule_distance(t_struct *cub, int test);
+void 	calcule_distance(t_struct *cub, int test);
 
 void	check_func(t_struct *cub, int op);
+double	pythg(double x1, double x2, double y1, double y2);
+
 
 
 
