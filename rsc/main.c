@@ -44,6 +44,21 @@ int main(int ac, char **av)
 	while (++i < W_HEIGHT)
 		cub.color_buffer[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
 	ft_colorBuffer(&cub);
+    cub.wallTexture = (unsigned int *) malloc (sizeof(unsigned int) * (unsigned int)cub.scaleWidth * (unsigned int)cub.scaleHeight);
+    for(int x=0; x < cub.scaleWidth; x++)
+    {
+        for(int y =0; y < cub.scaleHeight;y++)
+        {
+            //put the value black or blue based on x and y being a multiple
+            if(x % 8 != 0 && y % 8 != 0)
+            {
+                cub.wallTexture[(cub.scaleWidth * y) + x] = 0xFF0000FF;
+            }
+            else{
+                cub.wallTexture[(cub.scaleWidth * y) + x] = 0XFF000000;
+            }
+        }
+    }
     cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
 	cub.addr = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
     player_position(&cub);

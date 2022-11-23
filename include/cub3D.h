@@ -21,6 +21,9 @@
 # include "../libft/libft.h"
 # define W_WIDTH 1020
 # define W_HEIGHT 510
+# define width_texture 60
+# define height_texture 60
+
 
 typedef struct s_floor
 {
@@ -73,6 +76,7 @@ typedef struct  s_ray{
     double  horzWallHitY;
 	double  vrticlWallHitX;
     double  vrtclWallHitY;
+	int check;
 	
 }  t_ray;
 
@@ -104,6 +108,7 @@ typedef struct s_struct
 	double		wallStripHeight;
 	int			check_test;
 	unsigned int **color_buffer;
+	unsigned int *wallTexture;
 }	t_struct;
 
 

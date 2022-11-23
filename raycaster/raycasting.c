@@ -36,6 +36,7 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
     while (++i < cub->numOfRays)
     {  
         cub->ray.rayAngle = normalizeAngle(cub->ray.rayAngle);
+        cub->ray.check = 0;
         castAllRays(cub);
 	    sostra = (cub->player.rottAngle) - cub->ray.rayAngle;
 	    if (sostra > degrees_to_radians(360))
@@ -55,13 +56,25 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 	    if (wallBottomPixel >= W_HEIGHT)
 		    wallBottomPixel = W_HEIGHT - 1;
 	    o = (wallTopPixel - 1);
+        //calculate textureOffsetx
+        int textureOffsetX ;
+        int textureOffsetY;
+        if(cub->ray.check == 1)
+        {
+            textureOffsetX = (int)cub->ray.wallHit_y % cub->scaleHeight;
+        }else if(cub->ray.check == 2){
+            textureOffsetX = (int)cub->ray.wallHit_x % cub->scaleWidth;
+        }
 	    //render the wall from wallTopPixel to wallBottomPixel
 	    while (++o < wallBottomPixel)
 	     {
 		    //copy all the color buffer to an sdl texture
-            if ((o > -1 && o < W_HEIGHT) && (i > -1 && i < W_WIDTH))
-                cub->color_buffer[o][i] = 0xFFF0000;
-            cub->check_test = 1;
+            //if ((o > -1 && o < W_HEIGHT) && (i > -1 && i < W_WIDTH))
+                //cub->color_buffer[o][i] = 0xFFF0000;
+            textureOffsetY = o - wallTopPixel *((double)cub->scaleHeight / cub->wallStripHeight);
+            unsigned int texturecolor = cub->wallTexture[(cub->scaleWidth * textureOffsetY) + textureOffsetX];
+            cub->color_buffer[o][i] = texturecolor;
+            cub->check_test = 1 ;
 	    }
         cub->ray.rayAngle += angleIncrem;
      }
@@ -280,11 +293,13 @@ void castAllRays(t_struct *cub)
         cub->ray.wallHit_x = cub->ray.vrticlWallHitX;
         cub->ray.wallHit_y = cub->ray.vrtclWallHitY;
         cub->ray.Distance  = vrtclDstnc;
+        cub->ray.check = 1;
     }
     else
     {
         cub->ray.wallHit_x = cub->ray.horzWallHitX;
         cub->ray.wallHit_y = cub->ray.horzWallHitY;
         cub->ray.Distance  = hrzntlDstnc;
+        cub->ray.check = 2;
     }
 }
