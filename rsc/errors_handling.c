@@ -6,7 +6,7 @@
 /*   By: yismaili < yismaili@student.1337.ma>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 21:24:03 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/11 15:42:47 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/11/21 22:55:06 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,10 +225,9 @@ int ft_check_alldouble(t_struct *cub)
     return (1);
 }
 
-char    **ft_jump_lines(t_struct *cub)
+void    ft_jump_lines(t_struct *cub)
 {
     int     i;
-    char    **data;
     int     len;
 
     i = 0;
@@ -240,20 +239,20 @@ char    **ft_jump_lines(t_struct *cub)
         else
             break;    
     }
-    data = ft_calloc(sizeof(char *), (cub->height - len) + 1);
+    cub->my_map = ft_calloc(sizeof(char *), (cub->height - len) + 1);
     i = 0;
     while (cub->map[len])
     {
-        data[i] = ft_calloc(sizeof(char), cub->width + 1);
-        ft_memset(data[i], ' ', cub->width);
-        data[i][cub->width] = '\0';
-        ft_memmove(data[i], cub->map[len], ft_strlen(cub->map[len]));
+        cub->my_map[i] = ft_calloc(sizeof(char), cub->width + 1);
+        ft_memset(cub->my_map[i], ' ', cub->width);
+        cub->my_map[i][cub->width] = '\0';
+        ft_memmove(cub->my_map[i], cub->map[len], ft_strlen(cub->map[len]));
         len++;
         i++;
     }
     cub->len_ofmap = i;
-    data[i] = NULL;
-    return (data);
+    cub->my_map[i] = NULL;
+    return ;
 }
 
 int ft_check_bgnend(char *data)
@@ -310,30 +309,30 @@ int count_direction(char **str)
 
 int  ft_check_map(t_struct *cub)
 {   
-    char    **data;
     int i;
     int j;
 
-    data = ft_jump_lines(cub);
+    cub->heightof_minimap = ft_count_height(cub);
+    cub->widthof_minimap = ft_strlen(cub->my_map[1]);
     i = 0;
-    if (count_direction(data) != 1)
+    if (count_direction(cub->my_map) != 1)
         return (ft_putstr_fd("too many direction", 2), 0);
-    if (ft_check_bgnend(data[0]) == 0)
+    if (ft_check_bgnend(cub->my_map[0]) == 0)
         return (ft_putstr_fd("Open map\n", 2),0);
-    if (ft_check_bgnend(data[cub->len_ofmap - 1]) == 0)
+    if (ft_check_bgnend(cub->my_map[cub->len_ofmap - 1]) == 0)
         return (ft_putstr_fd("Open map\n", 2), 0);
-    while (data[i])
+    while (cub->my_map[i])
     {
         j = 0;
-        while (data[i][j])
+        while (cub->my_map[i][j])
         {
-            if (data[i][j] != 'N' && data[i][j] != 'S' && data[i][j] != 'W' && data[i][j] != 'E' && data[i][j] != '1' && data[i][j] != '0' && data[i][j] != '2' && data[i][j] != '\0'  && data[i][j] != '\n' && data[i][j] != ' ')
+            if (cub->my_map[i][j] != 'N' && cub->my_map[i][j] != 'S' && cub->my_map[i][j] != 'W' && cub->my_map[i][j] != 'E' && cub->my_map[i][j] != '1' && cub->my_map[i][j] != '0' && cub->my_map[i][j] != '2' && cub->my_map[i][j] != '\0'  && cub->my_map[i][j] != '\n' && cub->my_map[i][j] != ' ')
                 return (ft_putstr_fd("Map error\n", 2),0);
            j++;
         }
         i++;
     }
-    if (ft_check_openmap(data))
+    if (ft_check_openmap(cub->my_map))
         return (ft_putstr_fd("Open map\n", 2), 0);
     return (1);
 }

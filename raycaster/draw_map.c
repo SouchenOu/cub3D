@@ -6,13 +6,13 @@
 /*   By: yismaili < yismaili@student.1337.ma>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:48:33 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/20 13:42:26 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/11/22 19:47:37 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-void	my_mlx_pixel_put(t_struct *ptr, int x, int y, long color)
+void	my_mlx_pixel_put(t_struct *ptr, int x, int y, unsigned int color)
 {
 	char	*dst;
 
@@ -24,7 +24,7 @@ void	my_mlx_pixel_put(t_struct *ptr, int x, int y, long color)
 	}
 }
 
-int ft_count_height(char **data)
+int ft_count_height(t_struct *cub)
 {
     int len;
     int i;
@@ -32,10 +32,10 @@ int ft_count_height(char **data)
 
     i = 0;
     len = 0;
-    while (data[i])
+    while (cub->my_map[i])
     {
         j = 0;
-        while (data[i][j])
+        while (cub->my_map[i][j])
         {
           if (j == 0)
             len++;
@@ -54,73 +54,70 @@ void    draw_cub(t_struct *ptr, int x, int y, int color)
     int     j;
 
         
-        start_x = x * ptr->scaleWidth;
-        start_y = y * ptr->scaleHeight;
+        start_x =  x * ptr->mini_map.mini_scaleWidth;
+        start_y =  y * ptr->mini_map.mini_scaleHeight;
         i = start_y;
         j = start_x;
-        while (i < start_y + ptr->scaleHeight)
+        while (i < start_y + ptr->mini_map.mini_scaleHeight)
         {
-        j =  start_x;
-        while (j < start_x + ptr->scaleWidth)
-        {
-            my_mlx_pixel_put(ptr, j, i, color);
-            j++;
-         }
+            j =  start_x;
+            while (j < start_x + ptr->mini_map.mini_scaleWidth)
+            {
+                my_mlx_pixel_put(ptr, j, i, color);
+                j++;
+            }
         i++;
     }
 }
 
 void    ft_draw_map(t_struct *cub)
 {
-    //int x;
-    //int y;
-    char    **data;
+    int x;
+    int y;
     int     len;
 
-    //y = 0;
+    y = 0;
     len = 0;
-    data = ft_jump_lines(cub);
-    cub->fovAngle = 60 * (M_PI / 180);
-    cub->numOfRays = W_WIDTH;
-     cub->rayAngle = cub->player.rottAngle;
-   /* while (data[y])
+    int xx = (cub->player.position_x/ cub->scaleWidth) * cub->mini_map.mini_scaleWidth;
+    int yy = (cub->player.position_y / cub->scaleHeight) * cub->mini_map.mini_scaleHeight;
+    drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F); 
+    while (cub->my_map[y])
     {
         x = 0;
-        while (data[y][x])
+        while (cub->my_map[y][x])
         {
-            if (data[y][x] == '1')
-                draw_cub(cub, x, y, 0xFFF0000);
-            else if (data[y][x] == '0')
+           if (cub->my_map[y][x] == '1')
+               draw_cub(cub, x, y, 0xFFF0000);
+            if (cub->my_map[y][x] == '0')
                 draw_cub(cub, x, y, 0);
             x++;
         }
         y++;
-    }*/
-    drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F);   
-    draw_player(cub, cub->player.position_x, cub->player.position_y , 0xfffff); 
+    }
+    drawRaysOfplyer_mini(cub, xx, yy , 0xFFFF0F);     
     mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);
 }
 
 void player_position(t_struct *cub){
     int i = 0;
     int j = 0;
-   char** data = ft_jump_lines(cub);
-   int  height = ft_count_height(data);
-   
-    cub->scaleHeight = W_HEIGHT/ height;
+  
+    cub->scaleHeight = W_HEIGHT/ cub->heightof_minimap;
     cub->scaleWidth = W_WIDTH/ cub->width;
     cub->player.rottSpeed = 0.174533;
     cub->player.walkDrctn = 0;
-   
-   while (data[i])
+    cub->numOfRays = W_WIDTH;
+   while (cub->my_map[i])
    {
         j = 0;
-        while(data[i][j])
+        while(cub->my_map[i][j])
         {
-            if (data[i][j] == 'E'|| data[i][j] == 'N' || data[i][j] == 'S' || data[i][j] == 'W')
+            if (cub->my_map[i][j] == 'E'|| cub->my_map[i][j] == 'N' || cub->my_map[i][j] == 'S' || cub->my_map[i][j] == 'W')
             {
-                 cub->player.position_x = j * cub->scaleWidth;
+                cub->player.position_x = j * cub->scaleWidth;
                 cub->player.position_y = i * cub->scaleHeight;
+                cub->mini_map.mini_scaleWidth = (cub->scaleWidth / 4);
+                cub->mini_map.mini_scaleHeight = (cub->scaleHeight / 4);
                 return ;
             }
             j++;
@@ -154,7 +151,6 @@ int	player_move(int key, t_struct *cub)
         cub->player.rottAngle -= cub->player.rottSpeed;
     mlx_destroy_image(cub->mlx_ptr, cub->img);
     cub->img = mlx_new_image(cub->mlx_ptr, W_WIDTH, W_HEIGHT);
-    find_pos_player_in_gridline(cub);
     ft_draw_map(cub);
     return (0);
 }
@@ -189,15 +185,14 @@ void check_downSteep(t_struct *cub)
 
 void directionOfPlayer(t_struct *cub)
 {
-    char** data = ft_jump_lines(cub);
     int gred_y = floor(cub->player.position_y/cub->scaleHeight);
     int gred_x = floor(cub->player.position_x/cub->scaleWidth);
-    if (data[gred_y][gred_x] == 'N')
+    if (cub->my_map[gred_y][gred_x] == 'N')
         cub->player.rottAngle = M_PI / 2;
-    if (data[gred_y][gred_x] == 'S')
+    if (cub->my_map[gred_y][gred_x] == 'S')
         cub->player.rottAngle = M_PI * (3/ 2);
-    if (data[gred_y][gred_x] == 'W')
+    if (cub->my_map[gred_y][gred_x] == 'W')
         cub->player.rottAngle = M_PI;
-    if (data[gred_y][gred_x] == 'E')
+    if (cub->my_map[gred_y][gred_x] == 'E')
         cub->player.rottAngle = 0;
 }
