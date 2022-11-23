@@ -20,7 +20,7 @@
 # include <math.h>
 # include "../libft/libft.h"
 # define W_WIDTH 1020
-# define W_HEIGHT 510
+# define W_HEIGHT 610
 # define width_texture 60
 # define height_texture 60
 

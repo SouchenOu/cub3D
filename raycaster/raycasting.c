@@ -55,23 +55,34 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 	    wallBottomPixel = (W_HEIGHT/ 2) + (int)(cub->wallStripHeight/ 2.00);
 	    if (wallBottomPixel >= W_HEIGHT)
 		    wallBottomPixel = W_HEIGHT - 1;
-	    o = (wallTopPixel - 1);
+	    o = (wallTopPixel);
         //calculate textureOffsetx
         int textureOffsetX ;
         int textureOffsetY;
+        
+        // calculate how much to navigate
+        // the texture offesetX it will going to be the same (how much i will going to x it will be the same for all of them)
         if(cub->ray.check == 1)
         {
-            textureOffsetX = (int)cub->ray.wallHit_y % cub->scaleHeight;
-        }else if(cub->ray.check == 2){
-            textureOffsetX = (int)cub->ray.wallHit_x % cub->scaleWidth;
+            //here vertical
+            textureOffsetX = (int)cub->ray.vrtclWallHitY % cub->scaleHeight;
+            // here horizontal
+        }else{
+            textureOffsetX = (int)cub->ray.horzWallHitX % cub->scaleWidth;
         }
+
 	    //render the wall from wallTopPixel to wallBottomPixel
-	    while (++o < wallBottomPixel)
+	   for (o = wallTopPixel; o < wallBottomPixel; o++)
 	     {
 		    //copy all the color buffer to an sdl texture
             //if ((o > -1 && o < W_HEIGHT) && (i > -1 && i < W_WIDTH))
                 //cub->color_buffer[o][i] = 0xFFF0000;
-            textureOffsetY = o - wallTopPixel *((double)cub->scaleHeight / cub->wallStripHeight);
+            // set the color of the wall based on the color from the texture
+            textureOffsetY = (o - wallTopPixel) * ((double)cub->scaleHeight / cub->wallStripHeight);
+            //
+
+            //offsetY means how much need to navigate (to y) to get my color
+            //offsetX means how much need to navigate (to x) to get my color
             unsigned int texturecolor = cub->wallTexture[(cub->scaleWidth * textureOffsetY) + textureOffsetX];
             cub->color_buffer[o][i] = texturecolor;
             cub->check_test = 1 ;

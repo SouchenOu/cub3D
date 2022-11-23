@@ -47,15 +47,15 @@ int main(int ac, char **av)
     cub.wallTexture = (unsigned int *) malloc (sizeof(unsigned int) * (unsigned int)cub.scaleWidth * (unsigned int)cub.scaleHeight);
     for(int x=0; x < cub.scaleWidth; x++)
     {
-        for(int y =0; y < cub.scaleHeight;y++)
+        for(int y = 0; y < cub.scaleHeight;y++)
         {
             //put the value black or blue based on x and y being a multiple
-            if(x % 8 != 0 && y % 8 != 0)
+            if(x % 8  && y % 8 )
             {
-                cub.wallTexture[(cub.scaleWidth * y) + x] = 0xFF0000FF;
+                cub.wallTexture[(cub.scaleWidth * y) + x] = 0xadd8e6;
             }
             else{
-                cub.wallTexture[(cub.scaleWidth * y) + x] = 0XFF000000;
+                cub.wallTexture[(cub.scaleWidth * y) + x] = 0xFFF0000;
             }
         }
     }
