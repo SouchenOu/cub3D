@@ -102,8 +102,8 @@ void player_position(t_struct *cub){
     int i = 0;
     int j = 0;
   
-    cub->scaleHeight = 32;
-    cub->scaleWidth = 32;
+    cub->scaleHeight = 64;
+    cub->scaleWidth = 64;
     cub->player.rottSpeed = 0.174533;
     cub->player.walkDrctn = 0;
     cub->numOfRays = W_WIDTH;

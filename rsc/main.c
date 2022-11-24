@@ -25,6 +25,8 @@ void print(char **str)
 int main(int ac, char **av)
 {
     t_struct cub;
+    cub.scaleHeight = 64;
+    cub.scaleWidth = 64;
     int i;
     if (ac != 2)
 		return (ft_putstr_fd("Usage : ./cub3D path/to/map.cub", 0), 0);

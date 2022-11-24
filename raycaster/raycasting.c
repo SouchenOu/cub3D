@@ -314,11 +314,13 @@ void castAllRays(t_struct *cub)
         cub->ray.wallHit_x = cub->ray.vrticlWallHitX;
         cub->ray.wallHit_y = cub->ray.vrtclWallHitY;
         cub->ray.Distance  = vrtclDstnc;
+        cub->ray.check = 1;
     }
     else
     {
         cub->ray.wallHit_x = cub->ray.horzWallHitX;
         cub->ray.wallHit_y = cub->ray.horzWallHitY;
         cub->ray.Distance  = hrzntlDstnc;
+        cub->ray.check = 2;
     }
 }
