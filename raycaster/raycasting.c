@@ -6,7 +6,7 @@
 /*   By: yismaili < yismaili@student.1337.ma>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 12:26:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/22 20:02:35 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/11/23 22:53:03 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@
 void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 {
     int i = -1;
-    double	sostra;
+  //  double	sostra;
 	int		wallBottomPixel ;
-	int		wallTopPixel;
+	double		wallTopPixel;
     int k;
     int o;
     o = 0;
     (void) x;
     (void) y;
     (void) color;
-    cub->wallStripHeight= 0;
+    cub->wallStripHeight = 0;
     double angleIncrem = (M_PI / 3) / cub->numOfRays;
     cub->ray.rayAngle = cub->player.rottAngle - (M_PI / 6); 
     if(cub->check_test == 1)
@@ -36,60 +36,66 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
     while (++i < cub->numOfRays)
     {  
         cub->ray.rayAngle = normalizeAngle(cub->ray.rayAngle);
-        cub->ray.check = 0;
         castAllRays(cub);
-	    sostra = (cub->player.rottAngle) - cub->ray.rayAngle;
-	    if (sostra > degrees_to_radians(360))
-		    sostra -= degrees_to_radians(360);
-	    else if (sostra < degrees_to_radians(0.00))
-		    sostra += degrees_to_radians(360.00);
-	    cub->ray.Distance = cub->ray.Distance * cos(sostra);
-	    cub->wallStripHeight= (int)((cub->scaleHeight) * (1.00 * W_HEIGHT)) / cub->ray.Distance;
-	    if (cub->wallStripHeight> (1.00 * W_HEIGHT))
-		    cub->wallStripHeight= (1.00 * W_HEIGHT);
+	   // sostra = cub->ray.rayAngle - cub->player.rottAngle;
+	    // if (sostra > degrees_to_radians(360))
+		//     sostra -= degrees_to_radians(360);
+	    // else if (sostra < degrees_to_radians(0.00))
+		//     sostra += degrees_to_radians(360.00);
+	    double distanceofwall = cub->ray.Distance * cos(cub->ray.rayAngle - cub->player.rottAngle);
+	    cub->wallStripHeight = (cub->scaleHeight * W_HEIGHT) /  distanceofwall;
+	    if (cub->wallStripHeight > W_HEIGHT)
+		    cub->wallStripHeight = W_HEIGHT;
 	        //wallTopPixel is the top of the wall
-	    wallTopPixel = (W_HEIGHT/ 2) - (int)(cub->wallStripHeight/ 2.00);
-	     if (wallTopPixel < 0)
+	    wallTopPixel = (W_HEIGHT/ 2) - ( cub->wallStripHeight/ 2);
+	    if (wallTopPixel < 0)
 		    wallTopPixel = 0; // the minimum we can have is 0
 		        //wallBottomPixel is the Bottom or end of the wall
-	    wallBottomPixel = (W_HEIGHT/ 2) + (int)(cub->wallStripHeight/ 2.00);
+	    wallBottomPixel = (W_HEIGHT / 2) + (cub->wallStripHeight / 2);
 	    if (wallBottomPixel >= W_HEIGHT)
 		    wallBottomPixel = W_HEIGHT - 1;
-	    o = (wallTopPixel);
-        //calculate textureOffsetx
-        int textureOffsetX ;
-        int textureOffsetY;
-        
-        // calculate how much to navigate
-        // the texture offesetX it will going to be the same (how much i will going to x it will be the same for all of them)
-        if(cub->ray.check == 1)
-        {
-            //here vertical
-            textureOffsetX = (int)cub->ray.vrtclWallHitY % cub->scaleHeight;
-            // here horizontal
-        }else{
-            textureOffsetX = (int)cub->ray.horzWallHitX % cub->scaleWidth;
-        }
-
+	    o = (wallTopPixel - 1);
 	    //render the wall from wallTopPixel to wallBottomPixel
-	   for (o = wallTopPixel; o < wallBottomPixel; o++)
+	   /* while (++o < wallBottomPixel)
 	     {
 		    //copy all the color buffer to an sdl texture
-            //if ((o > -1 && o < W_HEIGHT) && (i > -1 && i < W_WIDTH))
-                //cub->color_buffer[o][i] = 0xFFF0000;
-            // set the color of the wall based on the color from the texture
-            textureOffsetY = (o - wallTopPixel) * ((double)cub->scaleHeight / cub->wallStripHeight);
-            //
-
-            //offsetY means how much need to navigate (to y) to get my color
-            //offsetX means how much need to navigate (to x) to get my color
-            unsigned int texturecolor = cub->wallTexture[(cub->scaleWidth * textureOffsetY) + textureOffsetX];
-            cub->color_buffer[o][i] = texturecolor;
-            cub->check_test = 1 ;
+            if ((o > -1 && o < W_HEIGHT) && (i > -1 && i < W_WIDTH))
+                cub->color_buffer[o][i] = 0xFFF0000;
+            cub->check_test = 1;
 	    }
         cub->ray.rayAngle += angleIncrem;
-     }
-    //lets_do_raycast(cub, i);
+        }*/
+            int textureOffsetX ;
+            int textureOffsetY;
+        
+            // calculate how much to navigate
+            // the texture offesetX it will going to be the same (how much i will going to x it will be the same for all of them)
+            if(cub->ray.check == 1)
+            {
+                //here vertical
+                textureOffsetX = (int)cub->ray.vrtclWallHitY % cub->scaleHeight;
+                 // here horizontal
+            }else{
+                textureOffsetX = (int)cub->ray.horzWallHitX % cub->scaleWidth;
+            }
+
+	        //render the wall from wallTopPixel to wallBottomPixel
+	        for (o = wallTopPixel; o < wallBottomPixel; o++)
+	        {
+		        //copy all the color buffer to an sdl texture
+                //if ((o > -1 && o < W_HEIGHT) && (i > -1 && i < W_WIDTH))
+                //cub->color_buffer[o][i] = 0xFFF0000;
+                // set the color of the wall based on the color from the texture
+                textureOffsetY = (o - wallTopPixel) * ((double)cub->scaleHeight / cub->wallStripHeight);
+                //offsetY means how much need to navigate (to y) to get my color
+                //offsetX means how much need to navigate (to x) to get my color
+                unsigned int texturecolor = cub->wallTexture[(cub->scaleWidth * textureOffsetY) + textureOffsetX];
+                cub->color_buffer[o][i] = texturecolor;
+                cub->check_test = 1 ;
+	        }
+            cub->ray.rayAngle += angleIncrem;
+        }
+
     i = -1;
 	while (++i < W_HEIGHT)
 	{
@@ -97,9 +103,9 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 		while (++k < W_WIDTH)
 		{
 			if (is_ceiling(cub->color_buffer, i, k))
-				cub->addr[i * W_WIDTH + k] = 0xadd8e6;
+				cub->addr[i * W_WIDTH + k] = (cub->clg.r << 16) + (cub->clg.g << 8) + (cub->clg.b);
 			else if (is_floor(cub->color_buffer, i, k))
-				cub->addr[i * W_WIDTH + k] = 0x4B6C57;
+				cub->addr[i * W_WIDTH + k] = (cub->flr.r << 16) + (cub->flr.g << 8) + (cub->flr.b);
 			else
 				cub->addr[i * W_WIDTH + k] = cub->color_buffer[i][k];
 		}
@@ -167,7 +173,7 @@ void ddaForLine(t_struct *cub,int x_0, int y_0, int x_1, int y_1, int color)
     int gred_y = (int)(y/cub->scaleHeight); /*The value to round down to the nearest integer*/
     int gred_x = (int)(x/cub->scaleWidth);
     if (gred_y < cub->heightof_minimap  && gred_x <  cub->widthof_minimap){
-        if ( cub->my_map[gred_y][gred_x] == '1')
+        if (cub->my_map[gred_y][gred_x] == '1')
             return (1);   
     }
     return (0);
@@ -211,12 +217,14 @@ void castHrzntalRays(t_struct *cub)
     if (cub->ray.rayFacingRight && x_incrmnt < 0)
         x_incrmnt *= -1;
     bool check = false;
-    while (x_hrzntlIntrsctn >= 0 && x_hrzntlIntrsctn < W_WIDTH && y_hrzntlIntrsctn >= 0 &&y_hrzntlIntrsctn < W_HEIGHT )
+    while (x_hrzntlIntrsctn >= 0 && x_hrzntlIntrsctn < cub->widthofmap && y_hrzntlIntrsctn >= 0 &&y_hrzntlIntrsctn < cub->heightofmap)
     {
         if (check_wall(cub, x_hrzntlIntrsctn,y_hrzntlIntrsctn))
         {
+            if (cub->ray.rayFacingUp)
+                y_hrzntlIntrsctn += 1;
+            cub->ray.horzWallHitY = y_hrzntlIntrsctn;
             cub->ray.horzWallHitX = x_hrzntlIntrsctn;
-            cub->ray.horzWallHitY =y_hrzntlIntrsctn;
             check = true;
             break;
         }
@@ -252,10 +260,12 @@ void castVrtcalRays(t_struct *cub)
     if (cub->ray.rayFacingDown && y_incrmntVrtcl < 0)
         y_incrmntVrtcl *= -1;
     bool check = false;
-    while (x_vrticlIntrsctn >= 0 && x_vrticlIntrsctn < W_WIDTH && y_vrtclIntrsctn >= 0 && y_vrtclIntrsctn < W_HEIGHT)
+    while (x_vrticlIntrsctn >= 0 && x_vrticlIntrsctn < cub->widthofmap && y_vrtclIntrsctn >= 0 && y_vrtclIntrsctn <  cub->heightofmap)
     {
         if (check_wall(cub, x_vrticlIntrsctn, y_vrtclIntrsctn))
         {
+            if (cub->ray.rayFacingLeft)
+                 x_vrticlIntrsctn += 1;
             cub->ray.vrticlWallHitX = x_vrticlIntrsctn;
             cub->ray.vrtclWallHitY = y_vrtclIntrsctn;
             check = true;
@@ -291,7 +301,7 @@ void castAllRays(t_struct *cub)
         cub->ray.rayFacingDown = 1;
     else
         cub->ray.rayFacingUp = 1;
-    if (cub->ray.rayAngle < (M_PI/2) || cub->ray.rayAngle > ((3 * M_PI)/2))
+    if (cub->ray.rayAngle < (M_PI / 2) || cub->ray.rayAngle > ((3 * M_PI) / 2))
         cub->ray.rayFacingRight = 1;
     else
         cub->ray.rayFacingLeft = 1;
@@ -304,13 +314,11 @@ void castAllRays(t_struct *cub)
         cub->ray.wallHit_x = cub->ray.vrticlWallHitX;
         cub->ray.wallHit_y = cub->ray.vrtclWallHitY;
         cub->ray.Distance  = vrtclDstnc;
-        cub->ray.check = 1;
     }
     else
     {
         cub->ray.wallHit_x = cub->ray.horzWallHitX;
         cub->ray.wallHit_y = cub->ray.horzWallHitY;
         cub->ray.Distance  = hrzntlDstnc;
-        cub->ray.check = 2;
     }
 }
