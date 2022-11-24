@@ -20,7 +20,7 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
   //  double	sostra;
 	int		wallBottomPixel ;
 	double		wallTopPixel;
-    int k;
+    //int k;
     int o;
     o = 0;
     (void) x;
@@ -78,7 +78,12 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
             }else{
                 textureOffsetX = (int)cub->ray.horzWallHitX % cub->scaleWidth;
             }
-
+            int j = 0;
+            while(j < wallTopPixel)
+            {
+                cub->addr[(W_WIDTH * j) + i] = (cub->clg.r << 16) + (cub->clg.g << 8) + (cub->clg.b);
+                j++;
+            }
 	        //render the wall from wallTopPixel to wallBottomPixel
 	        for (o = wallTopPixel; o < wallBottomPixel; o++)
 	        {
@@ -90,26 +95,19 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
                 //offsetY means how much need to navigate (to y) to get my color
                 //offsetX means how much need to navigate (to x) to get my color
                 unsigned int texturecolor = cub->wallTexture[(cub->scaleWidth * textureOffsetY) + textureOffsetX];
-                cub->color_buffer[o][i] = texturecolor;
+                cub->addr[(W_WIDTH * o) + i] = texturecolor;
                 cub->check_test = 1 ;
 	        }
+            int n = wallBottomPixel;
+            while(n < W_HEIGHT)
+            {
+                cub->addr[(W_WIDTH * n) + i] = (cub->flr.r << 16) + (cub->flr.g << 8) + (cub->flr.b);
+                n++;
+            }
             cub->ray.rayAngle += angleIncrem;
         }
 
-    i = -1;
-	while (++i < W_HEIGHT)
-	{
-		k = -1;
-		while (++k < W_WIDTH)
-		{
-			if (is_ceiling(cub->color_buffer, i, k))
-				cub->addr[i * W_WIDTH + k] = (cub->clg.r << 16) + (cub->clg.g << 8) + (cub->clg.b);
-			else if (is_floor(cub->color_buffer, i, k))
-				cub->addr[i * W_WIDTH + k] = (cub->flr.r << 16) + (cub->flr.g << 8) + (cub->flr.b);
-			else
-				cub->addr[i * W_WIDTH + k] = cub->color_buffer[i][k];
-		}
-	}
+ 
 	mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);
             
 } 
