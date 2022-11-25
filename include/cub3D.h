@@ -13,6 +13,8 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+
+# define WHITE_SPACES " \t\r\f\v"
 # include <mlx.h>
 # include <stdio.h>
 # include <fcntl.h>
@@ -77,6 +79,21 @@ typedef struct  s_ray{
 	int check;
 	
 }  t_ray;
+typedef struct s_garbage
+{
+	char				*garbage_lines;
+	struct s_garbage	*next;
+}	t_garbage;
+typedef struct s_textures
+{
+	int		img_width;
+	int		img_height;
+	void	*img;
+	char	*data;
+	int		bits_per_pixel;
+	int		size_line;
+	int		endian;
+}	t_textures;
 
 typedef struct s_struct
 {
@@ -86,6 +103,7 @@ typedef struct s_struct
 	t_dirct		drct;
 	int			height;
 	int			width;
+	t_textures	*texture;
 	int			len_ofmap;
 	void		*mlx_ptr;
     void		*win_ptr;
@@ -111,6 +129,11 @@ typedef struct s_struct
 	unsigned int *wallTexture;
 	int texture_height;
 	int texture_width;
+	char				*no;
+	char				*so;
+	char				*we;
+	char				*ea;
+
 }	t_struct;
 
 
