@@ -19,8 +19,8 @@
 # include <stdbool.h>
 # include <math.h>
 # include "../libft/libft.h"
-# define W_WIDTH 1020
-# define W_HEIGHT 510
+# define W_WIDTH 1080
+# define W_HEIGHT 980
 
 typedef struct s_floor
 {
@@ -109,6 +109,8 @@ typedef struct s_struct
 	int			widthofmap;
 	int			heightofmap;
 	unsigned int *wallTexture;
+	int texture_height;
+	int texture_width;
 }	t_struct;
 
 

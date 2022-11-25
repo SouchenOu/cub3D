@@ -34,6 +34,8 @@ int main(int ac, char **av)
     int i;
     cub.scaleHeight = 64;
     cub.scaleWidth = 64;
+    cub.texture_height = 64;
+    cub.texture_width = 64;
     if (ac != 2)
 		return (ft_putstr_fd("Usage : ./cub3D path/to/map.cub", 0), 0);
 	if (ft_read_maps(av[1], &cub) == 0)
@@ -52,23 +54,27 @@ int main(int ac, char **av)
 	while (++i < W_HEIGHT)
 		cub.color_buffer[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
 	ft_colorBuffer(&cub);
-    cub.wallTexture = (unsigned int *) malloc (sizeof(unsigned int) * (unsigned int)cub.scaleWidth * (unsigned int)cub.scaleHeight);
-    for(int x=0; x < cub.scaleWidth; x++)
+    //here we create a texture in memory (so all this pixels(red, blue, red, blue)) to get a wall texture
+    //how do we i know what is the pixel that i have to pic to go and pint my wall strip
+    cub.wallTexture = (unsigned int *) malloc (sizeof(unsigned int) * (unsigned int)cub.texture_width * (unsigned int)cub.texture_height);
+    for(int x=0; x < cub.texture_width; x++)
     {
-        for(int y = 0; y < cub.scaleHeight;y++)
+        for(int y = 0; y < cub.texture_height;y++)
         {
             //put the value black or blue based on x and y being a multiple
             if(x % 8  && y % 8 )
             {
-                cub.wallTexture[(cub.scaleWidth * y) + x] = 0xadd8e6;
+                cub.wallTexture[(cub.texture_width * y) + x] = 0xadd8e6;
             }
             else{
-                cub.wallTexture[(cub.scaleWidth * y) + x] = 0xFFF0000;
+                cub.wallTexture[(cub.texture_width * y) + x] = 0xFFF0000;
             }
         }
     }
     cub.img = mlx_new_image(cub.mlx_ptr, W_WIDTH, W_HEIGHT);
 	cub.addr = (int *)mlx_get_data_addr(cub.img, &cub.bits_per_pixel, &cub.line_length, &cub.endian);
+    //cub.img = mlx_xpm_file_to_image()
+
     player_position(&cub);
     directionOfPlayer(&cub);
     cub.widthofmap = cub.scaleWidth * cub.widthof_minimap;

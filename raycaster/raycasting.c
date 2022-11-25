@@ -13,7 +13,7 @@
 #include "../include/cub3D.h"
 
 /* cast all rays */
-
+/// we use raycasting transform a limited form of data (a very simplified map or floor plan) into a 3D projection by tracing rays from the view point into the viewing volume
 void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 {
     int i = -1;
@@ -39,8 +39,9 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
         castAllRays(cub);
 	    double distanceofwall = cub->ray.Distance * cos(cub->ray.rayAngle - cub->player.rottAngle);
 	    cub->wallStripHeight = (cub->scaleHeight * W_HEIGHT) /  distanceofwall;
-	    if (cub->wallStripHeight > W_HEIGHT)
-		    cub->wallStripHeight = W_HEIGHT;
+        double len = cub->wallStripHeight;
+	     if (cub->wallStripHeight > W_HEIGHT)
+		     cub->wallStripHeight = W_HEIGHT;
 	        //wallTopPixel is the top of the wall
 	    wallTopPixel = (W_HEIGHT/ 2) - ( cub->wallStripHeight/ 2);
 	    if (wallTopPixel < 0)
@@ -73,10 +74,14 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 	        while (o < wallBottomPixel)
 	        {
                 // set the color of the wall based on the color from the texture
-                textureOffsetY = (o - wallTopPixel) * ((double)cub->scaleHeight / cub->wallStripHeight);
+                // we are forcing the y....
+                int distanceFromTop = o + (len / 2) - (W_HEIGHT/2);
+                // multiplier par how tall my wall is
+                //how height my texture is diviser par how hight my wall is
+                textureOffsetY = (distanceFromTop) * ((double)cub->texture_height / len);
                 //offsetY means how much need to navigate (to y) to get my color
                 //offsetX means how much need to navigate (to x) to get my color
-                unsigned int texturecolor = cub->wallTexture[(cub->scaleWidth * textureOffsetY) + textureOffsetX];
+                unsigned int texturecolor = cub->wallTexture[(cub->texture_width * textureOffsetY) + textureOffsetX];
                 cub->addr[(W_WIDTH * o) + i] = texturecolor;
                 cub->check_test = 1;
                 o++;
