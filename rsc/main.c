@@ -6,7 +6,7 @@
 /*   By: yismaili < yismaili@student.1337.ma>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 16:46:01 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/23 22:52:00 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/11/24 19:10:48 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,19 @@ void print(char **str)
         i++;
     }
 }
-
+void hooking(t_struct *cub)
+{
+    mlx_hook(cub->win_ptr, 02, 0, KeyPress ,cub);
+    mlx_hook(cub->win_ptr, 03, 0, KeyRelease, cub);
+    mlx_loop_hook(cub->mlx_ptr, player_move, cub);
+    mlx_loop(cub->mlx_ptr);
+}
 int main(int ac, char **av)
 {
     t_struct cub;
+    int i;
     cub.scaleHeight = 64;
     cub.scaleWidth = 64;
-    int i;
     if (ac != 2)
 		return (ft_putstr_fd("Usage : ./cub3D path/to/map.cub", 0), 0);
 	if (ft_read_maps(av[1], &cub) == 0)
@@ -41,7 +47,7 @@ int main(int ac, char **av)
         return (0);
     cub.mlx_ptr = mlx_init();
 	cub.win_ptr = mlx_new_window(cub.mlx_ptr, W_WIDTH, W_HEIGHT, "cub3D");
-    cub.color_buffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
+   cub.color_buffer = (unsigned int **)malloc(W_HEIGHT * sizeof(unsigned int *));
 	i = -1;
 	while (++i < W_HEIGHT)
 		cub.color_buffer[i] = (unsigned int *)malloc(W_WIDTH * sizeof(unsigned int));
@@ -68,8 +74,6 @@ int main(int ac, char **av)
     cub.widthofmap = cub.scaleWidth * cub.widthof_minimap;
     cub.heightofmap = cub.scaleHeight * cub.heightof_minimap;
     ft_draw_map(&cub);
-    mlx_key_hook(cub.win_ptr, player_move, &cub);
-   // mlx_loop_hook(cub.win_ptr, player_move, &cub);
-    mlx_loop(cub.mlx_ptr);
+    hooking(&cub);
     return (0);
 }

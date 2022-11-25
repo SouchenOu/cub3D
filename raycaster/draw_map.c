@@ -6,7 +6,7 @@
 /*   By: yismaili < yismaili@student.1337.ma>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:48:33 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/23 22:59:16 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/11/24 19:32:24 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void    ft_draw_map(t_struct *cub)
     len = 0;
     int xx = (cub->player.position_x/ cub->scaleWidth) * cub->mini_map.mini_scaleWidth;
     int yy = (cub->player.position_y / cub->scaleHeight) * cub->mini_map.mini_scaleHeight;
+    mlx_clear_window(cub->mlx_ptr, cub->win_ptr);
     drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F); 
     while (cub->my_map[y])
     {
@@ -126,33 +127,42 @@ void player_position(t_struct *cub){
    } 
 }
 
-int	player_move(int key, t_struct *cub)
+int	player_move(t_struct *cub)
 { 
-    cub->player.walkDrctn = 0;
-	if (key == 1){
-        cub->player.walkDrctn = -1;
-		check_nextSteep(cub);
-    }
-	else if (key == 13){
-        cub->player.walkDrctn = 1;
-       check_nextSteep(cub);
-    }
-	else if (key == 2){
-        cub->player.walkDown = 1;
-		check_downSteep(cub);
-    }
-	else if (key == 0){
-        cub->player.walkDown= -1;
-		check_downSteep(cub);
-    }
-    else if (key == 124)
-        cub->player.rottAngle += cub->player.rottSpeed;
-	else if (key == 123)
-        cub->player.rottAngle -= cub->player.rottSpeed;
-    mlx_destroy_image(cub->mlx_ptr, cub->img);
-    cub->img = mlx_new_image(cub->mlx_ptr, W_WIDTH, W_HEIGHT);
-    //cub->addr = (int *)mlx_get_data_addr(cub->img, &cub->bits_per_pixel, &cub->line_length, &cub->endian);
+	check_nextSteep(cub);
+	check_downSteep(cub);
+    if (cub->player.angle == 1 || cub->player.angle == -1)
+        cub->player.rottAngle += (cub->player.rottSpeed * cub->player.angle);
+     cub->player.angle = 0;
     ft_draw_map(cub);
+    return (0);
+}
+
+int KeyPress(int key, t_struct *cub)
+{
+	if (key == 1)
+        cub->player.walkDrctn = -1;
+	else if (key == 13)
+        cub->player.walkDrctn = 1;
+	else if (key == 2)
+        cub->player.walkDown = 1;
+	else if (key == 0)
+        cub->player.walkDown= -1;
+    else if (key == 124)
+        cub->player.angle = 1;
+    else if (key == 123)
+        cub->player.angle = -1;
+    return (0);
+}
+
+int	KeyRelease(int key, t_struct *cub)
+{ 
+    (void)key;
+    cub->player.walkDrctn = 0;
+    cub->player.walkDrctn = 0;
+    cub->player.walkDown = 0;
+    cub->player.walkDown= 0;
+    cub->player.angle = 0;
     return (0);
 }
 
@@ -175,8 +185,8 @@ void check_downSteep(t_struct *cub)
   double  new_x;
   double  new_y;
 
-    new_x = cub->player.position_x + (cos(cub->player.rottAngle + (M_PI/2)) * ((double)cub->player.walkDown * 4));
-    new_y = cub->player.position_y + (sin(cub->player.rottAngle + (M_PI/2)) * ((double)cub->player.walkDown * 4));
+    new_x = cub->player.position_x + (cos(cub->player.rottAngle + (M_PI/2)) * 4) * cub->player.walkDown;
+    new_y = cub->player.position_y + (sin(cub->player.rottAngle + (M_PI/2)) * 4) * cub->player.walkDown;
     if (check_wall(cub, new_x, new_y) != 1)
     {
         cub->player.position_x = new_x;

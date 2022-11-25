@@ -6,7 +6,7 @@
 /*   By: yismaili < yismaili@student.1337.ma>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:56:15 by yismaili          #+#    #+#             */
-/*   Updated: 2022/11/23 22:48:37 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/11/24 18:14:19 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct  s_player{
 	double  rottSpeed;
 	int 	walkDrctn;
 	int		walkDown;
+	int		angle;
 	
 }  t_player;
 typedef struct  s_minimap{
@@ -108,7 +109,6 @@ typedef struct s_struct
 	int			widthofmap;
 	int			heightofmap;
 	unsigned int *wallTexture;
-	
 }	t_struct;
 
 
@@ -131,7 +131,7 @@ char    **ft_split_map(t_struct *cub);
 char    *ft_search_inmap(t_struct *cub, char *search, int len_ofsrch);
 void    ft_draw_map(t_struct *cub);
 void 	player_position(t_struct *cub);
-int		player_move(int key, t_struct *p);
+int		player_move(t_struct *cub);
 void 	directionOfPlayer(t_struct *cub);
 void 	ddaForLine(t_struct *cub,int x_0, int y_0, int x_1, int y_1, int color);
 int 	check_wall(t_struct *cub, double x, double y);
@@ -152,5 +152,7 @@ void 	ft_colorBuffer(t_struct *cub);
 double	degrees_to_radians(double a);
 int		is_ceiling(unsigned int **buffer, int i, int k);
 int		is_floor(unsigned int **buffer, int i, int k);
+int		KeyRelease(int key, t_struct *cub);
+int		KeyPress(int key, t_struct *cub);
 void print(char **str);
 #endif
