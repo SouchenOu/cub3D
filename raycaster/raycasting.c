@@ -14,7 +14,7 @@
 
 /* cast all rays */
 /// we use raycasting transform a limited form of data (a very simplified map or floor plan) into a 3D projection by tracing rays from the view point into the viewing volume
-void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
+void drawRaysOfplyer(t_struct *cub,int x, int y, int color)
 {
     int i = -1;
   //  double	sostra;
@@ -29,10 +29,7 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
     cub->wallStripHeight = 0;
     double angleIncrem = (M_PI / 3) / cub->numOfRays;
     cub->ray.rayAngle = cub->player.rottAngle - (M_PI / 6); 
-    if(cub->check_test == 1)
-    {
-        ft_colorBuffer(cub);
-    }
+
     while (++i < cub->numOfRays)
     {  
         cub->ray.rayAngle = normalizeAngle(cub->ray.rayAngle);
@@ -52,49 +49,59 @@ void drawRaysOfplyer(t_struct *cub, int x, int y, int color)
 		    wallBottomPixel = W_HEIGHT - 1;
 	    o = (wallTopPixel - 1);
 	    //render the wall from wallTopPixel to wallBottomPixel
-        int textureOffsetX ;
-        int textureOffsetY;
+        double textureOffsetX ;
+        double textureOffsetY;
         
             // calculate how much to navigate
             // the texture offesetX it will going to be the same (how much i will going to x it will be the same for all of them)
         if(cub->ray.check == 1)
         {
-                textureOffsetX = (int)cub->ray.vrtclWallHitY % cub->scaleHeight;
+                textureOffsetX = cub->ray.vrtclWallHitY;
         }else{
-                textureOffsetX = (int)cub->ray.horzWallHitX % cub->scaleWidth;
-            }
-            int j = 0;
-            while(j < wallTopPixel)
-            {
-                cub->addr[(W_WIDTH * j) + i] = (cub->clg.r << 16) + (cub->clg.g << 8) + (cub->clg.b);
-                j++;
-            }
-	        //render the wall from wallTopPixel to wallBottomPixel
-            o = wallTopPixel;
-	        while (o < wallBottomPixel)
-	        {
-                // set the color of the wall based on the color from the texture
-                // we are forcing the y....
-                int distanceFromTop = o + (len / 2) - (W_HEIGHT/2);
-                // multiplier par how tall my wall is
-                //how height my texture is diviser par how hight my wall is
-                textureOffsetY = (distanceFromTop) * ((double)cub->texture_height / len);
-                //offsetY means how much need to navigate (to y) to get my color
-                //offsetX means how much need to navigate (to x) to get my color
-                unsigned int texturecolor = cub->wallTexture[(cub->texture_width * textureOffsetY) + textureOffsetX];
-                cub->addr[(W_WIDTH * o) + i] = texturecolor;
-                cub->check_test = 1;
-                o++;
-	        }
-            int n = wallBottomPixel;
-            while(n < W_HEIGHT)
-            {
-                cub->addr[(W_WIDTH * n) + i] = (cub->flr.r << 16) + (cub->flr.g << 8) + (cub->flr.b);
-                n++;
-            }
-            cub->ray.rayAngle += angleIncrem;
+                textureOffsetX = cub->ray.horzWallHitX;
         }
-	mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);         
+
+        int j = 0;
+        while(j < wallTopPixel)
+        {
+            cub->addr[(W_WIDTH * j) + i] = (cub->clg.r << 16) + (cub->clg.g << 8) + (cub->clg.b);
+            j++;
+        }
+        
+        //render the wall from wallTopPixel to wallBottomPixel
+        textureOffsetX /= cub->scaleHeight;
+        textureOffsetX -= floor(textureOffsetX);
+        textureOffsetX *= cub->texture_width;
+        o = wallTopPixel;
+        while (o < wallBottomPixel)
+        {
+            // set the color of the wall based on the color from the texture
+            // we are forcing the y....
+            int distanceFromTop = o + ((len / 2) - (W_HEIGHT/2));
+            if (distanceFromTop < 0)
+                distanceFromTop = 0;
+            // multiplier par how tall my wall is
+            //how height my texture is diviser par how hight my wall is
+            textureOffsetY = (distanceFromTop) * ((double)cub->texture_height / len);
+            textureOffsetY = floor(textureOffsetY);
+            //offsetY means how much need to navigate (to y) to get my color
+            //offsetX means how much need to navigate (to x) to get my color
+            unsigned int texturecolor ;//= cub->wallTexture[(cub->texture_width * textureOffsetY) + textureOffsetX];
+            // printf("*** X : %d - Y : %d\n", (int)textureOffsetX, (int)(cub->texture_width * textureOffsetY));
+            texturecolor = cub->data[(int)(cub->texture_width * textureOffsetY) + (int)textureOffsetX];
+            cub->addr[(W_WIDTH * o) + i] = texturecolor;
+            cub->check_test = 1;
+            o++;
+        }
+        int n = wallBottomPixel;
+        while(n < W_HEIGHT)
+        {
+            cub->addr[(W_WIDTH * n) + i] = (cub->flr.r << 16) + (cub->flr.g << 8) + (cub->flr.b);
+            n++;
+        }
+        cub->ray.rayAngle += angleIncrem;
+    }
+	mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);
 } 
 
 void drawRaysOfplyer_mini(t_struct *cub, int x, int y, int color)

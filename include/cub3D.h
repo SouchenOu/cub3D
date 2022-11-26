@@ -89,7 +89,7 @@ typedef struct s_textures
 	int		img_width;
 	int		img_height;
 	void	*img;
-	char	*data;
+	int		*data;
 	int		bits_per_pixel;
 	int		size_line;
 	int		endian;
@@ -108,10 +108,16 @@ typedef struct s_struct
 	void		*mlx_ptr;
     void		*win_ptr;
 	void		*img;
+	void		*img2;
 	int 		*addr;
+	int			*data;
 	int			bits_per_pixel;
 	int			line_length;
+	int 		size_line;
+	int			bits_per_pixel2;
+
 	int			endian;
+	int			endian2;
 	int 		scaleHeight;
 	int 		scaleWidth;
 	t_player 	player;
@@ -127,8 +133,8 @@ typedef struct s_struct
 	int			widthofmap;
 	int			heightofmap;
 	unsigned int *wallTexture;
-	int texture_height;
-	int texture_width;
+	int 		texture_height;
+	int 		texture_width;
 	char				*no;
 	char				*so;
 	char				*we;
@@ -160,7 +166,7 @@ int		player_move(t_struct *cub);
 void 	directionOfPlayer(t_struct *cub);
 void 	ddaForLine(t_struct *cub,int x_0, int y_0, int x_1, int y_1, int color);
 int 	check_wall(t_struct *cub, double x, double y);
-void 	drawRaysOfplyer(t_struct *cub, int x, int y, int color);
+void 	drawRaysOfplyer(t_struct *cub,int x, int y, int color);
 int		castRays(t_struct *cub);
 void 	check_nextSteep(t_struct *cub);
 void	check_downSteep(t_struct *cub);
@@ -179,5 +185,11 @@ int		is_ceiling(unsigned int **buffer, int i, int k);
 int		is_floor(unsigned int **buffer, int i, int k);
 int		KeyRelease(int key, t_struct *cub);
 int		KeyPress(int key, t_struct *cub);
-void print(char **str);
+void 	print(char **str);
+void	init_textures(t_struct *cub);
+void	load_texture(t_struct *cub, char *filename, t_textures *texture);
+int	print_map(t_struct cub);
+void	loading_map(t_struct *cub);
+
+
 #endif

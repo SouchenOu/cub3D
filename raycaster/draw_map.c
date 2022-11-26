@@ -18,7 +18,7 @@ void	my_mlx_pixel_put(t_struct *ptr, int x, int y, unsigned int color)
 
 	if (x > 0 && y > 0 && x < W_WIDTH && y < W_HEIGHT)
 	{
-		dst = (char *)ptr->addr + (y * ptr->line_length + x
+		dst = (char *)ptr->addr+ (y * ptr->line_length + x
 				* (ptr->bits_per_pixel / 8));
 		*( unsigned int *)dst = color;
 	}
@@ -81,14 +81,14 @@ void    ft_draw_map(t_struct *cub)
     int xx = (cub->player.position_x/ cub->scaleWidth) * cub->mini_map.mini_scaleWidth;
     int yy = (cub->player.position_y / cub->scaleHeight) * cub->mini_map.mini_scaleHeight;
     mlx_clear_window(cub->mlx_ptr, cub->win_ptr);
-    drawRaysOfplyer(cub, cub->player.position_x, cub->player.position_y , 0xFFFF0F); 
+    drawRaysOfplyer(cub , cub->player.position_x, cub->player.position_y , 0xFFFF0F); 
     while (cub->my_map[y])
     {
         x = 0;
         while (cub->my_map[y][x])
         {
             if (cub->my_map[y][x] == '1')
-               draw_cub(cub, x, y, 0xFFF0000);
+               draw_cub(cub,x, y, 0xFFF0000);
             else 
                 draw_cub(cub, x, y, 0);
             x++;
@@ -128,7 +128,7 @@ void player_position(t_struct *cub){
 }
 
 int	player_move(t_struct *cub)
-{ 
+{
 	check_nextSteep(cub);
 	check_downSteep(cub);
     if (cub->player.angle == 1 || cub->player.angle == -1)
