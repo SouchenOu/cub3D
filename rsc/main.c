@@ -103,3 +103,31 @@ void	load_texture(t_struct *cub, char *filename, t_textures *texture)
 	if (!texture->data || texture->img_width != texture->img_height)
 		return ;
 }
+
+/*t_map_data	*(int fd, char **raw_map)
+{
+	char		*line;
+	t_garbage	*junk_list;
+	t_map_data	*scrape;
+
+	junk_list = NULL;
+	line = "";
+	scrape = (t_map_data *)malloc(sizeof(t_map_data));
+	if (!scrape)
+		return (0);
+	while (line)
+	{
+		line = get_next_line(fd);
+		garbage(&junk_list, line);
+		if ((line && check_empty_line(line)))
+			continue ;
+		line = ft_strtrim(line, WHITE_SPACES);
+		garbage(&junk_list, line);
+		get_textures_val(line, &scrape, &junk_list);
+		get_rgb_val(line, &scrape, &junk_list);
+	}
+	list_free(&junk_list);
+	scrape->map = convert_map(raw_map);
+	scrape->map_mini = convert_map(raw_map);
+	return (scrape);
+}*/
