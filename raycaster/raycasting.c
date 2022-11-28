@@ -14,12 +14,13 @@
 
 /* cast all rays */
 /// we use raycasting transform a limited form of data (a very simplified map or floor plan) into a 3D projection by tracing rays from the view point into the viewing volume
-void drawRaysOfplyer(t_struct *cub,int x, int y, int color)
+void drawRaysOfplyer(t_struct *cub,t_textures *txt,int x, int y, int color)
 {
     int i = -1;
   //  double	sostra;
 	int		wallBottomPixel ;
 	double		wallTopPixel;
+    int j;
     //int k;
     int o;
     o = 0;
@@ -29,31 +30,39 @@ void drawRaysOfplyer(t_struct *cub,int x, int y, int color)
     cub->wallStripHeight = 0;
     double angleIncrem = (M_PI / 3) / cub->numOfRays;
     cub->ray.rayAngle = cub->player.rottAngle - (M_PI / 6); 
+    (void) txt;
+    //printf("data here = %d\n", txt[2].data[0]);
+ 
+    //render ray by ray
+    j = 0;
+    /*while(txt[0].data[j])
+    {
+        printf("txt_data[%d]= %d\n", j,txt[0].data[j]);
+        j++;
+    }*/
 
     while (++i < cub->numOfRays)
-    {  
+    { 
         cub->ray.rayAngle = normalizeAngle(cub->ray.rayAngle);
         castAllRays(cub);
-	    double distanceofwall = cub->ray.Distance * cos(cub->ray.rayAngle - cub->player.rottAngle);
-	    cub->wallStripHeight = (cub->scaleHeight * W_HEIGHT) /  distanceofwall;
+	    double correctDistance = cub->ray.Distance * cos(cub->ray.rayAngle - cub->player.rottAngle);
+	    cub->wallStripHeight = (cub->scaleHeight * (W_HEIGHT)) /  correctDistance;
         double len = cub->wallStripHeight;
-	     if (cub->wallStripHeight > W_HEIGHT)
+	    if (cub->wallStripHeight > W_HEIGHT)
 		     cub->wallStripHeight = W_HEIGHT;
-	        //wallTopPixel is the top of the wall
 	    wallTopPixel = (W_HEIGHT/ 2) - ( cub->wallStripHeight/ 2);
 	    if (wallTopPixel < 0)
-		    wallTopPixel = 0; // the minimum we can have is 0
-		        //wallBottomPixel is the Bottom or end of the wall
+		    wallTopPixel = 0;
 	    wallBottomPixel = (W_HEIGHT / 2) + (cub->wallStripHeight / 2);
 	    if (wallBottomPixel >= W_HEIGHT)
 		    wallBottomPixel = W_HEIGHT - 1;
+        /*if(txt->img_height > 64)
+            txt->img_height = 64;
+        if(txt->img_width > 64)
+            txt->img_width = 64;*/
 	    o = (wallTopPixel - 1);
-	    //render the wall from wallTopPixel to wallBottomPixel
         double textureOffsetX ;
         double textureOffsetY;
-        
-            // calculate how much to navigate
-            // the texture offesetX it will going to be the same (how much i will going to x it will be the same for all of them)
         if(cub->ray.check == 1)
         {
                 textureOffsetX = cub->ray.vrtclWallHitY;
@@ -67,28 +76,46 @@ void drawRaysOfplyer(t_struct *cub,int x, int y, int color)
             cub->addr[(W_WIDTH * j) + i] = (cub->clg.r << 16) + (cub->clg.g << 8) + (cub->clg.b);
             j++;
         }
-        
-        //render the wall from wallTopPixel to wallBottomPixel
         textureOffsetX /= cub->scaleHeight;
         textureOffsetX -= floor(textureOffsetX);
         textureOffsetX *= cub->texture_width;
         o = wallTopPixel;
         while (o < wallBottomPixel)
         {
-            // set the color of the wall based on the color from the texture
-            // we are forcing the y....
             int distanceFromTop = o + ((len / 2) - (W_HEIGHT/2));
             if (distanceFromTop < 0)
                 distanceFromTop = 0;
-            // multiplier par how tall my wall is
-            //how height my texture is diviser par how hight my wall is
-            textureOffsetY = (distanceFromTop) * ((double)cub->texture_height / len);
+
+            textureOffsetY = (distanceFromTop) * ((double)cub->texture_height/ len);
             textureOffsetY = floor(textureOffsetY);
-            //offsetY means how much need to navigate (to y) to get my color
-            //offsetX means how much need to navigate (to x) to get my color
-            unsigned int texturecolor ;//= cub->wallTexture[(cub->texture_width * textureOffsetY) + textureOffsetX];
+
+            unsigned int texturecolor = 0;
+            //= cub->wallTexture[(cub->texture_width * textureOffsetY) + textureOffsetX];
             // printf("*** X : %d - Y : %d\n", (int)textureOffsetX, (int)(cub->texture_width * textureOffsetY));
-            texturecolor = cub->data[(int)(cub->texture_width * textureOffsetY) + (int)textureOffsetX];
+            // printf("texture_offsetx = %f\n", textureOffsetX);
+            // printf("texture_offsetY = %f\n", textureOffsetY);
+            // printf("img_width = %d\n",txt->img_width);
+            // printf("img_width = %d\n",txt->img_height);
+            //printf("data[0] = %d\n", txt[0].data[(int)(txt[0].img_width * textureOffsetY) + (int)textureOffsetX]);
+            if(cub->ray.check == 1)
+            {
+                //printf("here1\n");
+                // texturecolor = cub->data[(int)(cub->texture_width * textureOffsetY) + (int)textureOffsetX];
+                texturecolor = cub->texture[0].data[(int)(cub->texture[0].img_width * textureOffsetY) + (int)textureOffsetX];
+                //printf("width_txt = %d\n", txt[0].img_width);
+                //printf("here txt data = %d\n",txt[0].data[(int)(txt->img_width * textureOffsetY) + (int)textureOffsetX] );
+            }
+            else if(cub->ray.check  == 2)
+            {
+      
+                //printf("here2\n");
+                // texturecolor = cub->data[(int)(cub->texture_width * textureOffsetY) + (int)textureOffsetX];
+                texturecolor = cub->texture[1].data[(int)(cub->texture[1].img_width * textureOffsetY) + (int)textureOffsetX];
+                // texturecolor = cub->wallTexture[(int)(cub->texture_width * textureOffsetY) + (int)textureOffsetX];
+
+            }
+            // printf("yes\n");
+
             cub->addr[(W_WIDTH * o) + i] = texturecolor;
             cub->check_test = 1;
             o++;
@@ -100,6 +127,7 @@ void drawRaysOfplyer(t_struct *cub,int x, int y, int color)
             n++;
         }
         cub->ray.rayAngle += angleIncrem;
+        //printf("finishe\n");
     }
 	mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);
 } 
@@ -288,14 +316,32 @@ void castAllRays(t_struct *cub)
     cub->ray.vrtclWallHitY = 0;
     cub->ray.horzWallHitX = 0;
     cub->ray.horzWallHitY = 0;
+    cub->ray.down = 0;
+    cub->ray.up = 0;
+    cub->ray.right = 0;
+    cub->ray.left = 0;
+
     if (cub->ray.rayAngle > 0 && cub->ray.rayAngle < M_PI)
+    {
+        cub->ray.down = 1;
         cub->ray.rayFacingDown = 1;
-    else
+    }
+    else if(cub->ray.rayAngle > M_PI)
+    {
         cub->ray.rayFacingUp = 1;
+        cub->ray.up = 1;
+    }
     if (cub->ray.rayAngle < (M_PI / 2) || cub->ray.rayAngle > ((3 * M_PI) / 2))
+    {
+        cub->ray.right = 1;
         cub->ray.rayFacingRight = 1;
-    else
-        cub->ray.rayFacingLeft = 1;
+    }
+    else if(cub->ray.rayAngle > (M_PI / 2) || cub->ray.rayAngle < ((3 * M_PI) / 2) )
+    {
+            cub->ray.rayFacingLeft = 1;
+            cub->ray.left = 1;
+    }
+
     castVrtcalRays(cub);
     castHrzntalRays(cub);
     hrzntlDstnc = calculDistance(cub->ray.horzWallHitX, cub->ray.horzWallHitY, cub->player.position_x, cub->player.position_y);

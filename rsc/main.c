@@ -31,17 +31,20 @@ void hooking(t_struct *cub)
 int main(int ac, char **av)
 {
     t_struct cub;
+    //t_textures txt;
     cub.scaleHeight = 64;
     cub.scaleWidth = 64;
     cub.texture_height = 64;
     cub.texture_width = 64;
+    //cub.texture->img_height = 64;
+    //cub.texture->img_width = 64;
     if (ac != 2)
 		return (ft_putstr_fd("Usage : ./cub3D path/to/map.cub", 0), 0);
 	if (ft_read_maps(av[1], &cub) == 0)
         return (0);
     ft_jump_lines(&cub);
-    if (!ft_check_alltextures(&cub))
-        return (0);
+    //if (!ft_check_alltextures(&cub))
+    //    return (0);
    if (!ft_check_rgb(&cub))
         return (0);
     if (!ft_check_map(&cub))
@@ -74,60 +77,124 @@ int main(int ac, char **av)
 		return (0);
     player_position(&cub);
     directionOfPlayer(&cub); 
-	loading_map(&cub);
+	//  loading_map(&cub);
+    init_textures(&cub);
     cub.widthofmap = cub.scaleWidth * cub.widthof_minimap;
     cub.heightofmap = cub.scaleHeight * cub.heightof_minimap;
-    ft_draw_map(&cub);
+    /*printf("%d\n",cub.texture->data[0]);
+   int i = 0;
+    while(cub.texture->data[i])
+    {
+        printf("txt_data[%d]= %d\n", i,cub.texture->data[i]);
+        i++;
+        // if(i == 3)
+        //     break ;
+    }
+    printf("%i", i);
+    printf("%p", cub.texture->data);*/
+    ft_draw_map(&cub,cub.texture);
     hooking(&cub);
     return (0);
 }
 
 
+void	init_textures(t_struct *cub)
+{
+	//t_textures	*texture_ptr;
+    //int i = 0;
+
+	cub->texture = malloc(sizeof(t_textures) * 4);
+	// if (cub->texture == NULL)
+	// 	return ;
+        load_texture(cub, "textures/xpm/1.xpm", cub->texture);
+}
+
+int	get_textures_val(char *line, t_struct **cub)
+{
+	t_struct	*s;
+
+	if (!line)
+		return (1);
+	s = *cub;
+	if (!ft_strncmp("NO ", line, 3))
+	{
+		s->no = ft_substr(line, 5, ft_strlen(line));
+	}
+	else if (!ft_strncmp("SO ", line , 3))
+	{
+
+		s->so = ft_substr(line, 5, ft_strlen(line));
+	}
+    else if(!ft_strncmp("WE ", line, 3))
+    {
+        s->we = ft_substr(line, 5, ft_strlen(line));
+    }
+    else if(!ft_strncmp("EA ", line, 3))
+    {
+        s->ea = ft_substr(line, 5, ft_strlen(line));
+    }
+	return (1);
+}
+
+
+
 void	loading_map(t_struct *cub)
 {
 
-	cub->img2 = mlx_xpm_file_to_image(cub->mlx_ptr, "texure/xpm/1.xpm",&cub->texture_width, &cub->texture_height);
+	cub->img2 = mlx_xpm_file_to_image(cub->mlx_ptr, "textures/xpm/1.xpm",&cub->texture_width, &cub->texture_height);
 	if (!cub->img2)
 		return ;
 	cub->data = (int *)mlx_get_data_addr(cub->img2, &cub->bits_per_pixel2, &cub->size_line, &cub->endian2);
 	if (!cub->data || cub->texture_width != cub->texture_height)
-		return ;
+    {
+        return ;
+    }
+   
 }
+
+
 void	load_texture(t_struct *cub, char *filename, t_textures *texture)
 {
+    //printf("width text = %d\n", cub->texture_width);
+    //printf("height txt = %d\n", cub->texture_height);
 
-	texture->img = mlx_xpm_file_to_image(cub->mlx_ptr, filename,&texture->img_width, &texture->img_height);
-	if (!texture->img || !filename)
-		return ;
-	texture->data = (int *)mlx_get_data_addr(texture->img, &texture->bits_per_pixel, &texture->size_line, &texture->endian);
-	if (!texture->data || texture->img_width != texture->img_height)
-		return ;
+
+
+
+    // for(int i = 0; i < 4 ; i++){
+	texture[0].img = mlx_xpm_file_to_image(cub->mlx_ptr, filename, &texture[0].img_width, &texture[0].img_height);
+	texture[0].data = (int *)mlx_get_data_addr(texture[0].img, &texture[0].bits_per_pixel, &texture[0].size_line, &texture[0].endian);
+	texture[1].img = mlx_xpm_file_to_image(cub->mlx_ptr, "textures/xpm/east.xpm", &texture[1].img_width, &texture[1].img_height);
+	texture[1].data = (int *)mlx_get_data_addr(texture[1].img, &texture[1].bits_per_pixel, &texture[1].size_line, &texture[1].endian);
+    // texture[0].img = mlx_xpm_file_to_image(cub->mlx_ptr, filename, &texture[0].img_width, &texture[0].img_height);
+	// texture[0].data = (int *)mlx_get_data_addr(texture[0].img, &texture[0].bits_per_pixel, &texture[0].size_line, &texture[0].endian);
+    // texture[0].img = mlx_xpm_file_to_image(cub->mlx_ptr, filename, &texture[0].img_width, &texture[0].img_height);
+	// texture[0].data = (int *)mlx_get_data_addr(texture[0].img, &texture[0].bits_per_pixel, &texture[0].size_line, &texture[0].endian);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // int i = 0;
+    // //printf("textdata[0] = %d\n", texture->data[10]);
+    // while(texture->data[i] != 100)
+    // {
+    //     printf("txt_data[%d]= %d\n", i,texture->data[i]);
+    //     i++;
+    // }
+    // exit(0);
+    //printf("i = %d\n", i);
+	// if (!texture->img || !filename)
+    // {
+    //     return ;
+    // }
+	// if (!texture->data || texture->img_width != texture->img_height)
+    // {
+    //     return ;
+    // }
+ 	
 }
-
-/*t_map_data	*(int fd, char **raw_map)
-{
-	char		*line;
-	t_garbage	*junk_list;
-	t_map_data	*scrape;
-
-	junk_list = NULL;
-	line = "";
-	scrape = (t_map_data *)malloc(sizeof(t_map_data));
-	if (!scrape)
-		return (0);
-	while (line)
-	{
-		line = get_next_line(fd);
-		garbage(&junk_list, line);
-		if ((line && check_empty_line(line)))
-			continue ;
-		line = ft_strtrim(line, WHITE_SPACES);
-		garbage(&junk_list, line);
-		get_textures_val(line, &scrape, &junk_list);
-		get_rgb_val(line, &scrape, &junk_list);
-	}
-	list_free(&junk_list);
-	scrape->map = convert_map(raw_map);
-	scrape->map_mini = convert_map(raw_map);
-	return (scrape);
-}*/

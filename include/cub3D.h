@@ -77,19 +77,24 @@ typedef struct  s_ray{
 	double  vrticlWallHitX;
     double  vrtclWallHitY;
 	int check;
+	int down;
+	int up;
+	int left;
+	int right;
 	
 }  t_ray;
-typedef struct s_garbage
+typedef struct s_lines
 {
 	char				*garbage_lines;
 	struct s_garbage	*next;
-}	t_garbage;
+}	t_lines;
+
 typedef struct s_textures
 {
 	int		img_width;
 	int		img_height;
 	void	*img;
-	int		*data;
+	int 		*data;
 	int		bits_per_pixel;
 	int		size_line;
 	int		endian;
@@ -160,13 +165,13 @@ char	*ft_strdup_map(const char *s1, int len);
 int		ft_check_openmap(char **data);
 char    **ft_split_map(t_struct *cub);
 char    *ft_search_inmap(t_struct *cub, char *search, int len_ofsrch);
-void    ft_draw_map(t_struct *cub);
+void    ft_draw_map(t_struct *cub,t_textures *txt);
 void 	player_position(t_struct *cub);
-int		player_move(t_struct *cub);
+int		player_move(t_struct *cub, t_textures *txt);
 void 	directionOfPlayer(t_struct *cub);
 void 	ddaForLine(t_struct *cub,int x_0, int y_0, int x_1, int y_1, int color);
 int 	check_wall(t_struct *cub, double x, double y);
-void 	drawRaysOfplyer(t_struct *cub,int x, int y, int color);
+void 	drawRaysOfplyer(t_struct *cub,t_textures *txt,int x, int y, int color);
 int		castRays(t_struct *cub);
 void 	check_nextSteep(t_struct *cub);
 void	check_downSteep(t_struct *cub);
@@ -188,8 +193,10 @@ int		KeyPress(int key, t_struct *cub);
 void 	print(char **str);
 void	init_textures(t_struct *cub);
 void	load_texture(t_struct *cub, char *filename, t_textures *texture);
-int	print_map(t_struct cub);
+int		print_map(t_struct cub);
 void	loading_map(t_struct *cub);
+int		get_textures_val(char *line, t_struct **cub);
+
 
 
 #endif

@@ -18,7 +18,7 @@ RESET = \033[0m
 BBlue=\033[0;34m
 BYellow=\033[1;33m
 CC = gcc
-FLAGS = -g -Wall -Werror -Wextra -g -fsanitize=address
+FLAGS = -g -Wall -Werror -Wextra -g
 framework= -framework OpenGL -framework AppKit 
 RM = rm -rf
 

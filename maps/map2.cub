@@ -1,7 +1,7 @@
-NO ./texure/xpm/wood.xpm
-SO ./texure/xpm/wood.xpm
-WE ./texure/xpm/wood.xpm
-EA ./texure/xpm/wood.xpm
+NO ./textures/xpm/east.xpm
+SO ./textures/xpm/east.xpm
+WE ./textures/xpm/east.xpm
+EA ./textures/xpm/east.xpm
 
 F 220,50,0
 C 225,200,220

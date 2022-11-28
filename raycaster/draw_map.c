@@ -70,7 +70,7 @@ void    draw_cub(t_struct *ptr, int x, int y, int color)
     }
 }
 
-void    ft_draw_map(t_struct *cub)
+void    ft_draw_map(t_struct *cub, t_textures *txt)
 {
     int x;
     int y;
@@ -78,10 +78,21 @@ void    ft_draw_map(t_struct *cub)
 
     y = 0;
     len = 0;
+    //int i = 100;
+
+    /*printf("txt_data[0]= %d\n", txt[1].data[100]);
+    while(txt[1].data[i])
+    {
+        printf("cub->texture_data2[%d]= %d\n", i,txt[1].data[i]);
+        i++;
+        if(i == 105)
+             exit(0);
+        }*/
+   // printf(" check %p", txt[0]->data);
     int xx = (cub->player.position_x/ cub->scaleWidth) * cub->mini_map.mini_scaleWidth;
     int yy = (cub->player.position_y / cub->scaleHeight) * cub->mini_map.mini_scaleHeight;
     mlx_clear_window(cub->mlx_ptr, cub->win_ptr);
-    drawRaysOfplyer(cub , cub->player.position_x, cub->player.position_y , 0xFFFF0F); 
+    drawRaysOfplyer(cub ,txt, cub->player.position_x, cub->player.position_y , 0xFFFF0F); 
     while (cub->my_map[y])
     {
         x = 0;
@@ -127,14 +138,14 @@ void player_position(t_struct *cub){
    } 
 }
 
-int	player_move(t_struct *cub)
+int	player_move(t_struct *cub,t_textures *txt)
 {
 	check_nextSteep(cub);
 	check_downSteep(cub);
     if (cub->player.angle == 1 || cub->player.angle == -1)
         cub->player.rottAngle += (cub->player.rottSpeed * cub->player.angle);
      cub->player.angle = 0;
-    ft_draw_map(cub);
+    ft_draw_map(cub,txt);
     return (0);
 }
 

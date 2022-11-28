@@ -86,6 +86,7 @@ int	ft_read_maps(char *map_file, t_struct *cub)
 	int		i;
 	char	*get_line;
 
+
 	i = 0;
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
@@ -99,6 +100,7 @@ int	ft_read_maps(char *map_file, t_struct *cub)
 	while (i < cub->height)
 	{
 		get_line = get_next_line(fd);
+		get_textures_val(get_line, &cub);
         cub->map[i] = ft_strdup(get_line);
 		free(get_line);
 		i++;
