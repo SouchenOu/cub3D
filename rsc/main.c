@@ -81,18 +81,8 @@ int main(int ac, char **av)
     init_textures(&cub);
     cub.widthofmap = cub.scaleWidth * cub.widthof_minimap;
     cub.heightofmap = cub.scaleHeight * cub.heightof_minimap;
-    /*printf("%d\n",cub.texture->data[0]);
-   int i = 0;
-    while(cub.texture->data[i])
-    {
-        printf("txt_data[%d]= %d\n", i,cub.texture->data[i]);
-        i++;
-        // if(i == 3)
-        //     break ;
-    }
-    printf("%i", i);
-    printf("%p", cub.texture->data);*/
-    ft_draw_map(&cub,cub.texture);
+ 
+    ft_draw_map(&cub);
     hooking(&cub);
     return (0);
 }
@@ -100,13 +90,9 @@ int main(int ac, char **av)
 
 void	init_textures(t_struct *cub)
 {
-	//t_textures	*texture_ptr;
-    //int i = 0;
-
 	cub->texture = malloc(sizeof(t_textures) * 4);
-	// if (cub->texture == NULL)
-	// 	return ;
-        load_texture(cub, "textures/xpm/1.xpm", cub->texture);
+	
+    load_texture(cub,cub->texture);
 }
 
 int	get_textures_val(char *line, t_struct **cub)
@@ -138,30 +124,12 @@ int	get_textures_val(char *line, t_struct **cub)
 
 
 
-void	loading_map(t_struct *cub)
+
+
+void	load_texture(t_struct *cub,t_textures *texture)
 {
 
-	cub->img2 = mlx_xpm_file_to_image(cub->mlx_ptr, "textures/xpm/1.xpm",&cub->texture_width, &cub->texture_height);
-	if (!cub->img2)
-		return ;
-	cub->data = (int *)mlx_get_data_addr(cub->img2, &cub->bits_per_pixel2, &cub->size_line, &cub->endian2);
-	if (!cub->data || cub->texture_width != cub->texture_height)
-    {
-        return ;
-    }
-   
-}
 
-
-void	load_texture(t_struct *cub, char *filename, t_textures *texture)
-{
-    //printf("width text = %d\n", cub->texture_width);
-    //printf("height txt = %d\n", cub->texture_height);
-
-   (void) filename;
-
-
-    // for(int i = 0; i < 4 ; i++){
 	texture[0].img = mlx_xpm_file_to_image(cub->mlx_ptr, cub->no, &texture[0].img_width, &texture[0].img_height);
 	texture[0].data = (int *)mlx_get_data_addr(texture[0].img, &texture[0].bits_per_pixel, &texture[0].size_line, &texture[0].endian);
 	texture[1].img = mlx_xpm_file_to_image(cub->mlx_ptr, cub->so, &texture[1].img_width, &texture[1].img_height);

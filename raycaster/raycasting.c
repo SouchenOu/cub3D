@@ -14,7 +14,7 @@
 
 /* cast all rays */
 /// we use raycasting transform a limited form of data (a very simplified map or floor plan) into a 3D projection by tracing rays from the view point into the viewing volume
-void drawRaysOfplyer(t_struct *cub,t_textures *txt,int x, int y, int color)
+void drawRaysOfplyer(t_struct *cub,int x, int y, int color)
 {
     int i = -1;
   //  double	sostra;
@@ -30,16 +30,10 @@ void drawRaysOfplyer(t_struct *cub,t_textures *txt,int x, int y, int color)
     cub->wallStripHeight = 0;
     double angleIncrem = (M_PI / 3) / cub->numOfRays;
     cub->ray.rayAngle = cub->player.rottAngle - (M_PI / 6); 
-    (void) txt;
-    //printf("data here = %d\n", txt[2].data[0]);
- 
-    //render ray by ray
+
+
     j = 0;
-    /*while(txt[0].data[j])
-    {
-        printf("txt_data[%d]= %d\n", j,txt[0].data[j]);
-        j++;
-    }*/
+ 
 
     while (++i < cub->numOfRays)
     { 
@@ -56,10 +50,6 @@ void drawRaysOfplyer(t_struct *cub,t_textures *txt,int x, int y, int color)
 	    wallBottomPixel = (W_HEIGHT / 2) + (cub->wallStripHeight / 2);
 	    if (wallBottomPixel >= W_HEIGHT)
 		    wallBottomPixel = W_HEIGHT - 1;
-        /*if(txt->img_height > 64)
-            txt->img_height = 64;
-        if(txt->img_width > 64)
-            txt->img_width = 64;*/
 	    o = (wallTopPixel - 1);
         double textureOffsetX ;
         double textureOffsetY;
