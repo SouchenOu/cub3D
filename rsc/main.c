@@ -158,18 +158,18 @@ void	load_texture(t_struct *cub, char *filename, t_textures *texture)
     //printf("width text = %d\n", cub->texture_width);
     //printf("height txt = %d\n", cub->texture_height);
 
-
+   (void) filename;
 
 
     // for(int i = 0; i < 4 ; i++){
-	texture[0].img = mlx_xpm_file_to_image(cub->mlx_ptr, filename, &texture[0].img_width, &texture[0].img_height);
+	texture[0].img = mlx_xpm_file_to_image(cub->mlx_ptr, cub->no, &texture[0].img_width, &texture[0].img_height);
 	texture[0].data = (int *)mlx_get_data_addr(texture[0].img, &texture[0].bits_per_pixel, &texture[0].size_line, &texture[0].endian);
-	texture[1].img = mlx_xpm_file_to_image(cub->mlx_ptr, "textures/xpm/east.xpm", &texture[1].img_width, &texture[1].img_height);
+	texture[1].img = mlx_xpm_file_to_image(cub->mlx_ptr, cub->so, &texture[1].img_width, &texture[1].img_height);
 	texture[1].data = (int *)mlx_get_data_addr(texture[1].img, &texture[1].bits_per_pixel, &texture[1].size_line, &texture[1].endian);
-    // texture[0].img = mlx_xpm_file_to_image(cub->mlx_ptr, filename, &texture[0].img_width, &texture[0].img_height);
-	// texture[0].data = (int *)mlx_get_data_addr(texture[0].img, &texture[0].bits_per_pixel, &texture[0].size_line, &texture[0].endian);
-    // texture[0].img = mlx_xpm_file_to_image(cub->mlx_ptr, filename, &texture[0].img_width, &texture[0].img_height);
-	// texture[0].data = (int *)mlx_get_data_addr(texture[0].img, &texture[0].bits_per_pixel, &texture[0].size_line, &texture[0].endian);
+    texture[2].img = mlx_xpm_file_to_image(cub->mlx_ptr, cub->ea, &texture[2].img_width, &texture[2].img_height);
+	texture[2].data = (int *)mlx_get_data_addr(texture[2].img, &texture[2].bits_per_pixel, &texture[2].size_line, &texture[2].endian);
+    texture[3].img = mlx_xpm_file_to_image(cub->mlx_ptr, cub->we, &texture[3].img_width, &texture[3].img_height);
+	texture[3].data = (int *)mlx_get_data_addr(texture[3].img, &texture[3].bits_per_pixel, &texture[3].size_line, &texture[3].endian);
     
     
     

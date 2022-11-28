@@ -90,31 +90,24 @@ void drawRaysOfplyer(t_struct *cub,t_textures *txt,int x, int y, int color)
             textureOffsetY = floor(textureOffsetY);
 
             unsigned int texturecolor = 0;
-            //= cub->wallTexture[(cub->texture_width * textureOffsetY) + textureOffsetX];
-            // printf("*** X : %d - Y : %d\n", (int)textureOffsetX, (int)(cub->texture_width * textureOffsetY));
-            // printf("texture_offsetx = %f\n", textureOffsetX);
-            // printf("texture_offsetY = %f\n", textureOffsetY);
-            // printf("img_width = %d\n",txt->img_width);
-            // printf("img_width = %d\n",txt->img_height);
-            //printf("data[0] = %d\n", txt[0].data[(int)(txt[0].img_width * textureOffsetY) + (int)textureOffsetX]);
-            if(cub->ray.check == 1)
+           
+            if(cub->ray.check == 1)//vertical
             {
-                //printf("here1\n");
-                // texturecolor = cub->data[(int)(cub->texture_width * textureOffsetY) + (int)textureOffsetX];
-                texturecolor = cub->texture[0].data[(int)(cub->texture[0].img_width * textureOffsetY) + (int)textureOffsetX];
-                //printf("width_txt = %d\n", txt[0].img_width);
-                //printf("here txt data = %d\n",txt[0].data[(int)(txt->img_width * textureOffsetY) + (int)textureOffsetX] );
+                if( cub->ray.up == 1)
+                    texturecolor = cub->texture[0].data[(int)(cub->texture[0].img_width * textureOffsetY) + (int)textureOffsetX];
+                else if(cub->ray.down == 1)
+                    texturecolor = cub->texture[1].data[(int)(cub->texture[1].img_width * textureOffsetY) + (int)textureOffsetX];
+ 
             }
-            else if(cub->ray.check  == 2)
+            else if(cub->ray.check  == 2)//horizontal
             {
-      
-                //printf("here2\n");
-                // texturecolor = cub->data[(int)(cub->texture_width * textureOffsetY) + (int)textureOffsetX];
-                texturecolor = cub->texture[1].data[(int)(cub->texture[1].img_width * textureOffsetY) + (int)textureOffsetX];
-                // texturecolor = cub->wallTexture[(int)(cub->texture_width * textureOffsetY) + (int)textureOffsetX];
+                if(cub->ray.left == 1)
+                    texturecolor = cub->texture[3].data[(int)(cub->texture[3].img_width * textureOffsetY) + (int)textureOffsetX];
+
+                else if(cub->ray.right == 1)
+                    texturecolor = cub->texture[2].data[(int)(cub->texture[2].img_width * textureOffsetY) + (int)textureOffsetX];
 
             }
-            // printf("yes\n");
 
             cub->addr[(W_WIDTH * o) + i] = texturecolor;
             cub->check_test = 1;
@@ -127,7 +120,6 @@ void drawRaysOfplyer(t_struct *cub,t_textures *txt,int x, int y, int color)
             n++;
         }
         cub->ray.rayAngle += angleIncrem;
-        //printf("finishe\n");
     }
 	mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img, 0, 0);
 } 
